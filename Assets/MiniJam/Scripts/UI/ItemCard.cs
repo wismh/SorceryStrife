@@ -48,7 +48,7 @@ namespace Game
             foreach (var property in properties)
             {
                 var list = (List<float>)property.GetValue(item);
-                var values = string.Join("/", list.Select(v => v.ToString("0.#")));
+                var values = string.Join("/", list.Select(v => v.ToString("0.##")));
 
                 namesText += $"{property.Name}:\n";
                 valuesText += $"{values}\n";

@@ -61,7 +61,8 @@ namespace Game
             Experience = 0;
             RequiredExperienceForLevelUp *= _multiplierFactorOfRequiredExperienceByLevel;
 
-            _playerAsEntity.Health += (_playerAsEntity.MaxHealth * 0.2f);
+            _playerAsEntity.Health += (_playerAsEntity.MaxHealth * 0.1f);
+            _playerAsEntity.Health = Mathf.Clamp(_playerAsEntity.Health, 0, _playerAsEntity.MaxHealth);
             
             OnLevelUp?.Invoke();
         }

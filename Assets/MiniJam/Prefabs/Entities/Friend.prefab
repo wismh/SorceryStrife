@@ -136,6 +136,7 @@ MonoBehaviour:
   - "You\u2019re bleeding again. Let me guess \u2014 \u2018just a scratch\u2019?"
   - You're not immortal, sis, you just fight like you forgot you're not.
   _textLabel: {fileID: 5622802874355770399}
+  _canvas: {fileID: 8814982073099295089}
   _interval: 10
 --- !u!1 &3470588402309795764
 GameObject:
@@ -171,7 +172,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -7.3, y: -21.3}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2844329810701943824
@@ -266,7 +267,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -226.17584, y: -75.72397, z: -63.69777, w: 0}
+  m_margin: {x: -226.17584, y: -75.72397, z: -26.235092, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -333,7 +334,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!114 &4248033323386065778
 MonoBehaviour:

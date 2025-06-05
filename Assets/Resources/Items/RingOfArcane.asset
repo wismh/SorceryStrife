@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3959930caabf403ca468ac977eadc852, type: 3}
   m_Name: RingOfArcane
   m_EditorClassIdentifier: 
-  <Icon>k__BackingField: {fileID: 21300000, guid: d87a83f4156717f4a9465f6797388021,
+  <Icon>k__BackingField: {fileID: 21300000, guid: 4a8330083295968439df4fc6243b4edf,
     type: 3}
   <Title>k__BackingField: Ring Of Arcane
-  <Description>k__BackingField: Reduce spells cooldown
+  <Description>k__BackingField: Draws power from the arcane flow, slightly reducing
+    all spell cooldowns.
   <MaxLevel>k__BackingField: 2
   <Cooldown>k__BackingField:
-  - -0.5
   - -0.1
-  - -0.15
+  - -0.2
+  - -0.3

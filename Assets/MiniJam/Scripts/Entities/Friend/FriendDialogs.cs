@@ -10,6 +10,7 @@ namespace Game
     {
         [SerializeField] private List<string> _texts;
         [SerializeField] private TextMeshProUGUI _textLabel;
+        [SerializeField] private Transform _canvas;
         [SerializeField] private float _interval;
         
         private Camera _camera;
@@ -22,7 +23,7 @@ namespace Game
         
         private void Update()
         {
-            _textLabel.transform.forward = _camera.transform.forward;
+            _canvas.transform.forward = _camera.transform.forward;
         }
         
         private IEnumerator StartDialogs()
@@ -32,16 +33,16 @@ namespace Game
             while (true)
             {
                 _textLabel.text = _texts[Random.Range(0, _texts.Count)];
-                // Tween.Custom(
-                //     0, 1, 1,
-                //     value => _textLabel.alpha = value
-                //     ).OnComplete(() =>
-                // {
-                //     Tween.Custom(
-                //         1, 0, 1,
-                //         value => _textLabel.alpha = value,
-                //         startDelay: 3);
-                // });
+                Tween.Custom(
+                    0, 1, 1,
+                    value => _textLabel.alpha = value
+                    ).OnComplete(() =>
+                {
+                    Tween.Custom(
+                        1, 0, 1,
+                        value => _textLabel.alpha = value,
+                        startDelay: 3);
+                });
                 
                 yield return new WaitForSeconds(_interval);
             }

@@ -46,22 +46,25 @@ namespace Game
         
         public void Show()
         {
-            Time.timeScale = 0.01f;
-            gameObject.SetActive(true);
-
             var possibleSpells = _spells.ToList();
             
             foreach (
                 var spell in from spell in _spells
-                where _player.Level != 0 || (_player.Level == 0 && !spell.CanOnFirstLevel)
+                //where _player.Level != 0 || (_player.Level == 0 && !spell.CanOnFirstLevel)
                 let caster = _playerCaster.GetCasterOfSpell(spell.GetType())
-                where caster != null && caster.Level >= spell.MaxLevel
-                where _playerCaster.IsFull() && !_playerCaster.HasSpell(caster.Spell.GetType())
+                where (caster != null && caster.Level >= spell.MaxLevel) || 
+                      (_playerCaster.IsFull() && !_playerCaster.HasSpell(spell.GetType()))
                 select spell
             )
             {
                 possibleSpells.Remove(spell);
             }
+
+            if (possibleSpells.Count == 0)
+                return;
+            
+            Time.timeScale = 0.01f;
+            gameObject.SetActive(true);
             
             var numberOfVariants = possibleSpells.Count >= 3 ? 3 : possibleSpells.Count;
             for (var i = 0; i < numberOfVariants; ++i)

@@ -28,9 +28,10 @@ namespace Game
         protected override void CastInternal(Transform caster)
         {
             const float angleOffset = 25f;
-            var number = 1 * PlayerInventory.GetSumOfBuff("Projectiles");
 
-            for (var i = -(number / 2); i <= number / 2; ++i)
+            var number = 1 * PlayerInventory.GetSumOfBuff("Projectiles");
+            
+            for (var i = 0; i < number; ++i)
             {
                 var nearestEnemy = _enemies.GetNearestTo(caster.position);
                 if (!nearestEnemy)
@@ -38,7 +39,7 @@ namespace Game
 
                 var directionToEnemy = (nearestEnemy.transform.position - caster.position).normalized;
                 
-                var angle = angleOffset * i;
+                var angle = angleOffset * (i - number / 2);
                 var direction = Quaternion.AngleAxis(angle, Vector3.up) * directionToEnemy;
 
                 var clone = _container.InstantiatePrefabForComponent<IceArrowProjectile>(_spell.ProjectilePrefab);

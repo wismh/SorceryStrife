@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 261e6afa65ec48089b330968f5b9b7be, type: 3}
   m_Name: ItemDropSpell
   m_EditorClassIdentifier: 
-  <Icon>k__BackingField: {fileID: 21300000, guid: 69f4c89e4b1de164485dea299438726f,
+  <Icon>k__BackingField: {fileID: 21300000, guid: 5aaff4f17956a0346b016b6b74acb44b,
     type: 3}
   <Title>k__BackingField: Item Drop
-  <Description>k__BackingField: Item Drop
+  <Description>k__BackingField: Periodically drops a random item after a cooldown.
   <CanOnFirstLevel>k__BackingField: 0
   <MaxLevel>k__BackingField: 4
   <Cooldown>k__BackingField:

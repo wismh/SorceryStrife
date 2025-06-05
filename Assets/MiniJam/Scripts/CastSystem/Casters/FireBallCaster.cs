@@ -37,9 +37,9 @@ namespace Game
             
             var number = 3 * PlayerInventory.GetSumOfBuff("Projectiles");
             
-            for (var i = -(number / 2); i <= number / 2; ++i)
+            for (var i = 0; i < number; ++i)
             { 
-                var angle = angleOffset * i;
+                var angle = angleOffset * (i - number / 2);
                 var direction = Quaternion.AngleAxis(angle, Vector3.up) * directionToEnemy;
                 
                 var clone = _container.InstantiatePrefabForComponent<FireBallProjectile>(_spell.ProjectilePrefab);
