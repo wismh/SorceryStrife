@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 using Zenject;
 
 namespace Game
@@ -7,9 +6,8 @@ namespace Game
     [SpellCaster(SpellType = typeof(FireBallSpell))]
     public class FireBallCaster : Caster
     {
-        public float Damage => 
-            (Level >= _spell.Damage.Count ? _spell.Damage.Last() : _spell.Damage[Level]) * PlayerInventory.GetSumOfBuff(nameof(Damage));
-        public float Speed => Level >= _spell.Speed.Count ? _spell.Speed.Last() : _spell.Speed[Level];
+        public float Damage => _spell.Damage.ValueAtLevel(Level) * PlayerInventory.GetSumOfBuff(nameof(Damage));
+        public float Speed => _spell.Speed.ValueAtLevel(Level);
         
         private readonly FireBallSpell _spell;
         private readonly ListOfObject<Enemy> _enemies;

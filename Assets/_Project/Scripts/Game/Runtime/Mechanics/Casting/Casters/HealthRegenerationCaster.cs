@@ -1,4 +1,3 @@
-using System.Linq;
 using UnityEngine;
 using Zenject;
 
@@ -7,8 +6,7 @@ namespace Game
     [SpellCaster(SpellType = typeof(HealthRegenerationSpell))]
     public class HealthRegenerationCaster : Caster
     {
-        public float Heal =>
-            (Level >= _spell.Regeneration.Count ? _spell.Regeneration.Last() : _spell.Regeneration[Level]) * PlayerInventory.GetSumOfBuff(nameof(Heal));
+        public float Heal => _spell.Regeneration.ValueAtLevel(Level) * PlayerInventory.GetSumOfBuff(nameof(Heal));
 
         private readonly HealthRegenerationSpell _spell;
         private readonly Entity _player;

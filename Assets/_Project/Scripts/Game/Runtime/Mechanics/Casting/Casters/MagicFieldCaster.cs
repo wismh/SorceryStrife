@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 using Zenject;
 
 namespace Game
@@ -7,11 +6,9 @@ namespace Game
     [SpellCaster(SpellType = typeof(MagicFieldSpell))]
     public class MagicFieldCaster : Caster
     {
-        public float Duration => Level >= _spell.Duration.Count ? _spell.Duration.Last() : _spell.Duration[Level];
-        public float Radius =>
-            (Level >= _spell.Radius.Count ? _spell.Radius.Last() : _spell.Radius[Level]) * PlayerInventory.GetSumOfBuff(nameof(Radius));
-        public float Damage => 
-            (Level >= _spell.Damage.Count ? _spell.Damage.Last() : _spell.Damage[Level]) * PlayerInventory.GetSumOfBuff(nameof(Damage));
+        public float Duration => _spell.Duration.ValueAtLevel(Level);
+        public float Radius => _spell.Radius.ValueAtLevel(Level) * PlayerInventory.GetSumOfBuff(nameof(Radius));
+        public float Damage => _spell.Damage.ValueAtLevel(Level) * PlayerInventory.GetSumOfBuff(nameof(Damage));
 
         private readonly MagicFieldSpell _spell;
         private readonly DiContainer _container;

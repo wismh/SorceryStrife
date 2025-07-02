@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Game
 {
@@ -26,7 +25,8 @@ namespace Game
         public bool CanMove
         {
             get => _canMove;
-            set  {
+            set
+            {
                 _canMove = value;
                 _rigidbody.linearVelocity = Vector3.zero;
             }
