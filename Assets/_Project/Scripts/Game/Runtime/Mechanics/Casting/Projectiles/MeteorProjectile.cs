@@ -33,7 +33,7 @@ namespace Game
             if (!_startFalling)
                 return;
 
-            _rigidbody.velocity = Vector3.down * 10f;
+            _rigidbody.linearVelocity = Vector3.down * 10f;
         }
 
         private IEnumerator DelayRoutine()
