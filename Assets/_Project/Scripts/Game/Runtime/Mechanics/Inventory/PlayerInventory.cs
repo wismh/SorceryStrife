@@ -1,22 +1,20 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using Game.InventorySystem;
 using ModestTree;
-using UnityEngine;
 using Zenject;
 
 namespace Game
 {
     public class PlayerInventory
     {
-        public event Action<Item> OnAddItem; 
+        public event Action<Item> OnAddItem;
         public event Action<Item> OnLevelUpItem;
-        
-        private readonly Dictionary<string, float> _cacheOfBuffs = new();
+
+        private readonly Dictionary<StatType, (float Percent, float Flat)> _cache = new();
         private readonly Dictionary<Item, int> _items = new();
         private readonly ItemsRegister _itemsRegister;
-        
+
         [Inject]
         public PlayerInventory(ItemsRegister itemsRegister)
         {
@@ -32,16 +30,16 @@ namespace Game
         {
             if (!typeOfItem.DerivesFrom(typeof(Item)))
                 return false;
-            
+
             var item = _itemsRegister.GetItemByType(typeOfItem);
             return _items.ContainsKey(item);
         }
-        
+
         public void AddOrLevelUpItem(Type typeOfItem)
         {
             if (!typeOfItem.DerivesFrom(typeof(Item)))
                 return;
-            
+
             var item = _itemsRegister.GetItemByType(typeOfItem);
 
             if (!_items.TryAdd(item, 1))
@@ -51,31 +49,49 @@ namespace Game
             }
             else
                 OnAddItem?.Invoke(item);
-            
-            _cacheOfBuffs.Clear();
+
+            _cache.Clear();
         }
 
         public int GetLevelOfItem(Item item)
         {
             return _items.GetValueOrDefault(item, 0);
         }
-        
-        public float GetSumOfBuff(string key)
+
+        /// <summary>Applies every owned item's modifiers for <paramref name="stat"/> to a base value.</summary>
+        public float ApplyModifiers(StatType stat, float baseValue)
         {
-            if (_cacheOfBuffs.TryGetValue(key, out var cache))
-                return cache;
-            
-            var sum = (
-                from item in _items 
-                let properties = Utils.GetAllListProperties(item.Key).ToList()
-                let propertyByKey = properties.Find(x => x.Name == key) 
-                where propertyByKey != null
-                let listOfValues = (List<float>)propertyByKey.GetValue(item.Key) 
-                select item.Value >= listOfValues.Count ? listOfValues.Last() : listOfValues[item.Value])
-                .Sum() + 1;
-            
-            _cacheOfBuffs.Add(key, sum);
-            return sum;
+            if (!_cache.TryGetValue(stat, out var aggregate))
+            {
+                aggregate = ComputeAggregate(stat);
+                _cache.Add(stat, aggregate);
+            }
+
+            return baseValue * aggregate.Percent + aggregate.Flat;
+        }
+
+        private (float Percent, float Flat) ComputeAggregate(StatType stat)
+        {
+            var percent = 1f;
+            var flat = 0f;
+
+            foreach (var ownedItem in _items)
+            {
+                foreach (var modifier in ownedItem.Key.Modifiers)
+                {
+                    if (modifier.Stat != stat)
+                        continue;
+
+                    var value = modifier.ValuePerLevel.ValueAtLevel(ownedItem.Value);
+
+                    if (modifier.Op == ModifierOp.Flat)
+                        flat += value;
+                    else
+                        percent += value;
+                }
+            }
+
+            return (percent, flat);
         }
     }
 }

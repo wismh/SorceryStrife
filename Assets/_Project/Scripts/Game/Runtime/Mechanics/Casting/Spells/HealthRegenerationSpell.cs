@@ -7,5 +7,13 @@ namespace Game
     public class HealthRegenerationSpell : Spell
     {
         [field: SerializeField] public List<float> Regeneration { get; set; }
+
+        public override IEnumerable<SpellStatDisplay> GetDisplayStats()
+        {
+            foreach (var stat in base.GetDisplayStats())
+                yield return stat;
+
+            yield return new SpellStatDisplay(nameof(Regeneration), Regeneration);
+        }
     }
 }

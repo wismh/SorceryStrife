@@ -6,7 +6,7 @@ namespace Game
     [SpellCaster(SpellType = typeof(IceArrowSpell))]
     public class IceArrowCaster : Caster
     {
-        public float Damage => _spell.Damage.ValueAtLevel(Level) * PlayerInventory.GetSumOfBuff(nameof(Damage));
+        public float Damage => PlayerInventory.ApplyModifiers(StatType.Damage, _spell.Damage.ValueAtLevel(Level));
         public float Speed => _spell.Speed.ValueAtLevel(Level);
         
         private readonly IceArrowSpell _spell;
@@ -27,7 +27,7 @@ namespace Game
         {
             const float angleOffset = 25f;
 
-            var number = 1 * PlayerInventory.GetSumOfBuff("Projectiles");
+            var number = PlayerInventory.ApplyModifiers(StatType.ProjectileCount, 1);
             
             for (var i = 0; i < number; ++i)
             {
