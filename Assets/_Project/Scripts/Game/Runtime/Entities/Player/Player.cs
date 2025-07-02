@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 using Zenject;
 
 namespace Game
@@ -75,7 +73,7 @@ namespace Game
         private IEnumerator LoadMenuRoutine()
         {
             yield return new WaitForSeconds(4);
-            SceneManager.LoadScene(sceneBuildIndex: 0);
+            Bootstrap.StateMachine.Enter(new MenuState());
         }
     }
 }
