@@ -37,7 +37,7 @@ namespace Game
             
             _iconImage.sprite = item.Icon;
             _titleLabel.text = item.Title;
-            _levelLabel.text = k_levelPattern.Replace("{}", (_inventory.GetLevelOfItem(item) + 1).ToString());
+            _levelLabel.text = k_levelPattern.Replace("{}", (_inventory.GetLevelOfItem(item) + 2).ToString());
             _descriptionLabel.text = item.Description;
             
             var namesText = "";
