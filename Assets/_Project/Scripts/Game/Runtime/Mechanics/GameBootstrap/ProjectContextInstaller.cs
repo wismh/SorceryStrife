@@ -11,10 +11,7 @@ namespace Game
     {
         public override void InstallBindings()
         {
-            var stateMachine = new GlobalGameStateMachine();
-            stateMachine.SetInitial(new MenuState());
-
-            Container.Bind<GlobalGameStateMachine>().FromInstance(stateMachine).AsSingle();
+            Container.Bind<GlobalGameStateMachine>().AsSingle();
         }
     }
 }
