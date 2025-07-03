@@ -1,6 +1,7 @@
-﻿using System.Collections;
 using System.Collections.Generic;
-using PrimeTween;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
@@ -12,39 +13,37 @@ namespace Game
         [SerializeField] private TextMeshProUGUI _textLabel;
         [SerializeField] private Transform _canvas;
         [SerializeField] private float _interval;
-        
+
         private Camera _camera;
-        
+
         private void Start()
         {
             _camera = Camera.main;
-            StartCoroutine(StartDialogs());
+            StartDialogsAsync().Forget();
         }
-        
+
         private void Update()
         {
             _canvas.transform.forward = _camera.transform.forward;
         }
-        
-        private IEnumerator StartDialogs()
+
+        private async UniTaskVoid StartDialogsAsync()
         {
-            yield return new WaitForSeconds(3);
-            
+            var cancellationToken = this.GetCancellationTokenOnDestroy();
+
+            await UniTask.WaitForSeconds(3, cancellationToken: cancellationToken);
+
             while (true)
             {
                 _textLabel.text = _texts[Random.Range(0, _texts.Count)];
-                Tween.Custom(
-                    0, 1, 1,
-                    value => _textLabel.alpha = value
-                    ).OnComplete(() =>
+
+                _textLabel.alpha = 0;
+                DOTween.To(() => _textLabel.alpha, value => _textLabel.alpha = value, 1f, 1f).OnComplete(() =>
                 {
-                    Tween.Custom(
-                        1, 0, 1,
-                        value => _textLabel.alpha = value,
-                        startDelay: 3);
+                    DOTween.To(() => _textLabel.alpha, value => _textLabel.alpha = value, 0f, 1f).SetDelay(3f);
                 });
-                
-                yield return new WaitForSeconds(_interval);
+
+                await UniTask.WaitForSeconds(_interval, cancellationToken: cancellationToken);
             }
         }
     }

@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using PrimeTween;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
@@ -10,7 +8,7 @@ namespace Game
     {
         [SerializeField] private float _offset;
         [SerializeField] private float _duration;
-        
+
         private TextMeshProUGUI _textMesh;
         private Camera _camera;
 
@@ -24,7 +22,7 @@ namespace Game
         {
             _textMesh.color = color;
         }
-        
+
         private void Awake()
         {
             _camera = Camera.main;
@@ -33,7 +31,7 @@ namespace Game
 
         private void Start()
         {
-            Tween.PositionY(_textMesh.transform, transform.position.y + _offset, _duration);
+            _textMesh.transform.DOMoveY(transform.position.y + _offset, _duration);
         }
 
         private void Update()
