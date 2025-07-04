@@ -26,7 +26,7 @@ namespace Game
             if (!_player.IsAlive)
                 direction *= -1;
                 
-            _rigidbody.velocity = direction * _entity.MoveSpeed;
+            _rigidbody.linearVelocity = direction * _entity.MoveSpeed;
             transform.forward = direction;
         }
     }
