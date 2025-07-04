@@ -1,14 +1,19 @@
 using Cysharp.Threading.Tasks;
-using UnityEngine.SceneManagement;
 
 namespace Game
 {
     public class MenuState : StateBase
     {
-        public override UniTask Enter()
+        private readonly ISceneLoaderService _sceneLoaderService;
+
+        public MenuState(ISceneLoaderService sceneLoaderService)
         {
-            SceneManager.LoadScene(SceneInBuild.MainMenu);
-            return UniTask.CompletedTask;
+            _sceneLoaderService = sceneLoaderService;
+        }
+
+        public override async UniTask Enter()
+        {
+            await _sceneLoaderService.LoadSceneAsync(SceneInBuild.MainMenu, unloadRedundant: true);
         }
 
         public override UniTask Exit()
