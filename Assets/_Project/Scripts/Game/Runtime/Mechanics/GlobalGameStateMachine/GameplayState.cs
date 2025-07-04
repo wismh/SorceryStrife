@@ -1,16 +1,19 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine.SceneManagement;
 
 namespace Game
 {
-    public class GameplayState : IState
+    public class GameplayState : StateBase
     {
-        public void Enter()
+        public override UniTask Enter()
         {
             SceneManager.LoadScene(SceneInBuild.Gameplay);
+            return UniTask.CompletedTask;
         }
 
-        public void Exit()
+        public override UniTask Exit()
         {
+            return UniTask.CompletedTask;
         }
     }
 }
