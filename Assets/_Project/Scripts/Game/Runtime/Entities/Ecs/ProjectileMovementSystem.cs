@@ -5,8 +5,6 @@ using Unity.Transforms;
 
 namespace Game
 {
-    using Entity = Unity.Entities.Entity;
-
     /// <summary>Straight-line movement + lifetime countdown for every ECS projectile, regardless of owner.</summary>
     public partial struct ProjectileMovementSystem : ISystem
     {
@@ -34,7 +32,7 @@ namespace Game
 
         private void Execute(
             [EntityIndexInQuery] int indexInQuery,
-            Entity entity,
+            Unity.Entities.Entity entity,
             ref LocalTransform transform,
             in ProjectileVelocity velocity,
             ref ProjectileLifetime lifetime)

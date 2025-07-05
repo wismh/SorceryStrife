@@ -7,8 +7,6 @@ using UnityEngine.Rendering;
 
 namespace Game
 {
-    using Entity = Unity.Entities.Entity;
-
     /// <summary>
     /// Builds one reusable ECS "prefab" entity (Entities Graphics rendering set up entirely from
     /// code via RenderMeshUtility.AddComponents - no SubScene/Baker needed for a runtime-only
@@ -21,7 +19,7 @@ namespace Game
         [SerializeField] private Material _material;
 
         private EntityManager _entityManager;
-        private Entity _prefabEntity;
+        private Unity.Entities.Entity _prefabEntity;
 
         private void Start()
         {
@@ -29,9 +27,9 @@ namespace Game
             _prefabEntity = CreatePrefabEntity();
         }
 
-        public Entity SpawnProjectile(float3 position, float3 velocity, float damage, Team team, float lifetime)
+        public Unity.Entities.Entity SpawnProjectile(float3 position, float3 velocity, float damage, Team team, float lifetime)
         {
-            Entity instance = _entityManager.Instantiate(_prefabEntity);
+            Unity.Entities.Entity instance = _entityManager.Instantiate(_prefabEntity);
 
             _entityManager.SetComponentData(instance, new LocalTransform
             {
@@ -47,9 +45,9 @@ namespace Game
             return instance;
         }
 
-        private Entity CreatePrefabEntity()
+        private Unity.Entities.Entity CreatePrefabEntity()
         {
-            Entity entity = _entityManager.CreateEntity(
+            Unity.Entities.Entity entity = _entityManager.CreateEntity(
                 typeof(Prefab),
                 typeof(LocalTransform),
                 typeof(ProjectileVelocity),
