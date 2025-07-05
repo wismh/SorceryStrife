@@ -14,18 +14,17 @@ namespace EnemyEcs
     /// </summary>
     public class EnemyEcsSpawner : MonoBehaviour
     {
-        private EntityManager _entityManager;
-
-        private void Start()
-        {
-            _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-        }
+        // Fetched fresh rather than cached in Start() - EnemySpawner (a different GameObject) can
+        // call Spawn() from its own Start() before this component's Start() has run, since Unity
+        // doesn't guarantee cross-GameObject Start() ordering.
+        private static EntityManager EntityManager => World.DefaultGameObjectInjectionWorld.EntityManager;
 
         public void Spawn(EntityStatsAuthoring stats, Vector3 position)
         {
             EntityCharacteristics characteristics = stats.Characteristics;
+            EntityManager entityManager = EntityManager;
 
-            var entity = _entityManager.CreateEntity(
+            var entity = entityManager.CreateEntity(
                 typeof(LocalTransform),
                 typeof(MoveSpeed),
                 typeof(AttackStats),
@@ -34,23 +33,23 @@ namespace EnemyEcs
                 typeof(AttackState),
                 typeof(EnemyEcsType));
 
-            _entityManager.SetComponentData(entity, new LocalTransform
+            entityManager.SetComponentData(entity, new LocalTransform
             {
                 Position = position,
                 Rotation = quaternion.identity,
                 Scale = 1f,
             });
-            _entityManager.SetComponentData(entity, new MoveSpeed { Value = characteristics.MoveSpeed });
-            _entityManager.SetComponentData(entity, new AttackStats
+            entityManager.SetComponentData(entity, new MoveSpeed { Value = characteristics.MoveSpeed });
+            entityManager.SetComponentData(entity, new AttackStats
             {
                 Attack = characteristics.Attack,
                 RangeOfAttack = characteristics.RangeOfAttack,
                 AttackSpeed = characteristics.AttackSpeed,
             });
-            _entityManager.SetComponentData(entity, new Health { Value = characteristics.MaxHealth, Max = characteristics.MaxHealth });
-            _entityManager.SetComponentData(entity, new UnitTeam { Value = stats.Team });
-            _entityManager.SetComponentData(entity, new AttackState { Phase = AttackPhase.Idle, Timer = 0f });
-            _entityManager.SetComponentData(entity, new EnemyEcsType { Value = stats.EnemyType });
+            entityManager.SetComponentData(entity, new Health { Value = characteristics.MaxHealth, Max = characteristics.MaxHealth });
+            entityManager.SetComponentData(entity, new UnitTeam { Value = stats.Team });
+            entityManager.SetComponentData(entity, new AttackState { Phase = AttackPhase.Idle, Timer = 0f });
+            entityManager.SetComponentData(entity, new EnemyEcsType { Value = stats.EnemyType });
         }
     }
 }
