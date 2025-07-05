@@ -5760,10 +5760,14 @@ MonoBehaviour:
   - {fileID: 406936042}
   _projectileEcsSpawner: {fileID: 190000004}
   _enemyEcsSpawner: {fileID: 190000014}
-  _minionCompanionPrefab: {fileID: 0}
-  _mutantCompanionPrefab: {fileID: 0}
-  _ogrCompanionPrefab: {fileID: 0}
-  _oldMutantCompanionPrefab: {fileID: 0}
+  _minionCompanionPrefab: {fileID: 2270169045049551187, guid: 701506a00452885b76e25b9697a9ff70,
+    type: 3}
+  _mutantCompanionPrefab: {fileID: 2270169045049551187, guid: d6a5ea65abe3d9900165b98164f97af9,
+    type: 3}
+  _ogrCompanionPrefab: {fileID: 2270169045049551187, guid: e02aa1b73a878c806d7a2b0b0ab69585,
+    type: 3}
+  _oldMutantCompanionPrefab: {fileID: 2270169045049551187, guid: e3e8b8990e0605bc99e31277fc4e2db1,
+    type: 3}
 --- !u!1001 &898328776
 PrefabInstance:
   m_ObjectHideFlags: 0
