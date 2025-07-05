@@ -9,7 +9,7 @@ namespace Game
         public async UniTask LoadSceneAsync(int sceneIndex, bool unloadRedundant)
         {
             LoadSceneMode mode = unloadRedundant ? LoadSceneMode.Single : LoadSceneMode.Additive;
-            await SceneManager.LoadSceneAsync(sceneIndex, mode);
+            await SceneManager.LoadSceneAsync(sceneIndex, mode).ToUniTask();
         }
     }
 }
