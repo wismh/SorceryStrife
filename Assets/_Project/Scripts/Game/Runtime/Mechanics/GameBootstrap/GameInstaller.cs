@@ -9,9 +9,12 @@ namespace Game {
         [SerializeField] private Player _player;
         [SerializeField] private Experience _experiencePrefab;
         [SerializeField] private List<BaseScreen> _screens;
+        [SerializeField] private ProjectileEcsSpawner _projectileEcsSpawner;
 
         public override void InstallBindings()
         {
+            Container.Bind<ProjectileEcsSpawner>().FromInstance(_projectileEcsSpawner).AsSingle();
+
             var screenManager = new BaseScreenManager(_screens);
             Container.Bind<BaseScreenManager>().FromInstance(screenManager);
             Container.Bind<IScreenManager>().FromInstance(screenManager);
