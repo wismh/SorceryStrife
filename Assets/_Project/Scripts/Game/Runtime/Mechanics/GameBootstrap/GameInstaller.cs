@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Game.InventorySystem;
+using ProjectileEcs;
 using UnityEngine;
 using Zenject;
 

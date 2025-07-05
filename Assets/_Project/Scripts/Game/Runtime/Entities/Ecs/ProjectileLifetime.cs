@@ -1,6 +1,6 @@
 using Unity.Entities;
 
-namespace Game
+namespace ProjectileEcs
 {
     public struct ProjectileLifetime : IComponentData
     {

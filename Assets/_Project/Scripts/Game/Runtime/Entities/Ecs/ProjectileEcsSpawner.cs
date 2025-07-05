@@ -1,3 +1,4 @@
+using Game;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Rendering;
@@ -5,7 +6,7 @@ using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace Game
+namespace ProjectileEcs
 {
     /// <summary>
     /// Builds one reusable ECS "prefab" entity (Entities Graphics rendering set up entirely from

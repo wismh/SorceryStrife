@@ -6,7 +6,10 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
-namespace Game
+// No "using Game;" in this file on purpose - see ProjectileVelocity.cs for why. Game-namespace
+// types (Enemy, EntityDamagable, Team) are always written fully qualified below so Game.Entity
+// never enters scope, even transitively through the IJobEntity source generator's companion file.
+namespace ProjectileEcs
 {
     /// <summary>
     /// Bridges Zenject-managed MonoBehaviour enemies into ECS: builds a per-frame position/radius
@@ -18,9 +21,9 @@ namespace Game
     [UpdateAfter(typeof(ProjectileMovementSystem))]
     public partial class EnemyHitDetectionSystem : SystemBase
     {
-        private List<Enemy> _enemyTargets = new();
+        private List<Game.Enemy> _enemyTargets = new();
 
-        public void SetEnemyTargets(List<Enemy> enemyTargets)
+        public void SetEnemyTargets(List<Game.Enemy> enemyTargets)
         {
             _enemyTargets = enemyTargets;
         }
@@ -32,9 +35,9 @@ namespace Game
 
             var positions = new NativeList<float3>(_enemyTargets.Count, Allocator.TempJob);
             var radii = new NativeList<float>(_enemyTargets.Count, Allocator.TempJob);
-            var liveEnemies = new List<Enemy>(_enemyTargets.Count);
+            var liveEnemies = new List<Game.Enemy>(_enemyTargets.Count);
 
-            foreach (Enemy enemy in _enemyTargets)
+            foreach (Game.Enemy enemy in _enemyTargets)
             {
                 if (!enemy.TryGetComponent(out Game.Entity entityComponent) || !entityComponent.IsAlive)
                     continue;
@@ -56,8 +59,8 @@ namespace Game
 
             while (hits.TryDequeue(out HitResult hit))
             {
-                Enemy target = liveEnemies[hit.EnemyIndex];
-                if (target.TryGetComponent(out EntityDamagable damagable))
+                Game.Enemy target = liveEnemies[hit.EnemyIndex];
+                if (target.TryGetComponent(out Game.EntityDamagable damagable))
                     damagable.Damage(hit.Damage);
 
                 if (EntityManager.Exists(hit.Projectile))
@@ -72,7 +75,7 @@ namespace Game
 
     internal struct HitResult
     {
-        public Unity.Entities.Entity Projectile;
+        public Entity Projectile;
         public int EnemyIndex;
         public float Damage;
     }
@@ -84,9 +87,9 @@ namespace Game
         [ReadOnly] public NativeArray<float> EnemyRadii;
         public NativeQueue<HitResult>.ParallelWriter Hits;
 
-        private void Execute(Unity.Entities.Entity entity, in LocalTransform transform, in ProjectileDamage damage, in UnitTeam team)
+        private void Execute(Entity entity, in LocalTransform transform, in ProjectileDamage damage, in Game.UnitTeam team)
         {
-            if (team.Value != Team.Ally)
+            if (team.Value != Game.Team.Ally)
                 return;
 
             for (int i = 0; i < EnemyPositions.Length; i++)

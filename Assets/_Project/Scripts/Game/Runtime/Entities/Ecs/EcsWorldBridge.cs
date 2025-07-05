@@ -1,8 +1,9 @@
+using Game;
 using Unity.Entities;
 using UnityEngine;
 using Zenject;
 
-namespace Game
+namespace ProjectileEcs
 {
     /// <summary>
     /// The entire Zenject-DI to ECS-World seam for крок-7: pushes the Zenject-managed enemy list
