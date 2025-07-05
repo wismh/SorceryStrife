@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using EnemyEcs;
 using Game.InventorySystem;
 using ProjectileEcs;
 using UnityEngine;
@@ -12,7 +11,6 @@ namespace Game {
         [SerializeField] private Experience _experiencePrefab;
         [SerializeField] private List<BaseScreen> _screens;
         [SerializeField] private ProjectileEcsSpawner _projectileEcsSpawner;
-        [SerializeField] private EnemyEcsSpawner _enemyEcsSpawner;
         [SerializeField] private EnemyCompanion _minionCompanionPrefab;
         [SerializeField] private EnemyCompanion _mutantCompanionPrefab;
         [SerializeField] private EnemyCompanion _ogrCompanionPrefab;
@@ -21,7 +19,6 @@ namespace Game {
         public override void InstallBindings()
         {
             Container.Bind<ProjectileEcsSpawner>().FromInstance(_projectileEcsSpawner).AsSingle();
-            Container.Bind<EnemyEcsSpawner>().FromInstance(_enemyEcsSpawner).AsSingle();
 
             var companionPools = new EnemyCompanionPools(new[]
             {

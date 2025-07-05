@@ -6,9 +6,9 @@ namespace Game
     /// <summary>
     /// Bakes the same stats as Entity/EntityCharacteristics (Attack, RangeOfAttack,
     /// AttackSpeed, MoveSpeed, MaxHealth, RangeOfPickUp) plus Team into ECS components. The Baker
-    /// itself stays unused (крок-7/8 skip SubScene/baking entirely for runtime-only spawns) - what
-    /// crок-8 actually uses is the Characteristics/Team/EnemyType getters below, read directly off
-    /// the prefab asset by EnemySpawner/EnemyEcsSpawner.
+    /// itself stays unused (крок-7/9 skip SubScene/baking entirely for runtime-only spawns) - what
+    /// крок-9 actually uses is the Characteristics/Team/EnemyType getters below, read directly off
+    /// the prefab asset by WaveSpawnSystem.
     /// </summary>
     public class EntityStatsAuthoring : MonoBehaviour
     {
@@ -16,7 +16,7 @@ namespace Game
         [SerializeField] private Team _team;
         [SerializeField] private EnemyType _enemyType;
 
-        /// <summary>Read directly off the prefab asset at spawn time (крок-7/8 skip baking/SubScene entirely) - see EnemySpawner/EnemyEcsSpawner.</summary>
+        /// <summary>Read directly off the prefab asset at spawn time (крок-7/9 skip baking/SubScene entirely) - see WaveSpawnSystem.</summary>
         public EntityCharacteristics Characteristics => _characteristics;
         public Team Team => _team;
         public EnemyType EnemyType => _enemyType;
