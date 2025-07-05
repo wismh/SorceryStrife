@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using EnemyEcs;
 using UnityEngine;
 using Zenject;
 using Random = UnityEngine.Random;
@@ -30,12 +31,14 @@ namespace Game
         private float _spawnDelay;
         private DiContainer _container;
         private Entity _player;
+        private EnemyEcsSpawner _enemyEcsSpawner;
 
         [Inject]
-        public void Construct(DiContainer container, Player player)
+        public void Construct(DiContainer container, Player player, EnemyEcsSpawner enemyEcsSpawner)
         {
             _container = container;
             _player = player.GetComponent<Entity>();
+            _enemyEcsSpawner = enemyEcsSpawner;
         }
 
         private void Start()
@@ -71,9 +74,20 @@ namespace Game
             while (spawnedNumber < parameters.Amount)
             {
                 var position = Random.insideUnitCircle.normalized * Random.Range(_range.x, _range.y);
+                var worldPosition = _player.transform.position + new Vector3(position.x, 0, position.y);
 
-                var clone = _container.InstantiatePrefabForComponent<Enemy>(parameters.EnemyPrefab);
-                clone.transform.position = _player.transform.position + new Vector3(position.x, 0, position.y);
+                // крок-8: melee types (Minion/Mutant/Ogr/OldMutant) carry EntityStatsAuthoring and
+                // spawn as pure ECS entities instead - see EnemyEcsSpawner. Devil/HotDevil/Eye/BigEye
+                // don't have it and keep spawning as MonoBehaviour, unchanged.
+                if (parameters.EnemyPrefab.TryGetComponent(out EntityStatsAuthoring stats))
+                {
+                    _enemyEcsSpawner.Spawn(stats, worldPosition);
+                }
+                else
+                {
+                    var clone = _container.InstantiatePrefabForComponent<Enemy>(parameters.EnemyPrefab);
+                    clone.transform.position = worldPosition;
+                }
 
                 spawnedNumber += 1;
                 await UniTask.WaitForSeconds(delay, cancellationToken: cancellationToken);

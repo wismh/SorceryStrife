@@ -5,15 +5,21 @@ namespace Game
 {
     /// <summary>
     /// Bakes the same stats as Entity/EntityCharacteristics (Attack, RangeOfAttack,
-    /// AttackSpeed, MoveSpeed, MaxHealth, RangeOfPickUp) plus Team into ECS components.
-    /// Not yet wired to any spawn path or SubScene - groundwork for the enemy/projectile
-    /// ECS conversion (migration plan steps 7-8), which will decide whether entities come
-    /// from a baked SubScene prefab or EntityManager.CreateEntity at runtime.
+    /// AttackSpeed, MoveSpeed, MaxHealth, RangeOfPickUp) plus Team into ECS components. The Baker
+    /// itself stays unused (крок-7/8 skip SubScene/baking entirely for runtime-only spawns) - what
+    /// crок-8 actually uses is the Characteristics/Team/EnemyType getters below, read directly off
+    /// the prefab asset by EnemySpawner/EnemyEcsSpawner.
     /// </summary>
     public class EntityStatsAuthoring : MonoBehaviour
     {
         [SerializeField] private EntityCharacteristics _characteristics;
         [SerializeField] private Team _team;
+        [SerializeField] private EnemyType _enemyType;
+
+        /// <summary>Read directly off the prefab asset at spawn time (крок-7/8 skip baking/SubScene entirely) - see EnemySpawner/EnemyEcsSpawner.</summary>
+        public EntityCharacteristics Characteristics => _characteristics;
+        public Team Team => _team;
+        public EnemyType EnemyType => _enemyType;
 
         private class Baker : Baker<EntityStatsAuthoring>
         {
