@@ -11,6 +11,8 @@ namespace Game
     /// </summary>
     public class Bootstrap : MonoBehaviour
     {
+        [SerializeField] private int _shortDelayBeforeLoadMenu = 2500;
+
         private GlobalGameStateMachine _stateMachine;
 
         [Inject]
@@ -26,6 +28,11 @@ namespace Game
 
         private async UniTaskVoid EnterMenuAsync()
         {
+            if (_shortDelayBeforeLoadMenu > 0)
+            {
+                await UniTask.Delay(_shortDelayBeforeLoadMenu);
+            }
+
             await _stateMachine.Enter<MenuState>();
         }
     }
