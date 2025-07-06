@@ -11,8 +11,10 @@ namespace ProjectileEcs
     /// <summary>
     /// Builds one reusable ECS "prefab" entity (Entities Graphics rendering set up entirely from
     /// code via RenderMeshUtility.AddComponents - no SubScene/Baker needed for a runtime-only
-    /// spawn path) and instantiates it on demand. Not called by any real Caster yet - see
-    /// ProjectileEcsSmokeTest for the throwaway verification harness.
+    /// spawn path) and instantiates it on demand. Called from FireBallCaster/IceArrowCaster - see
+    /// EnemyHitDetectionSystem/EnemyMeleeHitDetectionSystem for what happens on hit, and
+    /// Docs/Architecture-DOTS-Migration-Plan.md step 7 for why Meteor/MagicField stay MonoBehaviour
+    /// (delayed-fall and persistent-area don't fit this straight-line-projectile shape).
     /// </summary>
     public class ProjectileEcsSpawner : MonoBehaviour
     {
@@ -27,7 +29,7 @@ namespace ProjectileEcs
         private Unity.Entities.Entity _prefabEntity;
         private bool _prefabCreated;
 
-        public Unity.Entities.Entity SpawnProjectile(float3 position, float3 velocity, float damage, Team team, float lifetime)
+        public Unity.Entities.Entity SpawnProjectile(float3 position, float3 velocity, float damage, Team team, float lifetime, bool piercing = false)
         {
             EnsurePrefabEntity();
 
@@ -44,6 +46,9 @@ namespace ProjectileEcs
             entityManager.SetComponentData(instance, new ProjectileDamage { Value = damage });
             entityManager.SetComponentData(instance, new ProjectileLifetime { Remaining = lifetime });
             entityManager.SetComponentData(instance, new UnitTeam { Value = team });
+
+            if (piercing)
+                entityManager.AddComponent<Piercing>(instance);
 
             return instance;
         }
@@ -66,7 +71,8 @@ namespace ProjectileEcs
                 typeof(ProjectileVelocity),
                 typeof(ProjectileDamage),
                 typeof(ProjectileLifetime),
-                typeof(UnitTeam));
+                typeof(UnitTeam),
+                typeof(HitEnemyEntry));
 
             entityManager.SetComponentData(entity, LocalTransform.Identity);
 

@@ -9,11 +9,12 @@ using Entity = Unity.Entities.Entity;
 namespace Game
 {
     /// <summary>
-    /// Lets MonoBehaviour projectiles damage (and optionally push) melee-type ECS enemies directly.
-    /// EnemyCompanion - the only GameObject a melee enemy has - is a visual-only proxy with no
-    /// Collider (see EnemyCompanion.cs), so OnCollisionEnter/OnTriggerEnter never fires for them.
-    /// This is a point-in-time EntityManager query mirroring what a real Collider hit would have
-    /// done, called from each projectile's own hit logic rather than a per-frame system.
+    /// Bridges MonoBehaviour code into the melee-type ECS enemy world (Minion/Mutant/Ogr/OldMutant) -
+    /// they're the only enemies with no Collider/EntityDamagable at all (EnemyCompanion is a
+    /// visual-only proxy, see EnemyCompanion.cs), so anything that used to reach them through
+    /// physics callbacks or ListOfObject&lt;Enemy&gt; (which only ever holds the still-MonoBehaviour
+    /// Devil/HotDevil/Eye/BigEye) needs a direct EntityManager query instead: damaging/pushing them
+    /// from a projectile's own hit logic, or finding the nearest one to aim at.
     /// </summary>
     public static class EcsMeleeEnemyHits
     {
@@ -24,6 +25,40 @@ namespace Game
         public static bool DamageInRange(Vector3 position, float range, float damage, HashSet<Entity> alreadyHit = null)
         {
             return DamageAndPushInRange(position, range, damage, pushDistance: 0f, alreadyHit);
+        }
+
+        /// <summary>Nearest alive melee enemy to <paramref name="from"/>, for spells that pick a target direction via ListOfObject&lt;Enemy&gt;.GetNearestTo - that list never contains melee-type enemies at all.</summary>
+        public static bool TryGetNearestPosition(Vector3 from, out Vector3 position)
+        {
+            position = default;
+
+            if (!TryGetEntityManager(out EntityManager entityManager))
+                return false;
+
+            using NativeArray<Entity> entities = _query.ToEntityArray(Allocator.Temp);
+            float3 origin = from;
+            var found = false;
+            var bestDistanceSq = float.MaxValue;
+            float3 bestPosition = default;
+
+            foreach (Entity entity in entities)
+            {
+                var health = entityManager.GetComponentData<Health>(entity);
+                if (health.Value <= 0f)
+                    continue;
+
+                var transform = entityManager.GetComponentData<LocalTransform>(entity);
+                float distanceSq = math.distancesq(transform.Position, origin);
+                if (distanceSq >= bestDistanceSq)
+                    continue;
+
+                bestDistanceSq = distanceSq;
+                bestPosition = transform.Position;
+                found = true;
+            }
+
+            position = bestPosition;
+            return found;
         }
 
         public static bool DamageAndPushInRange(Vector3 position, float range, float damage, float pushDistance, HashSet<Entity> alreadyHit = null)

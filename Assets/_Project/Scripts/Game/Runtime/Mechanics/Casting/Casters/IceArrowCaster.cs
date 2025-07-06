@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Zenject;
 
 namespace Game
@@ -6,20 +6,22 @@ namespace Game
     [SpellCaster(SpellType = typeof(IceArrowSpell))]
     public class IceArrowCaster : Caster
     {
+        private const float ProjectileLifetime = 8f;
+
         public float Damage => PlayerInventory.ApplyModifiers(StatType.Damage, _spell.Damage.ValueAtLevel(Level));
         public float Speed => _spell.Speed.ValueAtLevel(Level);
-        
+
         private readonly IceArrowSpell _spell;
         private readonly ListOfObject<Enemy> _enemies;
-        private readonly DiContainer _container;
-        
+        private readonly ProjectileEcs.ProjectileEcsSpawner _spawner;
+
         [Inject]
-        public IceArrowCaster(DiContainer container, PlayerInventory inventory, IceArrowSpell spell, ListOfObject<Enemy> enemies):
+        public IceArrowCaster(PlayerInventory inventory, IceArrowSpell spell, ListOfObject<Enemy> enemies, ProjectileEcs.ProjectileEcsSpawner spawner):
             base(spell, inventory)
         {
-            _container = container;
             _spell = spell;
             _enemies = enemies;
+            _spawner = spawner;
         }
 
         // ReSharper disable Unity.PerformanceAnalysis
@@ -28,21 +30,18 @@ namespace Game
             const float angleOffset = 25f;
 
             var number = PlayerInventory.ApplyModifiers(StatType.ProjectileCount, 1);
-            
+
             for (var i = 0; i < number; ++i)
             {
-                var nearestEnemy = _enemies.GetNearestTo(caster.position);
-                if (!nearestEnemy)
+                if (!EnemyTargeting.TryGetNearestPosition(caster.position, _enemies, out Vector3 targetPosition))
                     return;
 
-                var directionToEnemy = (nearestEnemy.transform.position - caster.position).normalized;
-                
+                var directionToEnemy = (targetPosition - caster.position).normalized;
+
                 var angle = angleOffset * (i - number / 2);
                 var direction = Quaternion.AngleAxis(angle, Vector3.up) * directionToEnemy;
 
-                var clone = _container.InstantiatePrefabForComponent<IceArrowProjectile>(_spell.ProjectilePrefab);
-                clone.Construct(this, direction);
-                clone.transform.position = caster.position;
+                _spawner.SpawnProjectile(caster.position, direction * Speed, Damage, Team.Ally, ProjectileLifetime, piercing: true);
             }
         }
     }

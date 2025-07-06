@@ -59,11 +59,18 @@ namespace ProjectileEcs
 
             while (hits.TryDequeue(out HitResult hit))
             {
+                if (!EntityManager.Exists(hit.Projectile))
+                    continue;
+
                 Game.Enemy target = liveEnemies[hit.EnemyIndex];
                 if (target.TryGetComponent(out Game.EntityDamagable damagable))
                     damagable.Damage(hit.Damage);
 
-                if (EntityManager.Exists(hit.Projectile))
+                // No per-target dedup buffer here, unlike EnemyMeleeHitDetectionSystem's ECS-vs-ECS
+                // case: a Piercing projectile lingering against the same Devil/HotDevil/Eye/BigEye
+                // for several frames can restack damage. Acceptable for now - these are the rare
+                // ranged/boss types, not the common case - revisit if it turns out to matter.
+                if (!EntityManager.HasComponent<Piercing>(hit.Projectile))
                     EntityManager.DestroyEntity(hit.Projectile);
             }
 

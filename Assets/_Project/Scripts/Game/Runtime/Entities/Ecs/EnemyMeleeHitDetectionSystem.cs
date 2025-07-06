@@ -12,7 +12,9 @@ namespace EnemyEcs
     /// Pure ECS-vs-ECS sibling to крок-7's EnemyHitDetectionSystem, for the 4 melee types only -
     /// no MonoBehaviour snapshot needed on the enemy side anymore, damage is a direct
     /// Health.Value decrement. Devil/HotDevil/Eye/BigEye still go through крок-7's original
-    /// MonoBehaviour-bridging system, untouched.
+    /// MonoBehaviour-bridging system, untouched. Every hit is deduped through the projectile's own
+    /// HitEnemyEntry buffer (so a lingering Piercing projectile can't restack damage on the same
+    /// enemy every frame it stays in range) and only destroys the projectile when it isn't Piercing.
     /// </summary>
     [UpdateAfter(typeof(EnemyMovementSystem))]
     [UpdateAfter(typeof(ProjectileEcs.ProjectileMovementSystem))]
@@ -49,15 +51,34 @@ namespace EnemyEcs
 
             while (hits.TryDequeue(out MeleeHitResult hit))
             {
+                if (!state.EntityManager.Exists(hit.Projectile))
+                    continue;
+
                 Entity enemyEntity = enemyEntities[hit.EnemyIndex];
                 if (state.EntityManager.Exists(enemyEntity))
                 {
-                    Game.Health health = state.EntityManager.GetComponentData<Game.Health>(enemyEntity);
-                    health.Value -= hit.Damage;
-                    state.EntityManager.SetComponentData(enemyEntity, health);
+                    DynamicBuffer<ProjectileEcs.HitEnemyEntry> hitHistory = state.EntityManager.GetBuffer<ProjectileEcs.HitEnemyEntry>(hit.Projectile);
+                    var alreadyHit = false;
+                    for (var i = 0; i < hitHistory.Length; i++)
+                    {
+                        if (hitHistory[i].Value != enemyEntity)
+                            continue;
+                        alreadyHit = true;
+                        break;
+                    }
+
+                    if (!alreadyHit)
+                    {
+                        hitHistory.Add(new ProjectileEcs.HitEnemyEntry { Value = enemyEntity });
+
+                        Game.Health health = state.EntityManager.GetComponentData<Game.Health>(enemyEntity);
+                        health.Value -= hit.Damage;
+                        state.EntityManager.SetComponentData(enemyEntity, health);
+                    }
                 }
 
-                ecb.DestroyEntity(hit.Projectile);
+                if (!state.EntityManager.HasComponent<ProjectileEcs.Piercing>(hit.Projectile))
+                    ecb.DestroyEntity(hit.Projectile);
             }
 
             ecb.Playback(state.EntityManager);
