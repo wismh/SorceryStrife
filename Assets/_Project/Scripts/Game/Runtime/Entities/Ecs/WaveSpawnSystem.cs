@@ -123,20 +123,18 @@ namespace EnemyEcs
                     continue;
 
                 group.Timer -= deltaTime;
-                if (group.Timer > 0f)
+                while (group.Timer <= 0f && group.SpawnedCount < group.Amount)
                 {
-                    _activeGroups[i] = group;
-                    continue;
+                    Vector2 offset = Random.insideUnitCircle.normalized * Random.Range(_range.x, _range.y);
+                    var worldPosition = playerPosition + new float3(offset.x, 0f, offset.y);
+
+                    if (group.Stats != null)
+                        SpawnEnemy(ecb, group.Stats, worldPosition);
+
+                    group.SpawnedCount++;
+                    group.Timer += group.Delay;
                 }
 
-                Vector2 offset = Random.insideUnitCircle.normalized * Random.Range(_range.x, _range.y);
-                var worldPosition = playerPosition + new float3(offset.x, 0f, offset.y);
-
-                if (group.Stats != null)
-                    SpawnEnemy(ecb, group.Stats, worldPosition);
-
-                group.SpawnedCount++;
-                group.Timer += group.Delay;
                 _activeGroups[i] = group;
             }
         }

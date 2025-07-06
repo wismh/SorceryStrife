@@ -19,7 +19,7 @@ namespace EnemyEcs
     {
         private const float TickInterval = 0.2f;
         private const float VisibleRadius = 25f;
-        private const int BudgetPerType = 10;
+        private const int BudgetPerType = 40;
 
         private float _timer;
         private Game.Player _player;
@@ -66,11 +66,13 @@ namespace EnemyEcs
 
         private void SyncAssignedTransforms()
         {
-            foreach (var (transform, entity) in
-                     SystemAPI.Query<RefRO<LocalTransform>>().WithAll<EnemyEcsType>().WithEntityAccess())
+            foreach (KeyValuePair<Entity, Game.EnemyCompanion> kvp in _assigned)
             {
-                if (_assigned.TryGetValue(entity, out Game.EnemyCompanion companion))
-                    companion.SetTransform(transform.ValueRO.Position, transform.ValueRO.Rotation);
+                if (SystemAPI.HasComponent<LocalTransform>(kvp.Key))
+                {
+                    LocalTransform transform = SystemAPI.GetComponent<LocalTransform>(kvp.Key);
+                    kvp.Value.SetTransform(transform.Position, transform.Rotation);
+                }
             }
         }
 
@@ -78,15 +80,17 @@ namespace EnemyEcs
         {
             _releaseScratch.Clear();
 
-            foreach (var (transform, entity) in
-                     SystemAPI.Query<RefRO<LocalTransform>>().WithAll<EnemyEcsType>().WithEntityAccess())
+            foreach (KeyValuePair<Entity, Game.EnemyCompanion> kvp in _assigned)
             {
-                if (!_assigned.ContainsKey(entity))
+                if (!SystemAPI.HasComponent<LocalTransform>(kvp.Key))
+                {
+                    _releaseScratch.Add(kvp.Key);
                     continue;
-                if (math.distance(transform.ValueRO.Position, playerPosition) <= VisibleRadius)
-                    continue;
+                }
 
-                _releaseScratch.Add(entity);
+                float3 pos = SystemAPI.GetComponent<LocalTransform>(kvp.Key).Position;
+                if (math.distance(pos, playerPosition) > VisibleRadius)
+                    _releaseScratch.Add(kvp.Key);
             }
 
             foreach (Entity entity in _releaseScratch)
