@@ -6,6 +6,8 @@ namespace Game
 {
     public class MeteorProjectile : MonoBehaviour
     {
+        private const float EcsHitRadius = 0.6f;
+
         public event Action OnCollisionFloor;
         private Rigidbody _rigidbody;
         private int _floorLayer;
@@ -34,6 +36,9 @@ namespace Game
                 return;
 
             _rigidbody.linearVelocity = Vector3.down * 10f;
+
+            if (EcsMeleeEnemyHits.DamageInRange(transform.position, EcsHitRadius, _meteorCaster.Damage / 3f))
+                Destroy(gameObject);
         }
 
         private async UniTaskVoid DelayAsync()
