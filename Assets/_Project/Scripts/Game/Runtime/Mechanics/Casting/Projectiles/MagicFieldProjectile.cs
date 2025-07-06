@@ -12,8 +12,6 @@ namespace Game
         private static readonly int k_lifetimeId = Shader.PropertyToID("Lifetime");
         private static readonly int k_sizeId = Shader.PropertyToID("Size");
 
-        private const float PushDistance = 2f;
-
         [SerializeField] private VisualEffect _firstEffect;
         [SerializeField] private VisualEffect _secondEffect;
         private SphereCollider _collider;
@@ -51,10 +49,9 @@ namespace Game
         private void Update()
         {
             // Melee-type ECS enemies have no Collider (EnemyCompanion is visual-only), so
-            // OnCollisionEnter below never sees them - push+damage them directly here instead,
-            // using the collider's own currently-tweened radius so it matches what a real
-            // enemy would physically feel this frame.
-            EcsMeleeEnemyHits.DamageAndPushInRange(transform.position, _collider.radius, _caster.Damage, PushDistance, _hitEcsEnemies);
+            // OnCollisionEnter below never sees them - smoothly push and damage them directly here instead,
+            // using the collider's own currently-tweened radius so they are repelled continuously as it expands.
+            EcsMeleeEnemyHits.PushAndDamageExpandingField(transform.position, _collider.radius, _caster.Damage, _hitEcsEnemies);
         }
 
         private void OnCollisionEnter(Collision other)
