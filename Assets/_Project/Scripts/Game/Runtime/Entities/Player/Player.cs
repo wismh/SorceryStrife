@@ -16,13 +16,13 @@ namespace Game
         public float Experience { get; private set; }
         public float RequiredExperienceForLevelUp { get; private set; }
 
-        private GlobalGameStateMachine _stateMachine;
+        private RunFlowStateMachine _runFlowStateMachine;
         private Entity _playerAsEntity;
 
         [Inject]
-        public void Construct(GlobalGameStateMachine stateMachine)
+        public void Construct(RunFlowStateMachine runFlowStateMachine)
         {
-            _stateMachine = stateMachine;
+            _runFlowStateMachine = runFlowStateMachine;
             _playerAsEntity = GetComponent<Entity>();
         }
         
@@ -63,13 +63,7 @@ namespace Game
 
         private void HandleDeath()
         {
-            LoadMenuAsync().Forget();
-        }
-
-        private async UniTaskVoid LoadMenuAsync()
-        {
-            await UniTask.WaitForSeconds(4, cancellationToken: this.GetCancellationTokenOnDestroy());
-            await _stateMachine.Enter<MenuState>();
+            _runFlowStateMachine.Enter<RunOverState>().Forget();
         }
     }
 }

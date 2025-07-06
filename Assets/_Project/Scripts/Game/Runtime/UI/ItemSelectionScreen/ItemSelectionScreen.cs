@@ -16,13 +16,19 @@ namespace Game
 
         private PlayerInventory _inventory;
         private IScreenManager _screenManager;
+        private RunFlowStateMachine _runFlowStateMachine;
 
         [Inject]
-        public void Construct(PlayerInventory inventory, List<Item> items, IScreenManager screenManager)
+        public void Construct(
+            PlayerInventory inventory,
+            List<Item> items,
+            IScreenManager screenManager,
+            RunFlowStateMachine runFlowStateMachine)
         {
             _inventory = inventory;
             _items = items;
             _screenManager = screenManager;
+            _runFlowStateMachine = runFlowStateMachine;
         }
 
         private void Start()
@@ -30,7 +36,6 @@ namespace Game
             foreach (var card in _itemsCards)
                 card.OnSelect += HandleCardSelected;
 
-            Time.timeScale = 1;
             gameObject.SetActive(false);
         }
 
@@ -43,6 +48,7 @@ namespace Game
         private void HandleCardSelected()
         {
             _screenManager.CloseScreen<ItemSelectionScreen>().Forget();
+            _runFlowStateMachine.Enter<WaveState>().Forget();
         }
 
         public override void OnOpen()
@@ -61,10 +67,11 @@ namespace Game
             if (possibleItems.Count == 0)
             {
                 _screenManager.CloseScreen<ItemSelectionScreen>().Forget();
+                _runFlowStateMachine.Enter<WaveState>().Forget();
                 return;
             }
 
-            Time.timeScale = 0.01f;
+            _runFlowStateMachine.Enter<LevelUpInterstitialState>().Forget();
 
             var numberOfVariants = possibleItems.Count >= 3 ? 3 : possibleItems.Count;
             for (var i = 0; i < numberOfVariants; ++i)
@@ -78,8 +85,6 @@ namespace Game
 
         public override UniTask OnClose()
         {
-            Time.timeScale = 1;
-
             foreach (var card in _itemsCards)
                 card.gameObject.SetActive(false);
 

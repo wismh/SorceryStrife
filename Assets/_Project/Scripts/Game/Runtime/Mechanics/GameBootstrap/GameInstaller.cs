@@ -35,6 +35,12 @@ namespace Game {
 
             Container.Bind<Controls>().AsSingle();
 
+            Container.Bind<RunPrepareState>().AsSingle();
+            Container.Bind<WaveState>().AsSingle();
+            Container.Bind<LevelUpInterstitialState>().AsSingle();
+            Container.Bind<RunOverState>().AsSingle();
+            Container.BindInterfacesAndSelfTo<RunFlowStateMachine>().AsSingle();
+
             Container.Bind<Player>().FromInstance(_player).AsSingle();
         }
     }
