@@ -21,7 +21,7 @@ namespace Game
             [Serializable]
             public struct EnemySpawnParameters
             {
-                public Enemy EnemyPrefab;
+                public GameObject EnemyPrefab;
                 public int Amount;
             }
 
@@ -32,18 +32,10 @@ namespace Game
         [SerializeField] private List<Wave> _waves;
         [SerializeField] private Vector2 _range;
 
-        private DiContainer _container;
-
-        [Inject]
-        public void Construct(DiContainer container)
-        {
-            _container = container;
-        }
-
         private void Start()
         {
             World.DefaultGameObjectInjectionWorld.GetOrCreateSystemManaged<WaveSpawnSystem>()
-                .SetDependencies(_waves, _range, _container);
+                .SetDependencies(_waves, _range);
         }
     }
 }

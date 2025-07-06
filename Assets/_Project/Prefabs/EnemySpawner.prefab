@@ -46,82 +46,82 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _waves:
   - Enemies:
-    - EnemyPrefab: {fileID: 73308400270477803, guid: efb3c982c11f4214899f3de9a547db88,
+    - EnemyPrefab: {fileID: 1449213688858323806, guid: efb3c982c11f4214899f3de9a547db88,
         type: 3}
       Amount: 20
     Duration: 50
   - Enemies:
-    - EnemyPrefab: {fileID: 73308400270477803, guid: efb3c982c11f4214899f3de9a547db88,
+    - EnemyPrefab: {fileID: 1449213688858323806, guid: efb3c982c11f4214899f3de9a547db88,
         type: 3}
       Amount: 30
-    - EnemyPrefab: {fileID: 73308400270477803, guid: 09afe802418efba439ed9404cd2e93a9,
+    - EnemyPrefab: {fileID: 1449213688858323806, guid: 09afe802418efba439ed9404cd2e93a9,
         type: 3}
       Amount: 15
     Duration: 60
   - Enemies:
-    - EnemyPrefab: {fileID: 73308400270477803, guid: efb3c982c11f4214899f3de9a547db88,
+    - EnemyPrefab: {fileID: 1449213688858323806, guid: efb3c982c11f4214899f3de9a547db88,
         type: 3}
       Amount: 40
     Duration: 10
   - Enemies:
-    - EnemyPrefab: {fileID: 73308400270477803, guid: 049868856a485f744b35b9d0e6832472,
+    - EnemyPrefab: {fileID: 1449213688858323806, guid: 049868856a485f744b35b9d0e6832472,
         type: 3}
       Amount: 10
-    - EnemyPrefab: {fileID: 73308400270477803, guid: 52b529a948fa4f645b2281382fd2eed8,
+    - EnemyPrefab: {fileID: 1449213688858323806, guid: 52b529a948fa4f645b2281382fd2eed8,
         type: 3}
       Amount: 1
     Duration: 60
   - Enemies:
-    - EnemyPrefab: {fileID: 73308400270477803, guid: efb3c982c11f4214899f3de9a547db88,
+    - EnemyPrefab: {fileID: 1449213688858323806, guid: efb3c982c11f4214899f3de9a547db88,
         type: 3}
       Amount: 30
-    - EnemyPrefab: {fileID: 73308400270477803, guid: 2660f4b3999b63a44b240fd4857f11eb,
+    - EnemyPrefab: {fileID: 1449213688858323806, guid: 2660f4b3999b63a44b240fd4857f11eb,
         type: 3}
       Amount: 10
     Duration: 60
   - Enemies:
-    - EnemyPrefab: {fileID: 73308400270477803, guid: 09afe802418efba439ed9404cd2e93a9,
+    - EnemyPrefab: {fileID: 1449213688858323806, guid: 09afe802418efba439ed9404cd2e93a9,
         type: 3}
       Amount: 30
-    - EnemyPrefab: {fileID: 73308400270477803, guid: efb3c982c11f4214899f3de9a547db88,
+    - EnemyPrefab: {fileID: 1449213688858323806, guid: efb3c982c11f4214899f3de9a547db88,
         type: 3}
       Amount: 50
     Duration: 60
   - Enemies:
-    - EnemyPrefab: {fileID: 73308400270477803, guid: 09afe802418efba439ed9404cd2e93a9,
+    - EnemyPrefab: {fileID: 1449213688858323806, guid: 09afe802418efba439ed9404cd2e93a9,
         type: 3}
       Amount: 60
-    - EnemyPrefab: {fileID: 73308400270477803, guid: 2660f4b3999b63a44b240fd4857f11eb,
+    - EnemyPrefab: {fileID: 1449213688858323806, guid: 2660f4b3999b63a44b240fd4857f11eb,
         type: 3}
       Amount: 20
     Duration: 120
   - Enemies:
-    - EnemyPrefab: {fileID: 73308400270477803, guid: 049868856a485f744b35b9d0e6832472,
+    - EnemyPrefab: {fileID: 1449213688858323806, guid: 049868856a485f744b35b9d0e6832472,
         type: 3}
       Amount: 10
-    - EnemyPrefab: {fileID: 73308400270477803, guid: 09afe802418efba439ed9404cd2e93a9,
+    - EnemyPrefab: {fileID: 1449213688858323806, guid: 09afe802418efba439ed9404cd2e93a9,
         type: 3}
       Amount: 50
-    - EnemyPrefab: {fileID: 73308400270477803, guid: 52b529a948fa4f645b2281382fd2eed8,
+    - EnemyPrefab: {fileID: 1449213688858323806, guid: 52b529a948fa4f645b2281382fd2eed8,
         type: 3}
       Amount: 2
     Duration: 120
   - Enemies:
-    - EnemyPrefab: {fileID: 73308400270477803, guid: 59ed8e7ed3128aa4d8143723dae7926d,
+    - EnemyPrefab: {fileID: 1449213688858323806, guid: 59ed8e7ed3128aa4d8143723dae7926d,
         type: 3}
       Amount: 2
-    - EnemyPrefab: {fileID: 73308400270477803, guid: 049868856a485f744b35b9d0e6832472,
+    - EnemyPrefab: {fileID: 1449213688858323806, guid: 049868856a485f744b35b9d0e6832472,
         type: 3}
       Amount: 50
     Duration: 90
   - Enemies:
-    - EnemyPrefab: {fileID: 73308400270477803, guid: 59ed8e7ed3128aa4d8143723dae7926d,
+    - EnemyPrefab: {fileID: 1449213688858323806, guid: 59ed8e7ed3128aa4d8143723dae7926d,
         type: 3}
       Amount: 10
-    - EnemyPrefab: {fileID: 73308400270477803, guid: 81177750c9c9a344aa5385a9f12a4318,
+    - EnemyPrefab: {fileID: 1449213688858323806, guid: 81177750c9c9a344aa5385a9f12a4318,
         type: 3}
       Amount: 50
-    - EnemyPrefab: {fileID: 73308400270477803, guid: 120c95515c8c884468c5cb136858860c,
+    - EnemyPrefab: {fileID: 1449213688858323806, guid: 120c95515c8c884468c5cb136858860c,
         type: 3}
       Amount: 30
     Duration: 120

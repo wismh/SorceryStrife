@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4063929110318000019}
-  - component: {fileID: 9000000000000001}
+  - component: {fileID: 2270169045049551187}
   m_Layer: 6
-  m_Name: BigEye
+  m_Name: EyeCompanion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35,7 +35,7 @@ Transform:
   - {fileID: 5853300084736606822}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9000000000000001
+--- !u!114 &2270169045049551187
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -44,13 +44,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1449213688858323806}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 210aeabb74c2c1df441228caae27b52a, type: 3}
+  m_Script: {fileID: 11500000, guid: fb7c6e297f866ea4439bea043514cc65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _characteristics: {fileID: 11400000, guid: 2c8188e563fb2db4b88563526088cc1f, type: 2}
-  _team: 1
-  _enemyType: 7
-  _attackType: 0
+  _deathMaterial: {fileID: 2100000, guid: 787c1f134c97b9849be5be0f88b9c615, type: 2}
 --- !u!1001 &3163199207001329829
 PrefabInstance:
   m_ObjectHideFlags: 0

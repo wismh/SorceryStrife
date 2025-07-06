@@ -5756,7 +5756,6 @@ MonoBehaviour:
   - {fileID: 846847278}
   - {fileID: 1479043344}
   - {fileID: 406936042}
-  _projectileEcsSpawner: {fileID: 190000004}
   _pickupEcsSpawner: {fileID: 190000015}
   _minionCompanionPrefab: {fileID: 2270169045049551187, guid: 701506a00452885b76e25b9697a9ff70,
     type: 3}
@@ -5765,6 +5764,14 @@ MonoBehaviour:
   _ogrCompanionPrefab: {fileID: 2270169045049551187, guid: e02aa1b73a878c806d7a2b0b0ab69585,
     type: 3}
   _oldMutantCompanionPrefab: {fileID: 2270169045049551187, guid: e3e8b8990e0605bc99e31277fc4e2db1,
+    type: 3}
+  _devilCompanionPrefab: {fileID: 2270169045049551187, guid: 1abd4691799f4920be4c137fc61481d7,
+    type: 3}
+  _hotDevilCompanionPrefab: {fileID: 2270169045049551187, guid: fdfd5acb60f64896a700e59b805bfe80,
+    type: 3}
+  _eyeCompanionPrefab: {fileID: 2270169045049551187, guid: 9c77c724d9c440b297e0a9822865d357,
+    type: 3}
+  _bigEyeCompanionPrefab: {fileID: 2270169045049551187, guid: b6d2e2f549a14770b61c70487b58dc37,
     type: 3}
 --- !u!1001 &898328776
 PrefabInstance:
@@ -14229,8 +14236,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 190000002}
-  - component: {fileID: 190000003}
-  - component: {fileID: 190000004}
   - component: {fileID: 190000015}
   m_Layer: 0
   m_Name: EcsBridges
@@ -14254,32 +14259,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &190000003
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 190000001}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e30899bbfb48f274e04bb007f3363efa, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
---- !u!114 &190000004
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 190000001}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2bab3f17e6c8eabe831b8a033a938856, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  _mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
-  _material: {fileID: 2100000, guid: c0f75bc0a68788a488110f7c938539f1, type: 2}
 --- !u!114 &190000015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14351,6 +14330,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f60cfc091270f6fe3a64e6be0db23f2, type: 3}
   m_Name:
   m_EditorClassIdentifier:
+  _devilProjectilePrefab: {fileID: 9091866047240996196, guid: c021d1271c520a74e95dbfda23a42300,
+    type: 3}
+  _chestPrefab: {fileID: 7080094072041777117, guid: a6184cd6324923244b898715831507ff,
+    type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

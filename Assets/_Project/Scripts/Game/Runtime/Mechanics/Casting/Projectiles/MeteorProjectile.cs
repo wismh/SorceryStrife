@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -37,7 +37,7 @@ namespace Game
 
             _rigidbody.linearVelocity = Vector3.down * 10f;
 
-            if (EcsMeleeEnemyHits.DamageInRange(transform.position, EcsHitRadius, _meteorCaster.Damage / 3f))
+            if (EcsEnemyHits.DamageInRange(transform.position, EcsHitRadius, _meteorCaster.Damage / 3f))
                 Destroy(gameObject);
         }
 
@@ -51,8 +51,6 @@ namespace Game
         {
             if (other.gameObject.layer == _floorLayer)
                 OnCollisionFloor?.Invoke();
-            else if (other.TryGetComponent(out EntityDamagable entityDamagable))
-                entityDamagable.Damage(_meteorCaster.Damage / 3);
 
             Destroy(gameObject);
         }

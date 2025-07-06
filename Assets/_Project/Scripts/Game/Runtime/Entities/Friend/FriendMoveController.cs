@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Zenject;
 
 namespace Game
@@ -8,47 +8,39 @@ namespace Game
         [SerializeField] private float _speed;
         [SerializeField] private float _maxSpeed;
         [SerializeField] private float _maxSqrDistanceFromPlayer;
-        
-        private ListOfObject<Enemy> _enemies;
-        private Player _player;
 
+        private Player _player;
         private Rigidbody _rigidbody;
-        
-        private Entity _target;
-        private Entity _playerAsEntity;
-        
+
         [Inject]
-        public void Construct(ListOfObject<Enemy> enemies, Player player)
+        public void Construct(Player player)
         {
-            _enemies = enemies;
             _player = player;
             _rigidbody = GetComponent<Rigidbody>();
-            _playerAsEntity = _player.GetComponent<Entity>();
         }
 
-        private void Start()
-        {
-            _target = _playerAsEntity;
-        }
-        
         private void FixedUpdate()
         {
-            if (!_target || !_target.IsAlive || _target == _playerAsEntity)
+            Vector3 targetPosition = _player.transform.position;
+
+            if (EnemyTargeting.TryGetNearestPosition(_player.transform.position, out Vector3 nearestEnemyPos))
             {
-                var enemy = _enemies.GetNearestTo(_player.transform.position);
-                var offset = enemy ? enemy.transform.position - transform.position : Vector3.zero;
-                
-                if (!enemy || offset.sqrMagnitude > _maxSqrDistanceFromPlayer)
-                    _target = _playerAsEntity;
-                else
-                    _target = enemy.GetComponent<Entity>();
+                var offset = nearestEnemyPos - transform.position;
+                if (offset.sqrMagnitude <= _maxSqrDistanceFromPlayer)
+                {
+                    targetPosition = nearestEnemyPos;
+                }
             }
 
-            var direction = (_target.transform.position - transform.position).normalized;
-            
+            var toTarget = targetPosition - transform.position;
+            if (toTarget.sqrMagnitude <= 0.01f)
+                return;
+
+            var direction = toTarget.normalized;
+
             _rigidbody.AddForce(direction * _speed);
             _rigidbody.linearVelocity = Vector3.ClampMagnitude(_rigidbody.linearVelocity, _maxSpeed);
-            
+
             transform.forward = direction;
             transform.rotation = new Quaternion(0, transform.rotation.y, 0, transform.rotation.w);
         }

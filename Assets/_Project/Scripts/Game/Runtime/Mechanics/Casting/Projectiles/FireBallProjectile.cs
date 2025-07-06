@@ -26,19 +26,10 @@ namespace Game
         {
             _rigidbody.linearVelocity = _direction * _caster.Speed;
 
-            if (EcsMeleeEnemyHits.DamageInRange(transform.position, EcsHitRadius, _caster.Damage))
+            if (EcsEnemyHits.DamageInRange(transform.position, EcsHitRadius, _caster.Damage))
             {
                 StopAndDespawn();
             }
-        }
-
-        private void OnCollisionEnter(Collision collision)
-        {
-            if (!collision.transform.TryGetComponent(out EntityDamagable damagable))
-                return;
-
-            damagable.Damage(_caster.Damage);
-            StopAndDespawn();
         }
 
         private void StopAndDespawn()

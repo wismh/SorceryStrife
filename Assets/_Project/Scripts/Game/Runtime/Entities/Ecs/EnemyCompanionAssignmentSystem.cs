@@ -25,7 +25,7 @@ namespace EnemyEcs
         private Game.Player _player;
         private Game.EnemyCompanionPools _pools;
         private readonly Dictionary<Entity, Game.EnemyCompanion> _assigned = new();
-        private readonly int[] _assignedCountByType = new int[4];
+        private readonly int[] _assignedCountByType = new int[System.Enum.GetValues(typeof(Game.EnemyType)).Length];
         private readonly List<Entity> _releaseScratch = new();
 
         public void SetDependencies(Game.Player player, Game.EnemyCompanionPools pools)
