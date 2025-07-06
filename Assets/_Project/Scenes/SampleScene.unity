@@ -5752,13 +5752,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 384120447}
-  _experiencePrefab: {fileID: -8197700048124896270, guid: 0cd2bda961f00a944a83331d3319a4ac,
-    type: 3}
   _screens:
   - {fileID: 846847278}
   - {fileID: 1479043344}
   - {fileID: 406936042}
   _projectileEcsSpawner: {fileID: 190000004}
+  _pickupEcsSpawner: {fileID: 190000015}
   _minionCompanionPrefab: {fileID: 2270169045049551187, guid: 701506a00452885b76e25b9697a9ff70,
     type: 3}
   _mutantCompanionPrefab: {fileID: 2270169045049551187, guid: d6a5ea65abe3d9900165b98164f97af9,
@@ -14233,6 +14232,7 @@ GameObject:
   - component: {fileID: 190000003}
   - component: {fileID: 190000004}
   - component: {fileID: 190000005}
+  - component: {fileID: 190000015}
   m_Layer: 0
   m_Name: EcsProjectileTest
   m_TagString: Untagged
@@ -14296,6 +14296,20 @@ MonoBehaviour:
   _speed: 8
   _damage: 5
   _lifetime: 5
+--- !u!114 &190000015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 190000001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f576e6437da5468fc69e90b4b0bacb6, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  _mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  _material: {fileID: 2100000, guid: c0f75bc0a68788a488110f7c938539f1, type: 2}
 --- !u!1 &190000010
 GameObject:
   m_ObjectHideFlags: 0

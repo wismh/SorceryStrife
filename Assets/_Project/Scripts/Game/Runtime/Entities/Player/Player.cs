@@ -16,14 +16,12 @@ namespace Game
         public float Experience { get; private set; }
         public float RequiredExperienceForLevelUp { get; private set; }
 
-        private PoolOfObject<Experience> _experiencePool;
         private GlobalGameStateMachine _stateMachine;
         private Entity _playerAsEntity;
 
         [Inject]
-        public void Construct(PoolOfObject<Experience> experiencePool, GlobalGameStateMachine stateMachine)
+        public void Construct(GlobalGameStateMachine stateMachine)
         {
-            _experiencePool = experiencePool;
             _stateMachine = stateMachine;
             _playerAsEntity = GetComponent<Entity>();
         }
@@ -43,27 +41,23 @@ namespace Game
             _playerAsEntity.OnDeath -= HandleDeath;
         }
 
-        private void OnCollisionEnter(Collision other)
+        /// <summary>Called by PickupEcs.PickupMagnetSystem when an Experience pickup entity reaches the player - крок-10's ECS replacement for the old Experience-vs-Player OnCollisionEnter.</summary>
+        public void AwardExperience(float amount)
         {
             if (!_playerAsEntity.IsAlive)
                 return;
-            
-            if (!other.transform.TryGetComponent(out Experience experience))
+
+            Experience += amount;
+            if (Experience < RequiredExperienceForLevelUp)
                 return;
-            
-            _experiencePool.Destroy(experience);
-            
-            Experience += 1;
-            if (Experience < RequiredExperienceForLevelUp) 
-                return;
-            
+
             Level += 1;
             Experience = 0;
             RequiredExperienceForLevelUp *= _multiplierFactorOfRequiredExperienceByLevel;
 
             _playerAsEntity.Health += (_playerAsEntity.MaxHealth * 0.1f);
             _playerAsEntity.Health = Mathf.Clamp(_playerAsEntity.Health, 0, _playerAsEntity.MaxHealth);
-            
+
             OnLevelUp?.Invoke();
         }
 

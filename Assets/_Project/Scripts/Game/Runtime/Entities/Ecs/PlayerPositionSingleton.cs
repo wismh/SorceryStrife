@@ -8,5 +8,6 @@ namespace EnemyEcs
     {
         public float3 Position;
         public bool IsAlive;
+        public float PickupRadius;
     }
 }

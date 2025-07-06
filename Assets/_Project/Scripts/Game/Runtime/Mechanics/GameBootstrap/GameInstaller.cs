@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Game.InventorySystem;
+using PickupEcs;
 using ProjectileEcs;
 using UnityEngine;
 using Zenject;
@@ -8,9 +9,9 @@ namespace Game {
     public class GameInstaller : MonoInstaller
     {
         [SerializeField] private Player _player;
-        [SerializeField] private Experience _experiencePrefab;
         [SerializeField] private List<BaseScreen> _screens;
         [SerializeField] private ProjectileEcsSpawner _projectileEcsSpawner;
+        [SerializeField] private PickupEcsSpawner _pickupEcsSpawner;
         [SerializeField] private EnemyCompanion _minionCompanionPrefab;
         [SerializeField] private EnemyCompanion _mutantCompanionPrefab;
         [SerializeField] private EnemyCompanion _ogrCompanionPrefab;
@@ -19,6 +20,7 @@ namespace Game {
         public override void InstallBindings()
         {
             Container.Bind<ProjectileEcsSpawner>().FromInstance(_projectileEcsSpawner).AsSingle();
+            Container.Bind<PickupEcsSpawner>().FromInstance(_pickupEcsSpawner).AsSingle();
 
             var companionPools = new EnemyCompanionPools(new[]
             {
@@ -38,8 +40,6 @@ namespace Game {
 
             Container.Bind<ListOfObject<Enemy>>().AsSingle();
             Container.Bind<ListOfObject<Projectile>>().AsSingle();
-            Container.Bind<PoolOfObject<Experience>>().FromInstance(
-                new PoolOfObject<Experience>(Container, _experiencePrefab)).AsSingle();
 
             Container.Bind<CastersRegister>().AsSingle();
             Container.Bind<ItemsRegister>().AsSingle();

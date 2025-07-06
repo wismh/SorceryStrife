@@ -1,27 +1,28 @@
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Mathematics;
 using Unity.Transforms;
 
 // No "using Game;" in this file - see ProjectileVelocity.cs for why.
 namespace EnemyEcs
 {
-    /// <summary>On Health &lt;= 0: releases the assigned companion (death animation + delayed pool return, matching EnemyAnimator's 2s fade), spawns Experience via the same PoolOfObject Enemy.SpawnExperience already uses, destroys the entity.</summary>
+    /// <summary>On Health &lt;= 0: releases the assigned companion (death animation + delayed pool return, matching EnemyAnimator's 2s fade), spawns an Experience pickup entity (крок-10: PickupEcs.PickupEcsSpawner's prefab, instantiated via this method's own ECB alongside the entity destroy - not a direct EntityManager call, since that would be unsafe mid-iteration of the SystemAPI.Query below), destroys the entity.</summary>
     [UpdateAfter(typeof(EnemyMeleeAttackSystem))]
     [UpdateAfter(typeof(EnemyMeleeHitDetectionSystem))]
     public partial class EnemyDeathSystem : SystemBase
     {
-        private Game.PoolOfObject<Game.Experience> _experiencePool;
+        private Entity _pickupPrefab;
         private EnemyCompanionAssignmentSystem _companionSystem;
 
-        public void SetDependencies(Game.PoolOfObject<Game.Experience> experiencePool, EnemyCompanionAssignmentSystem companionSystem)
+        public void SetDependencies(Entity pickupPrefab, EnemyCompanionAssignmentSystem companionSystem)
         {
-            _experiencePool = experiencePool;
+            _pickupPrefab = pickupPrefab;
             _companionSystem = companionSystem;
         }
 
         protected override void OnUpdate()
         {
-            if (_experiencePool == null)
+            if (_pickupPrefab == Entity.Null)
                 return;
 
             var ecb = new EntityCommandBuffer(Allocator.Temp);
@@ -34,8 +35,13 @@ namespace EnemyEcs
 
                 _companionSystem?.HandleDeath(entity, enemyType.ValueRO.Value);
 
-                Game.Experience experience = _experiencePool.Instantiate();
-                experience.transform.position = transform.ValueRO.Position;
+                Entity pickup = ecb.Instantiate(_pickupPrefab);
+                ecb.SetComponent(pickup, new LocalTransform
+                {
+                    Position = transform.ValueRO.Position,
+                    Rotation = quaternion.identity,
+                    Scale = 1f,
+                });
 
                 ecb.DestroyEntity(entity);
             }
