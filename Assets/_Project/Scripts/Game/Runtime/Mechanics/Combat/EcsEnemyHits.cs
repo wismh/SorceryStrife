@@ -38,7 +38,7 @@ namespace Game
             return DamageAndPushInRange(position, range, damage, pushDistance: 0f, alreadyHit);
         }
 
-        /// <summary>Nearest alive melee enemy to <paramref name="from"/>, for spells that pick a target direction via ListOfObject&lt;Enemy&gt;.GetNearestTo - that list never contains melee-type enemies at all.</summary>
+        /// <summary>Nearest alive enemy to <paramref name="from"/>, for spells that pick a target direction.</summary>
         public static bool TryGetNearestPosition(Vector3 from, out Vector3 position)
         {
             position = default;

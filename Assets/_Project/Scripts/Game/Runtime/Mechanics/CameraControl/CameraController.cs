@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Zenject;
 
 namespace Game
@@ -17,7 +17,7 @@ namespace Game
             _player = player.transform;
         }
 
-        private void Update()
+        private void LateUpdate()
         {
             var position = Vector3.Lerp(transform.position, _player.position + _cameraOffset, _cameraSpeed * Time.deltaTime);
             

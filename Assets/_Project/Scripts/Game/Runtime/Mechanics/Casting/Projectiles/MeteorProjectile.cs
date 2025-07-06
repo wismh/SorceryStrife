@@ -30,7 +30,7 @@ namespace Game
             DelayAsync().Forget();
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             if (!_startFalling)
                 return;

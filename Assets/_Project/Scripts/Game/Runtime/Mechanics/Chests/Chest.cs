@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Lumenwake.UIModule;
 using UnityEngine;
 using Zenject;
 
@@ -9,7 +10,7 @@ namespace Game
         [SerializeField] private float _animationDuration;
 
         private IScreenManager _screenManager;
-        private Animator _animator;
+        private bool _isOpened;
 
         [Inject]
         public void Construct(IScreenManager screenManager)
@@ -19,9 +20,13 @@ namespace Game
 
         private void OnTriggerEnter(Collider other)
         {
+            if (_isOpened)
+                return;
+
             if (!other.transform.TryGetComponent(out Player player))
                 return;
 
+            _isOpened = true;
             StartDelayAsync().Forget();
         }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -10,15 +10,17 @@ namespace Game
     public class CastersRegister
     {
         private readonly DiContainer _container;
-        private readonly IAssetLoaderService _assetLoaderService;
 
         private readonly Dictionary<Type, Type> _casters = new();
         private readonly Dictionary<Type, Spell> _spells = new();
 
-        public CastersRegister(DiContainer container, IAssetLoaderService assetLoaderService)
+        public CastersRegister(DiContainer container, List<Spell> spells)
         {
             _container = container;
-            _assetLoaderService = assetLoaderService;
+            foreach (var spell in spells)
+            {
+                _spells[spell.GetType()] = spell;
+            }
             LoadCasters();
         }
 
@@ -27,12 +29,7 @@ namespace Game
             if (!type.IsSubclassOf(typeof(Spell)))
                 return null;
 
-            if (_spells.TryGetValue(type, out var loadedSpell))
-                return loadedSpell;
-
-            var spell = _assetLoaderService.LoadAsset<Spell>($"Spells/{type.Name}");
-            _spells.Add(type, spell);
-            return spell;
+            return _spells.GetValueOrDefault(type);
         }
         
         private void LoadCasters()
@@ -59,8 +56,8 @@ namespace Game
             if (!_casters.TryGetValue(type, out var caster))
                 return null;
             
-            _container.Bind(type).FromInstance(LoadSpell(type)).WhenInjectedInto(caster);
-            return (Caster)_container.Instantiate(caster);
+            var spell = LoadSpell(type);
+            return (Caster)_container.Instantiate(caster, new object[] { spell });
         }
     }
 }

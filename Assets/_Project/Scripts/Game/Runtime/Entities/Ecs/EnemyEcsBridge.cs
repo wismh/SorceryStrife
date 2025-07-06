@@ -18,19 +18,16 @@ namespace EnemyEcs
         [SerializeField] private Chest _chestPrefab;
 
         private Player _player;
-        private EnemyCompanionPools _companionPools;
         private PickupEcsSpawner _pickupSpawner;
         private DiContainer _container;
 
         [Inject]
         public void Construct(
             Player player,
-            EnemyCompanionPools companionPools,
             PickupEcsSpawner pickupSpawner,
             DiContainer container)
         {
             _player = player;
-            _companionPools = companionPools;
             _pickupSpawner = pickupSpawner;
             _container = container;
         }
@@ -39,13 +36,9 @@ namespace EnemyEcs
         {
             World world = World.DefaultGameObjectInjectionWorld;
 
-            var companionSystem = world.GetOrCreateSystemManaged<EnemyCompanionAssignmentSystem>();
-            companionSystem.SetDependencies(_player, _companionPools);
-
             EntityDamagable playerDamagable = _player.GetComponent<EntityDamagable>();
             world.GetOrCreateSystemManaged<EnemyAttackSystem>().SetDependencies(
                 playerDamagable,
-                companionSystem,
                 _devilProjectilePrefab,
                 _container);
             EcsEnemyHits.SetDamageNumberPrefab(playerDamagable.DamageNumberPrefab);
@@ -53,10 +46,9 @@ namespace EnemyEcs
             Unity.Entities.Entity pickupPrefab = _pickupSpawner.GetOrCreatePrefabEntity();
             world.GetOrCreateSystemManaged<EnemyDeathSystem>().SetDependencies(
                 pickupPrefab,
-                companionSystem,
                 pos => _container.InstantiatePrefab(
                     _chestPrefab,
-                    new Vector3(pos.x, -7.5f, pos.z),
+                    new Vector3(pos.x, _player.transform.position.y, pos.z),
                     Quaternion.identity,
                     null));
 

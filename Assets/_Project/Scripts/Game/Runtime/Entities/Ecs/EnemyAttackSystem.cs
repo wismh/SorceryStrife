@@ -18,18 +18,15 @@ namespace EnemyEcs
     public partial class EnemyAttackSystem : SystemBase
     {
         private Game.EntityDamagable _playerDamagable;
-        private EnemyCompanionAssignmentSystem _companionSystem;
         private Game.DevilProjectile _devilProjectilePrefab;
         private DiContainer _container;
 
         public void SetDependencies(
             Game.EntityDamagable playerDamagable,
-            EnemyCompanionAssignmentSystem companionSystem,
             Game.DevilProjectile devilProjectilePrefab,
             DiContainer container)
         {
             _playerDamagable = playerDamagable;
-            _companionSystem = companionSystem;
             _devilProjectilePrefab = devilProjectilePrefab;
             _container = container;
         }
@@ -39,7 +36,6 @@ namespace EnemyEcs
             if (_playerDamagable == null || !SystemAPI.TryGetSingleton(out PlayerPositionSingleton player))
                 return;
 
-            var attackStarts = new NativeQueue<AttackStartEvent>(Allocator.TempJob);
             var meleeDamageEvents = new NativeQueue<float>(Allocator.TempJob);
             var rangedAttackEvents = new NativeQueue<RangedAttackEvent>(Allocator.TempJob);
 
@@ -48,16 +44,9 @@ namespace EnemyEcs
                 DeltaTime = SystemAPI.Time.DeltaTime,
                 PlayerPosition = player.Position,
                 BaseAttackDuration = Game.Entity.BaseAttackDuration,
-                AttackStarts = attackStarts.AsParallelWriter(),
                 MeleeDamageEvents = meleeDamageEvents.AsParallelWriter(),
                 RangedAttackEvents = rangedAttackEvents.AsParallelWriter(),
             }.ScheduleParallel(Dependency).Complete();
-
-            while (attackStarts.TryDequeue(out AttackStartEvent start))
-            {
-                if (_companionSystem != null && _companionSystem.TryGetCompanion(start.Entity, out Game.EnemyCompanion companion))
-                    companion.PlayAttack(start.Duration);
-            }
 
             while (meleeDamageEvents.TryDequeue(out float damage))
                 _playerDamagable.Damage(damage);
@@ -72,16 +61,9 @@ namespace EnemyEcs
                 }
             }
 
-            attackStarts.Dispose();
             meleeDamageEvents.Dispose();
             rangedAttackEvents.Dispose();
         }
-    }
-
-    internal struct AttackStartEvent
-    {
-        public Entity Entity;
-        public float Duration;
     }
 
     [BurstCompile]
@@ -90,12 +72,10 @@ namespace EnemyEcs
         public float DeltaTime;
         public float3 PlayerPosition;
         public float BaseAttackDuration;
-        public NativeQueue<AttackStartEvent>.ParallelWriter AttackStarts;
         public NativeQueue<float>.ParallelWriter MeleeDamageEvents;
         public NativeQueue<RangedAttackEvent>.ParallelWriter RangedAttackEvents;
 
         private void Execute(
-            Entity entity,
             in LocalTransform transform,
             in Game.AttackStats attackStats,
             in Game.Health health,
@@ -114,7 +94,6 @@ namespace EnemyEcs
                 float duration = BaseAttackDuration / attackStats.AttackSpeed;
                 state.Phase = AttackPhase.WindingUp;
                 state.Timer = duration;
-                AttackStarts.Enqueue(new AttackStartEvent { Entity = entity, Duration = duration });
                 return;
             }
 

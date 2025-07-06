@@ -1,5 +1,5 @@
-﻿using System;
-using System.Linq;
+using System;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -35,26 +35,24 @@ namespace Game
             _spell = spell;
             
             var spellCaster = _playerCaster.GetCasterOfSpell(spell.GetType());
-            var spellLevel = (spellCaster?.Level ?? -1) + 2;
+            var currentTier = spellCaster?.Level ?? -1;
+            var spellLevel = currentTier + 2;
             
             _iconImage.sprite = spell.Icon;
             _titleLabel.text = spell.Title;
             _levelLabel.text = k_levelPattern.Replace("{}", spellLevel.ToString());
             _descriptionLabel.text = spell.Description;
 
-            var namesText = "";
-            var valuesText = "<mspace=0.54em>";
+            var namesBuilder = new StringBuilder();
+            var valuesBuilder = new StringBuilder("<mspace=0.54em>");
 
             foreach (var stat in spell.GetDisplayStats())
             {
-                var values = string.Join("/", stat.ValuePerLevel.Select(v => v.ToString("0.#")));
-
-                namesText += $"{stat.Name}:\n";
-                valuesText += $"{values}\n";
+                StatDisplayFormatter.AppendSpellStatRow(namesBuilder, valuesBuilder, stat.Name, stat.ValuePerLevel, currentTier);
             }
 
-            _namesLabel.text = namesText;
-            _valuesLabel.text = valuesText;
+            _namesLabel.text = namesBuilder.ToString();
+            _valuesLabel.text = valuesBuilder.ToString();
         }
         
         private void Awake()

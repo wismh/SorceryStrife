@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71457000f8f746d32faf52b8af7c7588, type: 3}
+  m_Name: OldMutant_VatConfig
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyEcs.VatAnimationConfig
+  <Mesh>k__BackingField: {fileID: 4300000, guid: d290b7704e7e67e4c841957453a4ddd1,
+    type: 2}
+  <Material>k__BackingField: {fileID: 2100000, guid: c0907498cfc6f43489992a6af018c127,
+    type: 2}
+  <PositionTexture>k__BackingField: {fileID: 2800000, guid: 709de99b004bee24486d62bebdb93d67,
+    type: 2}
+  <NormalTexture>k__BackingField: {fileID: 2800000, guid: a6197995cc4019b40a79114455dcf692,
+    type: 2}
+  <TextureSize>k__BackingField: {x: 911, y: 162}
+  <WalkStartFrame>k__BackingField: 0
+  <WalkFrameCount>k__BackingField: 35
+  <AttackStartFrame>k__BackingField: 35
+  <AttackFrameCount>k__BackingField: 76
+  <DeathStartFrame>k__BackingField: 111
+  <DeathFrameCount>k__BackingField: 51
+  <Fps>k__BackingField: 24

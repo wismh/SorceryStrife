@@ -1,3 +1,7 @@
+using Lumenwake.UIModule;
+using Project.Core.AssetLoaderModule;
+using Project.Core.AudioSystem;
+using Project.Core.SceneLoaderServiceModule;
 using Zenject;
 
 namespace Game

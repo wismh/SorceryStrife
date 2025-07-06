@@ -1,5 +1,5 @@
-﻿using System;
-using System.Linq;
+using System;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -35,24 +35,30 @@ namespace Game
         {
             _item = item;
             
+            var currentTier = _inventory.GetLevelOfItem(item);
+            var itemLevel = currentTier + 2;
+
             _iconImage.sprite = item.Icon;
             _titleLabel.text = item.Title;
-            _levelLabel.text = k_levelPattern.Replace("{}", (_inventory.GetLevelOfItem(item) + 2).ToString());
+            _levelLabel.text = k_levelPattern.Replace("{}", itemLevel.ToString());
             _descriptionLabel.text = item.Description;
             
-            var namesText = "";
-            var valuesText = "<mspace=0.54em>";
+            var namesBuilder = new StringBuilder();
+            var valuesBuilder = new StringBuilder("<mspace=0.54em>");
 
             foreach (var modifier in item.Modifiers)
             {
-                var values = string.Join("/", modifier.ValuePerLevel.Select(v => v.ToString("0.##")));
-
-                namesText += $"{modifier.Stat}:\n";
-                valuesText += $"{values}\n";
+                StatDisplayFormatter.AppendItemModifierRow(
+                    namesBuilder,
+                    valuesBuilder,
+                    modifier.Stat,
+                    modifier.Op,
+                    modifier.ValuePerLevel,
+                    currentTier);
             }
 
-            _namesLabel.text = namesText;
-            _valuesLabel.text = valuesText;
+            _namesLabel.text = namesBuilder.ToString();
+            _valuesLabel.text = valuesBuilder.ToString();
         }
         
         private void Awake()

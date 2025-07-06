@@ -9,6 +9,9 @@ namespace Game
 
         private Vector3 _direction;
         private Rigidbody _rigidbody;
+        private SphereCollider _collider;
+        private TempObject _tempObject;
+        private VisualEffect _visualEffect;
         private FireBallCaster _caster;
 
         public void Construct(FireBallCaster caster, Vector3 direction)
@@ -20,6 +23,9 @@ namespace Game
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody>();
+            _collider = GetComponentInChildren<SphereCollider>();
+            _tempObject = GetComponent<TempObject>();
+            _visualEffect = GetComponentInChildren<VisualEffect>();
         }
 
         private void FixedUpdate()
@@ -35,9 +41,9 @@ namespace Game
         private void StopAndDespawn()
         {
             enabled = false;
-            GetComponentInChildren<SphereCollider>().enabled = false;
-            GetComponent<TempObject>().TimeOfLife = 2f;
-            GetComponentInChildren<VisualEffect>().Stop();
+            _collider.enabled = false;
+            _tempObject.TimeOfLife = 2f;
+            _visualEffect.Stop();
             _rigidbody.linearVelocity = Vector3.zero;
         }
     }
