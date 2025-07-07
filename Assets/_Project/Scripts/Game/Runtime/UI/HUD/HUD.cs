@@ -45,9 +45,6 @@ namespace Game
 
         private void Update()
         {
-            if (!_player)
-                return;
-                
             _healthBar.Value = _playerAsEntity.Health / _playerAsEntity.MaxHealth;
             _experienceBar.Value = _player.Experience / _player.RequiredExperienceForLevelUp;
         }

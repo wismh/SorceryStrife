@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using UnityEngine;
 
 namespace Game
@@ -17,8 +16,7 @@ namespace Game
         public PlayerInventory PlayerInventory { get; set; }
         public int Level { get; set; }
         
-        public float Cooldown => 
-            (Level >= Spell.Cooldown.Count ? Spell.Cooldown.Last() : Spell.Cooldown[Level]) * PlayerInventory.GetSumOfBuff(nameof(Cooldown));
+        public float Cooldown => Spell.Cooldown.ValueAtLevel(Level) * PlayerInventory.GetSumOfBuff(nameof(Cooldown));
         
         protected abstract void CastInternal(Transform caster);
 
