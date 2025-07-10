@@ -9,8 +9,8 @@ namespace Game
     [SpellCaster(SpellType = typeof(MeteorSpell))]
     public class MeteorCaster : Caster
     {
-        public float Damage => _spell.Damage.ValueAtLevel(Level) * PlayerInventory.GetSumOfBuff(nameof(Damage));
-        public float Projectiles => _spell.Projectiles.ValueAtLevel(Level) * PlayerInventory.GetSumOfBuff(nameof(Projectiles));
+        public float Damage => PlayerInventory.ApplyModifiers(StatType.Damage, _spell.Damage.ValueAtLevel(Level));
+        public float Projectiles => PlayerInventory.ApplyModifiers(StatType.ProjectileCount, _spell.Projectiles.ValueAtLevel(Level));
         public float Delay => _spell.Delay;
         
         private readonly MeteorSpell _spell;

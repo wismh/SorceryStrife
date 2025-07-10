@@ -12,5 +12,11 @@ namespace Game
         
         [field: SerializeField] public int MaxLevel { get; private set; }
         [field: SerializeField] public List<float> Cooldown { get; private set; }
+
+        /// <summary>Stat rows shown on the upgrade card, in display order. Override to add spell-specific stats.</summary>
+        public virtual IEnumerable<SpellStatDisplay> GetDisplayStats()
+        {
+            yield return new SpellStatDisplay(nameof(Cooldown), Cooldown);
+        }
     }
 }

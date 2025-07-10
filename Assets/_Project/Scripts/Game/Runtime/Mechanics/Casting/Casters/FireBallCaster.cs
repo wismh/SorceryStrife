@@ -6,7 +6,7 @@ namespace Game
     [SpellCaster(SpellType = typeof(FireBallSpell))]
     public class FireBallCaster : Caster
     {
-        public float Damage => _spell.Damage.ValueAtLevel(Level) * PlayerInventory.GetSumOfBuff(nameof(Damage));
+        public float Damage => PlayerInventory.ApplyModifiers(StatType.Damage, _spell.Damage.ValueAtLevel(Level));
         public float Speed => _spell.Speed.ValueAtLevel(Level);
         
         private readonly FireBallSpell _spell;
@@ -33,7 +33,7 @@ namespace Game
             
             var directionToEnemy = (nearestEnemy.transform.position - caster.position).normalized;
             
-            var number = 3 * PlayerInventory.GetSumOfBuff("Projectiles");
+            var number = PlayerInventory.ApplyModifiers(StatType.ProjectileCount, 3);
             
             for (var i = 0; i < number; ++i)
             { 

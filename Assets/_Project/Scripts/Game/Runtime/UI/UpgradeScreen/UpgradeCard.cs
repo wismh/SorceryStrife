@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -44,16 +42,14 @@ namespace Game
             _levelLabel.text = k_levelPattern.Replace("{}", spellLevel.ToString());
             _descriptionLabel.text = spell.Description;
 
-            var properties = Utils.GetAllListProperties(spell);
-            var namesText = ""; 
+            var namesText = "";
             var valuesText = "<mspace=0.54em>";
 
-            foreach (var property in properties)
+            foreach (var stat in spell.GetDisplayStats())
             {
-                var list = (List<float>)property.GetValue(spell);
-                var values = string.Join("/", list.Select(v => v.ToString("0.#")));
+                var values = string.Join("/", stat.ValuePerLevel.Select(v => v.ToString("0.#")));
 
-                namesText += $"{property.Name}:\n";
+                namesText += $"{stat.Name}:\n";
                 valuesText += $"{values}\n";
             }
 

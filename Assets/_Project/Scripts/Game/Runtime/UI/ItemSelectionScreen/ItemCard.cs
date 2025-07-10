@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -41,16 +40,14 @@ namespace Game
             _levelLabel.text = k_levelPattern.Replace("{}", (_inventory.GetLevelOfItem(item) + 1).ToString());
             _descriptionLabel.text = item.Description;
             
-            var properties = Utils.GetAllListProperties(item);
-            var namesText = ""; 
+            var namesText = "";
             var valuesText = "<mspace=0.54em>";
 
-            foreach (var property in properties)
+            foreach (var modifier in item.Modifiers)
             {
-                var list = (List<float>)property.GetValue(item);
-                var values = string.Join("/", list.Select(v => v.ToString("0.##")));
+                var values = string.Join("/", modifier.ValuePerLevel.Select(v => v.ToString("0.##")));
 
-                namesText += $"{property.Name}:\n";
+                namesText += $"{modifier.Stat}:\n";
                 valuesText += $"{values}\n";
             }
 

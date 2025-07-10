@@ -7,8 +7,8 @@ namespace Game
     public class MagicFieldCaster : Caster
     {
         public float Duration => _spell.Duration.ValueAtLevel(Level);
-        public float Radius => _spell.Radius.ValueAtLevel(Level) * PlayerInventory.GetSumOfBuff(nameof(Radius));
-        public float Damage => _spell.Damage.ValueAtLevel(Level) * PlayerInventory.GetSumOfBuff(nameof(Damage));
+        public float Radius => PlayerInventory.ApplyModifiers(StatType.Radius, _spell.Radius.ValueAtLevel(Level));
+        public float Damage => PlayerInventory.ApplyModifiers(StatType.Damage, _spell.Damage.ValueAtLevel(Level));
 
         private readonly MagicFieldSpell _spell;
         private readonly DiContainer _container;
