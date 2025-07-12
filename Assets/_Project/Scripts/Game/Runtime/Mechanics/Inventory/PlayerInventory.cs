@@ -42,7 +42,7 @@ namespace Game
 
             var item = _itemsRegister.GetItemByType(typeOfItem);
 
-            if (!_items.TryAdd(item, 1))
+            if (!_items.TryAdd(item, 0))
             {
                 _items[item] += 1;
                 OnLevelUpItem?.Invoke(item);
@@ -53,9 +53,10 @@ namespace Game
             _cache.Clear();
         }
 
+        /// <summary>0-based modifier tier, matching Caster.Level. -1 when the item isn't owned.</summary>
         public int GetLevelOfItem(Item item)
         {
-            return _items.GetValueOrDefault(item, 0);
+            return _items.TryGetValue(item, out var level) ? level : -1;
         }
 
         /// <summary>Applies every owned item's modifiers for <paramref name="stat"/> to a base value.</summary>
