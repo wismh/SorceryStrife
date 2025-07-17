@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace Game
 {
@@ -7,7 +8,15 @@ namespace Game
     {
         [SerializeField] private Button _startGameButton;
         [SerializeField] private Button _exitGameButton;
-        
+
+        private GlobalGameStateMachine _stateMachine;
+
+        [Inject]
+        public void Construct(GlobalGameStateMachine stateMachine)
+        {
+            _stateMachine = stateMachine;
+        }
+
         private void Start()
         {
             _startGameButton.onClick.AddListener(HandleStartGame);
@@ -20,9 +29,9 @@ namespace Game
             _exitGameButton.onClick.RemoveAllListeners();
         }
 
-        private static void HandleStartGame()
+        private void HandleStartGame()
         {
-            Bootstrap.StateMachine.Enter(new GameplayState());
+            _stateMachine.Enter(new GameplayState());
         }
 
         private static void HandleExitGame()
