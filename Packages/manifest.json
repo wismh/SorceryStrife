@@ -16,6 +16,7 @@
     "com.unity.ugui": "2.0.0",
     "com.unity.visualeffectgraph": "17.3.0",
     "com.unity.visualscripting": "1.9.9",
+    "com.wooshii.hierarchydecorator": "https://github.com/WooshiiDev/HierarchyDecorator.git#b69cf0d6a1b3441f828a94c78f85b2d42edc9418",
     "com.unity.modules.accessibility": "1.0.0",
     "com.unity.modules.adaptiveperformance": "1.0.0",
     "com.unity.modules.ai": "1.0.0",
