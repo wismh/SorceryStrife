@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 
@@ -69,12 +69,12 @@ namespace Game
 
         private void HandleDeath()
         {
-            StartCoroutine(LoadMenuRoutine());
+            LoadMenuAsync().Forget();
         }
 
-        private IEnumerator LoadMenuRoutine()
+        private async UniTaskVoid LoadMenuAsync()
         {
-            yield return new WaitForSeconds(4);
+            await UniTask.WaitForSeconds(4, cancellationToken: this.GetCancellationTokenOnDestroy());
             _stateMachine.Enter(new MenuState());
         }
     }

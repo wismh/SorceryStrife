@@ -1,4 +1,5 @@
-using System.Collections;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Game
@@ -7,26 +8,35 @@ namespace Game
     {
         [SerializeField] private float _timeOfLife;
 
+        private CancellationTokenSource _timerCancellation;
+
         public float TimeOfLife
         {
             get => _timeOfLife;
             set
             {
                 _timeOfLife = value;
-                StopAllCoroutines();
-                StartCoroutine(StartTimer());
+                RestartTimer();
             }
         }
-        
+
         private void Start()
         {
             if (_timeOfLife != 0)
-                StartCoroutine(StartTimer());
+                RestartTimer();
         }
 
-        private IEnumerator StartTimer()
+        private void RestartTimer()
         {
-            yield return new WaitForSeconds(_timeOfLife);
+            _timerCancellation?.Cancel();
+            _timerCancellation = CancellationTokenSource.CreateLinkedTokenSource(this.GetCancellationTokenOnDestroy());
+
+            StartTimerAsync(_timeOfLife, _timerCancellation.Token).Forget();
+        }
+
+        private async UniTaskVoid StartTimerAsync(float duration, CancellationToken cancellationToken)
+        {
+            await UniTask.WaitForSeconds(duration, cancellationToken: cancellationToken);
             Destroy(gameObject);
         }
     }
