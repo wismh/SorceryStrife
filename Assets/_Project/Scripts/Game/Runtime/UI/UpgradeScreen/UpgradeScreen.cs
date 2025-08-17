@@ -14,18 +14,20 @@ namespace Game
         private CastersRegister _castersRegister;
         private PlayerCaster _playerCaster;
         private Player _player;
-        
+        private IAssetLoaderService _assetLoaderService;
+
         [Inject]
-        public void Construct(Player player, CastersRegister castersRegister)
+        public void Construct(Player player, CastersRegister castersRegister, IAssetLoaderService assetLoaderService)
         {
             _player = player;
             _castersRegister = castersRegister;
             _playerCaster = player.GetComponent<PlayerCaster>();
+            _assetLoaderService = assetLoaderService;
         }
-        
+
         private void Awake()
         {
-            _spells = Resources.LoadAll<Spell>("Spells").ToList();
+            _spells = _assetLoaderService.LoadAllAssets<Spell>("Spells").ToList();
         }
 
         private void Start()

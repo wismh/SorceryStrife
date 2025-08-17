@@ -11,18 +11,20 @@ namespace Game
         [SerializeField] private List<ItemCard> _itemsCards;
         
         private List<Item> _items;
-        
+
         private PlayerInventory _inventory;
+        private IAssetLoaderService _assetLoaderService;
 
         [Inject]
-        public void Construct(PlayerInventory inventory)
+        public void Construct(PlayerInventory inventory, IAssetLoaderService assetLoaderService)
         {
             _inventory = inventory;
+            _assetLoaderService = assetLoaderService;
         }
 
         private void Awake()
         {
-            _items = Resources.LoadAll<Item>("Items").ToList();
+            _items = _assetLoaderService.LoadAllAssets<Item>("Items").ToList();
         }
 
         private void Start()
