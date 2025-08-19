@@ -13,6 +13,7 @@ namespace Game
         {
             Container.Bind<ISceneLoaderService>().To<BuildInSceneLoaderService>().AsSingle();
             Container.Bind<IAssetLoaderService>().To<ResourceAssetLoaderService>().AsSingle();
+            Container.BindInterfacesAndSelfTo<AudioSystem>().FromComponentInHierarchy().AsSingle();
 
             Container.Bind<MenuState>().AsSingle();
             Container.Bind<GameplayState>().AsSingle();
