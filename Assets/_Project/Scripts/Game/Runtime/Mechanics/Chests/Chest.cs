@@ -8,13 +8,13 @@ namespace Game
     {
         [SerializeField] private float _animationDuration;
 
-        private ItemSelectionScreen _itemSelectionScreen;
+        private IScreenManager _screenManager;
         private Animator _animator;
 
         [Inject]
-        public void Construct(ItemSelectionScreen itemSelectionScreen)
+        public void Construct(IScreenManager screenManager)
         {
-            _itemSelectionScreen = itemSelectionScreen;
+            _screenManager = screenManager;
         }
 
         private void OnTriggerEnter(Collider other)
@@ -28,7 +28,7 @@ namespace Game
         private async UniTaskVoid StartDelayAsync()
         {
             await UniTask.WaitForSeconds(_animationDuration, cancellationToken: this.GetCancellationTokenOnDestroy());
-            _itemSelectionScreen.Show();
+            await _screenManager.OpenScreen<ItemSelectionScreen>();
             Destroy(gameObject);
         }
     }
