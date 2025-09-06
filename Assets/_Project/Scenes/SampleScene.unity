@@ -5758,6 +5758,7 @@ MonoBehaviour:
   - {fileID: 846847278}
   - {fileID: 1479043344}
   - {fileID: 406936042}
+  _projectileEcsSpawner: {fileID: 190000004}
 --- !u!1001 &898328776
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14212,6 +14213,81 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1e57a48be595aaa4b9f8d8b35b936c93, type: 3}
+--- !u!1 &190000001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 190000002}
+  - component: {fileID: 190000003}
+  - component: {fileID: 190000004}
+  - component: {fileID: 190000005}
+  m_Layer: 0
+  m_Name: EcsProjectileTest
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &190000002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 190000001}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &190000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 190000001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e30899bbfb48f274e04bb007f3363efa, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+--- !u!114 &190000004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 190000001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bab3f17e6c8eabe831b8a033a938856, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  _mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  _material: {fileID: 2100000, guid: c0f75bc0a68788a488110f7c938539f1, type: 2}
+--- !u!114 &190000005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 190000001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bff4d60915b321c43cf1a83a64c790c6, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  _speed: 8
+  _damage: 5
+  _lifetime: 5
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -14226,3 +14302,4 @@ SceneRoots:
   - {fileID: 619290655}
   - {fileID: 410775893}
   - {fileID: 234602771}
+  - {fileID: 190000002}
