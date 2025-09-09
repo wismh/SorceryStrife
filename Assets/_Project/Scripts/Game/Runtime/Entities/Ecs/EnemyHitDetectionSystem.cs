@@ -8,8 +8,6 @@ using UnityEngine;
 
 namespace Game
 {
-    using Entity = Unity.Entities.Entity;
-
     /// <summary>
     /// Bridges Zenject-managed MonoBehaviour enemies into ECS: builds a per-frame position/radius
     /// snapshot of alive enemies (main thread - reads managed Enemy/Collider/Entity.IsAlive), runs
@@ -74,7 +72,7 @@ namespace Game
 
     internal struct HitResult
     {
-        public Entity Projectile;
+        public Unity.Entities.Entity Projectile;
         public int EnemyIndex;
         public float Damage;
     }
@@ -86,7 +84,7 @@ namespace Game
         [ReadOnly] public NativeArray<float> EnemyRadii;
         public NativeQueue<HitResult>.ParallelWriter Hits;
 
-        private void Execute(Entity entity, in LocalTransform transform, in ProjectileDamage damage, in UnitTeam team)
+        private void Execute(Unity.Entities.Entity entity, in LocalTransform transform, in ProjectileDamage damage, in UnitTeam team)
         {
             if (team.Value != Team.Ally)
                 return;
