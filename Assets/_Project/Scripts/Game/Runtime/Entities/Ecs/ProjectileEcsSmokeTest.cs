@@ -1,8 +1,9 @@
+using Game;
 using Unity.Mathematics;
 using UnityEngine;
 using Zenject;
 
-namespace Game
+namespace ProjectileEcs
 {
     /// <summary>
     /// THROWAWAY verification harness for крок-7's ECS projectile infra - fires a few plain-mesh
