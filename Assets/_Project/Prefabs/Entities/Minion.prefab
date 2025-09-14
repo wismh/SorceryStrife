@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 4847595921801941828}
   - component: {fileID: 3472639331867403549}
   - component: {fileID: 2270169045049551187}
+  - component: {fileID: 9000000000000001}
   m_Layer: 6
   m_Name: Minion
   m_TagString: Untagged
@@ -164,6 +165,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _deathMaterial: {fileID: 2100000, guid: 787c1f134c97b9849be5be0f88b9c615, type: 2}
+--- !u!114 &9000000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1449213688858323806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 210aeabb74c2c1df441228caae27b52a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  _characteristics: {fileID: 11400000, guid: 7d456ca9785c580408955ad2e5a84e63, type: 2}
+  _team: 1
+  _enemyType: 0
 --- !u!1001 &108466681803144212
 PrefabInstance:
   m_ObjectHideFlags: 0

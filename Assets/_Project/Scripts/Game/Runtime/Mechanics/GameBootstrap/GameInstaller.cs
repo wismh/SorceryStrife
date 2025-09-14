@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using EnemyEcs;
 using Game.InventorySystem;
 using ProjectileEcs;
 using UnityEngine;
@@ -11,10 +12,25 @@ namespace Game {
         [SerializeField] private Experience _experiencePrefab;
         [SerializeField] private List<BaseScreen> _screens;
         [SerializeField] private ProjectileEcsSpawner _projectileEcsSpawner;
+        [SerializeField] private EnemyEcsSpawner _enemyEcsSpawner;
+        [SerializeField] private EnemyCompanion _minionCompanionPrefab;
+        [SerializeField] private EnemyCompanion _mutantCompanionPrefab;
+        [SerializeField] private EnemyCompanion _ogrCompanionPrefab;
+        [SerializeField] private EnemyCompanion _oldMutantCompanionPrefab;
 
         public override void InstallBindings()
         {
             Container.Bind<ProjectileEcsSpawner>().FromInstance(_projectileEcsSpawner).AsSingle();
+            Container.Bind<EnemyEcsSpawner>().FromInstance(_enemyEcsSpawner).AsSingle();
+
+            var companionPools = new EnemyCompanionPools(new[]
+            {
+                new PoolOfObject<EnemyCompanion>(Container, _minionCompanionPrefab),
+                new PoolOfObject<EnemyCompanion>(Container, _mutantCompanionPrefab),
+                new PoolOfObject<EnemyCompanion>(Container, _ogrCompanionPrefab),
+                new PoolOfObject<EnemyCompanion>(Container, _oldMutantCompanionPrefab),
+            });
+            Container.Bind<EnemyCompanionPools>().FromInstance(companionPools).AsSingle();
 
             var screenManager = new BaseScreenManager(_screens);
             Container.Bind<BaseScreenManager>().FromInstance(screenManager);
