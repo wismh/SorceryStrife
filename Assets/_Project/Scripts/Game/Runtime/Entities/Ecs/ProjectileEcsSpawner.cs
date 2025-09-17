@@ -19,36 +19,48 @@ namespace ProjectileEcs
         [SerializeField] private Mesh _mesh;
         [SerializeField] private Material _material;
 
-        private EntityManager _entityManager;
-        private Unity.Entities.Entity _prefabEntity;
+        // Fetched fresh rather than cached in Start() - a caller on a different GameObject can
+        // invoke SpawnProjectile() from its own Start() before this component's Start() has run,
+        // since Unity doesn't guarantee cross-GameObject Start() ordering.
+        private static EntityManager EntityManager => World.DefaultGameObjectInjectionWorld.EntityManager;
 
-        private void Start()
-        {
-            _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-            _prefabEntity = CreatePrefabEntity();
-        }
+        private Unity.Entities.Entity _prefabEntity;
+        private bool _prefabCreated;
 
         public Unity.Entities.Entity SpawnProjectile(float3 position, float3 velocity, float damage, Team team, float lifetime)
         {
-            Unity.Entities.Entity instance = _entityManager.Instantiate(_prefabEntity);
+            EnsurePrefabEntity();
 
-            _entityManager.SetComponentData(instance, new LocalTransform
+            EntityManager entityManager = EntityManager;
+            Unity.Entities.Entity instance = entityManager.Instantiate(_prefabEntity);
+
+            entityManager.SetComponentData(instance, new LocalTransform
             {
                 Position = position,
                 Rotation = quaternion.identity,
                 Scale = 1f,
             });
-            _entityManager.SetComponentData(instance, new ProjectileVelocity { Value = velocity });
-            _entityManager.SetComponentData(instance, new ProjectileDamage { Value = damage });
-            _entityManager.SetComponentData(instance, new ProjectileLifetime { Remaining = lifetime });
-            _entityManager.SetComponentData(instance, new UnitTeam { Value = team });
+            entityManager.SetComponentData(instance, new ProjectileVelocity { Value = velocity });
+            entityManager.SetComponentData(instance, new ProjectileDamage { Value = damage });
+            entityManager.SetComponentData(instance, new ProjectileLifetime { Remaining = lifetime });
+            entityManager.SetComponentData(instance, new UnitTeam { Value = team });
 
             return instance;
         }
 
+        private void EnsurePrefabEntity()
+        {
+            if (_prefabCreated)
+                return;
+
+            _prefabEntity = CreatePrefabEntity();
+            _prefabCreated = true;
+        }
+
         private Unity.Entities.Entity CreatePrefabEntity()
         {
-            Unity.Entities.Entity entity = _entityManager.CreateEntity(
+            EntityManager entityManager = EntityManager;
+            Unity.Entities.Entity entity = entityManager.CreateEntity(
                 typeof(Prefab),
                 typeof(LocalTransform),
                 typeof(ProjectileVelocity),
@@ -56,13 +68,13 @@ namespace ProjectileEcs
                 typeof(ProjectileLifetime),
                 typeof(UnitTeam));
 
-            _entityManager.SetComponentData(entity, LocalTransform.Identity);
+            entityManager.SetComponentData(entity, LocalTransform.Identity);
 
             var renderMeshArray = new RenderMeshArray(new[] { _material }, new[] { _mesh });
             var renderMeshDescription = new RenderMeshDescription(ShadowCastingMode.Off);
             RenderMeshUtility.AddComponents(
                 entity,
-                _entityManager,
+                entityManager,
                 renderMeshDescription,
                 renderMeshArray,
                 MaterialMeshInfo.FromRenderMeshArrayIndices(0, 0));
