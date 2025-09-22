@@ -5759,7 +5759,6 @@ MonoBehaviour:
   - {fileID: 1479043344}
   - {fileID: 406936042}
   _projectileEcsSpawner: {fileID: 190000004}
-  _enemyEcsSpawner: {fileID: 190000014}
   _minionCompanionPrefab: {fileID: 2270169045049551187, guid: 701506a00452885b76e25b9697a9ff70,
     type: 3}
   _mutantCompanionPrefab: {fileID: 2270169045049551187, guid: d6a5ea65abe3d9900165b98164f97af9,
@@ -14308,7 +14307,6 @@ GameObject:
   - component: {fileID: 190000011}
   - component: {fileID: 190000012}
   - component: {fileID: 190000013}
-  - component: {fileID: 190000014}
   m_Layer: 0
   m_Name: EnemyEcsBootstrap
   m_TagString: Untagged
@@ -14353,18 +14351,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f60cfc091270f6fe3a64e6be0db23f2, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
---- !u!114 &190000014
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 190000010}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9de11c3cb5b34ab8e39db82c274dacf9, type: 3}
   m_Name:
   m_EditorClassIdentifier:
 --- !u!1660057539 &9223372036854775807
