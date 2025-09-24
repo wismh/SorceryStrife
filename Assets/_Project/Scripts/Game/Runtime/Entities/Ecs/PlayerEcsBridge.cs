@@ -32,6 +32,7 @@ namespace EnemyEcs
             {
                 Position = _player.transform.position,
                 IsAlive = playerAsEntity.IsAlive,
+                PickupRadius = playerAsEntity.RangeOfPickUp,
             });
         }
     }

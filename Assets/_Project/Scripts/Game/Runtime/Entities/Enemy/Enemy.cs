@@ -1,3 +1,4 @@
+using PickupEcs;
 using UnityEngine;
 using Zenject;
 
@@ -6,16 +7,16 @@ namespace Game
     public class Enemy : MonoBehaviour
     {
         private ListOfObject<Enemy> _enemies;
-        private PoolOfObject<Experience> _experiencePool;
+        private PickupEcsSpawner _pickupSpawner;
         private Entity _entity;
-        
+
         [Inject]
-        public void Construct(ListOfObject<Enemy> enemies, PoolOfObject<Experience> experiencePool)
-        {   
-            _experiencePool = experiencePool;
+        public void Construct(ListOfObject<Enemy> enemies, PickupEcsSpawner pickupSpawner)
+        {
+            _pickupSpawner = pickupSpawner;
             _enemies = enemies;
             _entity = GetComponent<Entity>();
-            
+
             enemies.Objects.Add(this);
         }
 
@@ -29,11 +30,10 @@ namespace Game
             _entity.OnDeath -= SpawnExperience;
             _enemies.Objects.Remove(this);
         }
-        
+
         private void SpawnExperience()
         {
-            var clone = _experiencePool.Instantiate();
-            clone.transform.position = transform.position;   
+            _pickupSpawner.SpawnPickup(transform.position);
         }
     }
 }
