@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Game
 {
@@ -9,6 +9,12 @@ namespace Game
         public void Construct(MeteorCaster caster)
         {
             _caster = caster;
+        }
+
+        private void Start()
+        {
+            if (TryGetComponent(out SphereCollider sphereCollider))
+                EcsMeleeEnemyHits.DamageInRange(transform.position, sphereCollider.radius, _caster.Damage);
         }
 
         private void OnTriggerEnter(Collider collision)
