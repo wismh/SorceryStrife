@@ -4,7 +4,6 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
-using Entity = Unity.Entities.Entity;
 
 namespace Game
 {
@@ -22,7 +21,7 @@ namespace Game
         private static bool _queryReady;
 
         /// <summary>Damages every alive melee enemy within range not already in <paramref name="alreadyHit"/> (if given). Returns true if at least one was hit.</summary>
-        public static bool DamageInRange(Vector3 position, float range, float damage, HashSet<Entity> alreadyHit = null)
+        public static bool DamageInRange(Vector3 position, float range, float damage, HashSet<Unity.Entities.Entity> alreadyHit = null)
         {
             return DamageAndPushInRange(position, range, damage, pushDistance: 0f, alreadyHit);
         }
@@ -35,13 +34,13 @@ namespace Game
             if (!TryGetEntityManager(out EntityManager entityManager))
                 return false;
 
-            using NativeArray<Entity> entities = _query.ToEntityArray(Allocator.Temp);
+            using NativeArray<Unity.Entities.Entity> entities = _query.ToEntityArray(Allocator.Temp);
             float3 origin = from;
             var found = false;
             var bestDistanceSq = float.MaxValue;
             float3 bestPosition = default;
 
-            foreach (Entity entity in entities)
+            foreach (Unity.Entities.Entity entity in entities)
             {
                 var health = entityManager.GetComponentData<Health>(entity);
                 if (health.Value <= 0f)
@@ -61,16 +60,16 @@ namespace Game
             return found;
         }
 
-        public static bool DamageAndPushInRange(Vector3 position, float range, float damage, float pushDistance, HashSet<Entity> alreadyHit = null)
+        public static bool DamageAndPushInRange(Vector3 position, float range, float damage, float pushDistance, HashSet<Unity.Entities.Entity> alreadyHit = null)
         {
             if (!TryGetEntityManager(out EntityManager entityManager))
                 return false;
 
-            using NativeArray<Entity> entities = _query.ToEntityArray(Allocator.Temp);
+            using NativeArray<Unity.Entities.Entity> entities = _query.ToEntityArray(Allocator.Temp);
             float3 center = position;
             var hitAny = false;
 
-            foreach (Entity entity in entities)
+            foreach (Unity.Entities.Entity entity in entities)
             {
                 if (alreadyHit != null && alreadyHit.Contains(entity))
                     continue;

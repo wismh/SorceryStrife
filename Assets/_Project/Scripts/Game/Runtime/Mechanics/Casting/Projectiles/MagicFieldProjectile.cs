@@ -4,7 +4,6 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.VFX;
 using Zenject;
-using Entity = Unity.Entities.Entity;
 
 namespace Game
 {
@@ -21,7 +20,7 @@ namespace Game
         private MagicFieldCaster _caster;
 
         private readonly List<EntityDamagable> _entities = new();
-        private readonly HashSet<Entity> _hitEcsEnemies = new();
+        private readonly HashSet<Unity.Entities.Entity> _hitEcsEnemies = new();
 
         public void Construct(MagicFieldCaster caster)
         {
