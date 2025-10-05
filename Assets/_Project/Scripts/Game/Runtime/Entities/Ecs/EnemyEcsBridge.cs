@@ -35,8 +35,9 @@ namespace EnemyEcs
 
             EntityDamagable playerDamagable = _player.GetComponent<EntityDamagable>();
             world.GetOrCreateSystemManaged<EnemyMeleeAttackSystem>().SetDependencies(playerDamagable, companionSystem);
+            EcsMeleeEnemyHits.SetDamageNumberPrefab(playerDamagable.DamageNumberPrefab);
 
-            Entity pickupPrefab = _pickupSpawner.GetOrCreatePrefabEntity();
+            Unity.Entities.Entity pickupPrefab = _pickupSpawner.GetOrCreatePrefabEntity();
             world.GetOrCreateSystemManaged<EnemyDeathSystem>().SetDependencies(pickupPrefab, companionSystem);
 
             world.GetOrCreateSystemManaged<PickupMagnetSystem>().SetDependencies(_player);

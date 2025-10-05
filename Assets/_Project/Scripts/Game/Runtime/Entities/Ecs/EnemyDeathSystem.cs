@@ -40,7 +40,7 @@ namespace EnemyEcs
                 {
                     Position = transform.ValueRO.Position,
                     Rotation = quaternion.identity,
-                    Scale = 1f,
+                    Scale = 0.2f,
                 });
 
                 ecb.DestroyEntity(entity);

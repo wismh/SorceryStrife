@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using UnityEngine;
 using Zenject;
 
@@ -7,6 +7,8 @@ namespace Game
     public class EntityDamagable : MonoBehaviour
     {
         [SerializeField] private DamageNumber _damageNumberPrefab;
+
+        public DamageNumber DamageNumberPrefab => _damageNumberPrefab;
 
         private Entity _entity;
 

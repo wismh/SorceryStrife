@@ -36,7 +36,7 @@ namespace PickupEcs
             {
                 Position = position,
                 Rotation = quaternion.identity,
-                Scale = 1f,
+                Scale = 0.2f,
             });
         }
 
@@ -58,7 +58,7 @@ namespace PickupEcs
                 typeof(LocalTransform),
                 typeof(Pickup));
 
-            entityManager.SetComponentData(entity, LocalTransform.Identity);
+            entityManager.SetComponentData(entity, LocalTransform.FromScale(0.2f));
 
             var renderMeshArray = new RenderMeshArray(new[] { _material }, new[] { _mesh });
             var renderMeshDescription = new RenderMeshDescription(ShadowCastingMode.Off);
