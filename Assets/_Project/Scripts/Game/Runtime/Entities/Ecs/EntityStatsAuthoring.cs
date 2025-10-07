@@ -15,11 +15,13 @@ namespace Game
         [SerializeField] private EntityCharacteristics _characteristics;
         [SerializeField] private Team _team;
         [SerializeField] private EnemyType _enemyType;
+        [SerializeField] private EnemyEcs.AttackType _attackType;
 
         /// <summary>Read directly off the prefab asset at spawn time (крок-7/9 skip baking/SubScene entirely) - see WaveSpawnSystem.</summary>
         public EntityCharacteristics Characteristics => _characteristics;
         public Team Team => _team;
         public EnemyType EnemyType => _enemyType;
+        public EnemyEcs.AttackType AttackType => _attackType;
 
         private class Baker : Baker<EntityStatsAuthoring>
         {

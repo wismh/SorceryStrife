@@ -4,7 +4,6 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
-using Zenject;
 using Random = UnityEngine.Random;
 
 // No "using Game;" in this file - see ProjectileVelocity.cs for why. Game-namespace types
@@ -25,7 +24,6 @@ namespace EnemyEcs
     {
         private struct SpawnGroupState
         {
-            public Game.Enemy EnemyPrefab;
             public Game.EntityStatsAuthoring Stats;
             public int Amount;
             public float Delay;
@@ -35,31 +33,30 @@ namespace EnemyEcs
 
         private List<Game.EnemySpawner.Wave> _waves;
         private Vector2 _range;
-        private DiContainer _container;
-        private EntityArchetype _meleeArchetype;
+        private EntityArchetype _enemyArchetype;
 
         private readonly List<SpawnGroupState> _activeGroups = new();
         private int _currentWaveId;
         private float _waveElapsed;
         private bool _waveStarted;
 
-        public void SetDependencies(List<Game.EnemySpawner.Wave> waves, Vector2 range, DiContainer container)
+        public void SetDependencies(List<Game.EnemySpawner.Wave> waves, Vector2 range)
         {
             _waves = waves;
             _range = range;
-            _container = container;
         }
 
         protected override void OnCreate()
         {
-            _meleeArchetype = EntityManager.CreateArchetype(
+            _enemyArchetype = EntityManager.CreateArchetype(
                 typeof(LocalTransform),
                 typeof(Game.MoveSpeed),
                 typeof(Game.AttackStats),
                 typeof(Game.Health),
                 typeof(Game.UnitTeam),
                 typeof(AttackState),
-                typeof(EnemyEcsType));
+                typeof(EnemyEcsType),
+                typeof(EnemyAttackType));
         }
 
         protected override void OnUpdate()
@@ -98,7 +95,6 @@ namespace EnemyEcs
 
                 _activeGroups.Add(new SpawnGroupState
                 {
-                    EnemyPrefab = enemy.EnemyPrefab,
                     Stats = stats,
                     Amount = enemy.Amount,
                     Delay = (float)_waves[waveId].Duration / enemy.Amount,
@@ -137,9 +133,7 @@ namespace EnemyEcs
                 var worldPosition = playerPosition + new float3(offset.x, 0f, offset.y);
 
                 if (group.Stats != null)
-                    SpawnMeleeEnemy(ecb, group.Stats, worldPosition);
-                else
-                    SpawnMonoBehaviourEnemy(group.EnemyPrefab, worldPosition);
+                    SpawnEnemy(ecb, group.Stats, worldPosition);
 
                 group.SpawnedCount++;
                 group.Timer += group.Delay;
@@ -147,10 +141,10 @@ namespace EnemyEcs
             }
         }
 
-        private void SpawnMeleeEnemy(EntityCommandBuffer ecb, Game.EntityStatsAuthoring stats, float3 position)
+        private void SpawnEnemy(EntityCommandBuffer ecb, Game.EntityStatsAuthoring stats, float3 position)
         {
             Game.EntityCharacteristics characteristics = stats.Characteristics;
-            Entity entity = ecb.CreateEntity(_meleeArchetype);
+            Entity entity = ecb.CreateEntity(_enemyArchetype);
 
             ecb.SetComponent(entity, new LocalTransform { Position = position, Rotation = quaternion.identity, Scale = 1f });
             ecb.SetComponent(entity, new Game.MoveSpeed { Value = characteristics.MoveSpeed });
@@ -164,12 +158,7 @@ namespace EnemyEcs
             ecb.SetComponent(entity, new Game.UnitTeam { Value = stats.Team });
             ecb.SetComponent(entity, new AttackState { Phase = AttackPhase.Idle, Timer = 0f });
             ecb.SetComponent(entity, new EnemyEcsType { Value = stats.EnemyType });
-        }
-
-        private void SpawnMonoBehaviourEnemy(Game.Enemy prefab, Vector3 position)
-        {
-            Game.Enemy clone = _container.InstantiatePrefabForComponent<Game.Enemy>(prefab);
-            clone.transform.position = position;
+            ecb.SetComponent(entity, new EnemyAttackType { Value = stats.AttackType });
         }
     }
 }

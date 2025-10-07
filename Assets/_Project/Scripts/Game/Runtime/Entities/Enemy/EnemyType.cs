@@ -6,6 +6,10 @@ namespace Game
         Minion,
         Mutant,
         Ogr,
-        OldMutant
+        OldMutant,
+        Devil,
+        HotDevil,
+        Eye,
+        BigEye
     }
 }

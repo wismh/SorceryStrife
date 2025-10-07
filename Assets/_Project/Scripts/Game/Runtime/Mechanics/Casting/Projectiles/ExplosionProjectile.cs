@@ -14,13 +14,7 @@ namespace Game
         private void Start()
         {
             if (TryGetComponent(out SphereCollider sphereCollider))
-                EcsMeleeEnemyHits.DamageInRange(transform.position, sphereCollider.radius, _caster.Damage);
-        }
-
-        private void OnTriggerEnter(Collider collision)
-        {
-            if (collision.TryGetComponent(out EntityDamagable damagable))
-                damagable.Damage(_caster.Damage);
+                EcsEnemyHits.DamageInRange(transform.position, sphereCollider.radius, _caster.Damage);
         }
     }
 }

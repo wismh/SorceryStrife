@@ -10,16 +10,14 @@ namespace Game
         public float Speed => _spell.Speed.ValueAtLevel(Level);
 
         private readonly IceArrowSpell _spell;
-        private readonly ListOfObject<Enemy> _enemies;
         private readonly DiContainer _container;
 
         [Inject]
-        public IceArrowCaster(DiContainer container, PlayerInventory inventory, IceArrowSpell spell, ListOfObject<Enemy> enemies) :
+        public IceArrowCaster(DiContainer container, PlayerInventory inventory, IceArrowSpell spell) :
             base(spell, inventory)
         {
             _container = container;
             _spell = spell;
-            _enemies = enemies;
         }
 
         // ReSharper disable Unity.PerformanceAnalysis
@@ -27,7 +25,7 @@ namespace Game
         {
             const float angleOffset = 25f;
 
-            if (!EnemyTargeting.TryGetNearestPosition(caster.position, _enemies, out Vector3 targetPosition))
+            if (!EnemyTargeting.TryGetNearestPosition(caster.position, out Vector3 targetPosition))
                 return;
 
             var directionToEnemy = (targetPosition - caster.position).normalized;

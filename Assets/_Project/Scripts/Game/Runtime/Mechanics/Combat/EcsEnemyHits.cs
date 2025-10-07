@@ -8,14 +8,9 @@ using UnityEngine;
 namespace Game
 {
     /// <summary>
-    /// Bridges MonoBehaviour code into the melee-type ECS enemy world (Minion/Mutant/Ogr/OldMutant) -
-    /// they're the only enemies with no Collider/EntityDamagable at all (EnemyCompanion is a
-    /// visual-only proxy, see EnemyCompanion.cs), so anything that used to reach them through
-    /// physics callbacks or ListOfObject&lt;Enemy&gt; (which only ever holds the still-MonoBehaviour
-    /// Devil/HotDevil/Eye/BigEye) needs a direct EntityManager query instead: damaging/pushing them
-    /// from a projectile's own hit logic, or finding the nearest one to aim at.
+    /// Bridges MonoBehaviour projectiles and targeting into the ECS enemy world (all enemies).
     /// </summary>
-    public static class EcsMeleeEnemyHits
+    public static class EcsEnemyHits
     {
         private static World _lastWorld;
         private static EntityQuery _query;

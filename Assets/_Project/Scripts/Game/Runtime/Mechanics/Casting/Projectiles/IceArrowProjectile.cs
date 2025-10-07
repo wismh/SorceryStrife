@@ -11,7 +11,6 @@ namespace Game
         private Rigidbody _rigidbody;
         private IceArrowCaster _caster;
         private readonly HashSet<Unity.Entities.Entity> _hitEcsEnemies = new();
-        private readonly HashSet<EntityDamagable> _hitDamagables = new();
 
         public void Construct(IceArrowCaster caster, Vector3 direction)
         {
@@ -29,18 +28,7 @@ namespace Game
             transform.right = _direction;
             _rigidbody.linearVelocity = _direction * _caster.Speed;
 
-            EcsMeleeEnemyHits.DamageInRange(transform.position, EcsHitRadius, _caster.Damage, _hitEcsEnemies);
-        }
-
-        private void OnTriggerEnter(Collider collision)
-        {
-            if (!collision.transform.TryGetComponent(out EntityDamagable damagable))
-                return;
-
-            if (_hitDamagables.Add(damagable))
-            {
-                damagable.Damage(_caster.Damage);
-            }
+            EcsEnemyHits.DamageInRange(transform.position, EcsHitRadius, _caster.Damage, _hitEcsEnemies);
         }
     }
 }

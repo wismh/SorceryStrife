@@ -17,7 +17,6 @@ namespace Game
         private SphereCollider _collider;
         private MagicFieldCaster _caster;
 
-        private readonly List<EntityDamagable> _entities = new();
         private readonly HashSet<Unity.Entities.Entity> _hitEcsEnemies = new();
 
         public void Construct(MagicFieldCaster caster)
@@ -48,22 +47,7 @@ namespace Game
 
         private void Update()
         {
-            // Melee-type ECS enemies have no Collider (EnemyCompanion is visual-only), so
-            // OnCollisionEnter below never sees them - smoothly push and damage them directly here instead,
-            // using the collider's own currently-tweened radius so they are repelled continuously as it expands.
-            EcsMeleeEnemyHits.PushAndDamageExpandingField(transform.position, _collider.radius, _caster.Damage, _hitEcsEnemies);
-        }
-
-        private void OnCollisionEnter(Collision other)
-        {
-            if (!other.transform.TryGetComponent(out EntityDamagable damagable))
-                return;
-
-            if (_entities.Contains(damagable))
-                return;
-
-            _entities.Add(damagable);
-            damagable.Damage(_caster.Damage);
+            EcsEnemyHits.PushAndDamageExpandingField(transform.position, _collider.radius, _caster.Damage, _hitEcsEnemies);
         }
     }
 }

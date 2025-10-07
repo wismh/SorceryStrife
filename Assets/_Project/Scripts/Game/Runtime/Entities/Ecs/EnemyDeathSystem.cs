@@ -7,17 +7,21 @@ using Unity.Transforms;
 namespace EnemyEcs
 {
     /// <summary>On Health &lt;= 0: releases the assigned companion (death animation + delayed pool return, matching EnemyAnimator's 2s fade), spawns an Experience pickup entity (крок-10: PickupEcs.PickupEcsSpawner's prefab, instantiated via this method's own ECB alongside the entity destroy - not a direct EntityManager call, since that would be unsafe mid-iteration of the SystemAPI.Query below), destroys the entity.</summary>
-    [UpdateAfter(typeof(EnemyMeleeAttackSystem))]
-    [UpdateAfter(typeof(EnemyMeleeHitDetectionSystem))]
+    [UpdateAfter(typeof(EnemyAttackSystem))]
     public partial class EnemyDeathSystem : SystemBase
     {
         private Entity _pickupPrefab;
         private EnemyCompanionAssignmentSystem _companionSystem;
+        private System.Action<float3> _minibossDeathCallback;
 
-        public void SetDependencies(Entity pickupPrefab, EnemyCompanionAssignmentSystem companionSystem)
+        public void SetDependencies(
+            Entity pickupPrefab,
+            EnemyCompanionAssignmentSystem companionSystem,
+            System.Action<float3> minibossDeathCallback = null)
         {
             _pickupPrefab = pickupPrefab;
             _companionSystem = companionSystem;
+            _minibossDeathCallback = minibossDeathCallback;
         }
 
         protected override void OnUpdate()
@@ -32,6 +36,9 @@ namespace EnemyEcs
             {
                 if (health.ValueRO.Value > 0f)
                     continue;
+
+                if (enemyType.ValueRO.Value == Game.EnemyType.Eye || enemyType.ValueRO.Value == Game.EnemyType.BigEye)
+                    _minibossDeathCallback?.Invoke(transform.ValueRO.Position);
 
                 _companionSystem?.HandleDeath(entity, enemyType.ValueRO.Value);
 
