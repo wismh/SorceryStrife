@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Game
 {
@@ -19,6 +19,7 @@ namespace Game
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody>();
+            Destroy(gameObject, 5f);
         }
 
         private void FixedUpdate()
@@ -31,8 +32,9 @@ namespace Game
         {
             if (!collision.transform.TryGetComponent(out EntityDamagable damagable))
                 return;
-            
+
             damagable.Damage(_damage);
+            Destroy(gameObject);
         }
     }
 }
