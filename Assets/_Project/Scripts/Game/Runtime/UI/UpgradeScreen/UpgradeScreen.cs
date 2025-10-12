@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+using Lumenwake.UIModule;
 using UnityEngine;
 using Zenject;
 
@@ -15,26 +16,20 @@ namespace Game
         private CastersRegister _castersRegister;
         private PlayerCaster _playerCaster;
         private Player _player;
-        private IAssetLoaderService _assetLoaderService;
         private IScreenManager _screenManager;
 
         [Inject]
         public void Construct(
             Player player,
             CastersRegister castersRegister,
-            IAssetLoaderService assetLoaderService,
+            List<Spell> spells,
             IScreenManager screenManager)
         {
             _player = player;
             _castersRegister = castersRegister;
             _playerCaster = player.GetComponent<PlayerCaster>();
-            _assetLoaderService = assetLoaderService;
+            _spells = spells;
             _screenManager = screenManager;
-        }
-
-        private void Awake()
-        {
-            _spells = _assetLoaderService.LoadAllAssets<Spell>("Spells").ToList();
         }
 
         private void Start()

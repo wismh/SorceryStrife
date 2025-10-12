@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,12 +6,10 @@ namespace Game.InventorySystem
 {
     public class ItemsRegister
     {
-        private const string k_itemsPath = "Items";
         private readonly Dictionary<Type, Item> _items;
 
-        public ItemsRegister(IAssetLoaderService assetLoaderService)
+        public ItemsRegister(List<Item> items)
         {
-            var items = assetLoaderService.LoadAllAssets<Item>(k_itemsPath);
             _items = items.ToDictionary(item => item.GetType(), item => item);
         }
 

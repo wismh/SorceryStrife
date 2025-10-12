@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71457000f8f746d32faf52b8af7c7588, type: 3}
+  m_Name: HotDevil_VatConfig
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyEcs.VatAnimationConfig
+  <Mesh>k__BackingField: {fileID: 4300000, guid: b09de2d2141d853479575eb8852105a2,
+    type: 2}
+  <Material>k__BackingField: {fileID: 2100000, guid: 008f59d42030f6a4c842650dc3befd28,
+    type: 2}
+  <PositionTexture>k__BackingField: {fileID: 2800000, guid: 93ea207890b318b49bdf4b4fcddcea9f,
+    type: 2}
+  <NormalTexture>k__BackingField: {fileID: 2800000, guid: dadbeace33d35814781f40d60d8783fc,
+    type: 2}
+  <TextureSize>k__BackingField: {x: 742, y: 127}
+  <WalkStartFrame>k__BackingField: 0
+  <WalkFrameCount>k__BackingField: 32
+  <AttackStartFrame>k__BackingField: 32
+  <AttackFrameCount>k__BackingField: 53
+  <DeathStartFrame>k__BackingField: 85
+  <DeathFrameCount>k__BackingField: 42
+  <Fps>k__BackingField: 24

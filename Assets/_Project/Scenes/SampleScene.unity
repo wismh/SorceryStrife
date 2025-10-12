@@ -5757,6 +5757,18 @@ MonoBehaviour:
   - {fileID: 1479043344}
   - {fileID: 406936042}
   _pickupEcsSpawner: {fileID: 190000015}
+  _spells:
+  - {fileID: 11400000, guid: 6b7a6bc13dc7565468c7ab5a4b14b813, type: 2}
+  - {fileID: 11400000, guid: 6e50f29b7763d4e40a128e32da7a89d2, type: 2}
+  - {fileID: 11400000, guid: 6d760d2b139be1c418e42d766e91a236, type: 2}
+  - {fileID: 11400000, guid: 1578abf8dd4cd354f8ed4bd1e226ba84, type: 2}
+  - {fileID: 11400000, guid: b46da1e4557052e4c949a2f178ffe00f, type: 2}
+  - {fileID: 11400000, guid: 1f43412b40cf93c44939f81b1c54dbd6, type: 2}
+  _items:
+  - {fileID: 11400000, guid: 27a7fcc52d7899b4c93b0bee547554a3, type: 2}
+  - {fileID: 11400000, guid: 307bab5c8de37f94283b48e72201b0bd, type: 2}
+  - {fileID: 11400000, guid: 3c37dc84d94687c478046f6204c1f23d, type: 2}
+  - {fileID: 11400000, guid: 59b66d922e5941c49bb6bafbf6e32bf9, type: 2}
   _minionCompanionPrefab: {fileID: 2270169045049551187, guid: 701506a00452885b76e25b9697a9ff70,
     type: 3}
   _mutantCompanionPrefab: {fileID: 2270169045049551187, guid: d6a5ea65abe3d9900165b98164f97af9,

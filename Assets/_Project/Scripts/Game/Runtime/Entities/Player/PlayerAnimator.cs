@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Game
 {
@@ -10,6 +10,7 @@ namespace Game
         private Animator _animator;
         private MoveController _moveController;
         private Entity _playerAsEntity;
+        private bool _wasIdle;
         
         private void Awake()
         {
@@ -21,6 +22,8 @@ namespace Game
         private void Start()
         {
             _playerAsEntity.OnDeath += HandleDeath;
+            _wasIdle = _moveController.Direction == Vector2.zero;
+            _animator.SetBool(k_idle, _wasIdle);
         }
 
         private void OnDestroy()
@@ -30,7 +33,12 @@ namespace Game
 
         private void Update()
         {
-            _animator.SetBool(k_idle, _moveController.Direction == Vector2.zero);
+            var isIdle = _moveController.Direction == Vector2.zero;
+            if (isIdle != _wasIdle)
+            {
+                _wasIdle = isIdle;
+                _animator.SetBool(k_idle, isIdle);
+            }
         }
 
         private void HandleDeath()

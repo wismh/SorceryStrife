@@ -1,4 +1,6 @@
 using Cysharp.Threading.Tasks;
+using Project.Core.SceneLoaderServiceModule;
+using Project.Core.StateMachineModule;
 
 namespace Game
 {

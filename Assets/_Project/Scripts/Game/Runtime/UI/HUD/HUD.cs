@@ -1,4 +1,5 @@
 using System;
+using Lumenwake.UIModule;
 using TMPro;
 using UnityEngine;
 using Zenject;
@@ -45,13 +46,19 @@ namespace Game
 
         private void UpdateLevelLabel()
         {
-            _levelLabel.text = _levelPattern.Replace("{}", (_player.Level + 1).ToString());
+            var levelNumber = _player.Level + 1;
+            _levelLabel.text = !string.IsNullOrEmpty(_levelPattern) && _levelPattern.Contains("{}")
+                ? _levelPattern.Replace("{}", levelNumber.ToString())
+                : $"Level {levelNumber}";
         }
 
         private void Update()
         {
-            _healthBar.Value = _playerAsEntity.Health / _playerAsEntity.MaxHealth;
-            _experienceBar.Value = _player.Experience / _player.RequiredExperienceForLevelUp;
+            if (_playerAsEntity.MaxHealth > 0)
+                _healthBar.Value = _playerAsEntity.Health / _playerAsEntity.MaxHealth;
+
+            if (_player.RequiredExperienceForLevelUp > 0)
+                _experienceBar.Value = _player.Experience / _player.RequiredExperienceForLevelUp;
         }
     }
 }

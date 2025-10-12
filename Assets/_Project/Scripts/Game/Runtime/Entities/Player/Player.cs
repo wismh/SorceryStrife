@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
@@ -48,17 +48,17 @@ namespace Game
                 return;
 
             Experience += amount;
-            if (Experience < RequiredExperienceForLevelUp)
-                return;
+            while (Experience >= RequiredExperienceForLevelUp)
+            {
+                Experience -= RequiredExperienceForLevelUp;
+                Level += 1;
+                RequiredExperienceForLevelUp *= _multiplierFactorOfRequiredExperienceByLevel;
 
-            Level += 1;
-            Experience = 0;
-            RequiredExperienceForLevelUp *= _multiplierFactorOfRequiredExperienceByLevel;
+                _playerAsEntity.Health += (_playerAsEntity.MaxHealth * 0.1f);
+                _playerAsEntity.Health = Mathf.Clamp(_playerAsEntity.Health, 0, _playerAsEntity.MaxHealth);
 
-            _playerAsEntity.Health += (_playerAsEntity.MaxHealth * 0.1f);
-            _playerAsEntity.Health = Mathf.Clamp(_playerAsEntity.Health, 0, _playerAsEntity.MaxHealth);
-
-            OnLevelUp?.Invoke();
+                OnLevelUp?.Invoke();
+            }
         }
 
         private void HandleDeath()

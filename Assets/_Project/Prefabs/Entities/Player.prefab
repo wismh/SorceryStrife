@@ -142,7 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ace4a0626f54c9e9c6431115b1052f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _baseRequiredExperienceForLevelUp: 5
+  _baseRequiredExperienceForLevelUp: 25
   _multiplierFactorOfRequiredExperienceByLevel: 1.3
 --- !u!114 &5627454803120917844
 MonoBehaviour:

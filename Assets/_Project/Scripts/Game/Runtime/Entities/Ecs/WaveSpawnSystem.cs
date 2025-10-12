@@ -2,8 +2,10 @@ using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Rendering;
 using Unity.Transforms;
 using UnityEngine;
+using UnityEngine.Rendering;
 using Random = UnityEngine.Random;
 
 // No "using Game;" in this file - see ProjectileVelocity.cs for why. Game-namespace types
@@ -11,15 +13,6 @@ using Random = UnityEngine.Random;
 // EnemySpawner) written fully qualified.
 namespace EnemyEcs
 {
-    /// <summary>
-    /// крок-9: replaces EnemySpawner's UniTask coroutine with per-frame ECS scheduling driven by
-    /// SystemAPI.Time. EnemySpawner (now a passive Bridge, see its Start()) pushes wave data and
-    /// the DiContainer once; every group in the current wave ticks its own stagger timer here.
-    /// Melee types (carry EntityStatsAuthoring) spawn as pure ECS entities via EntityCommandBuffer,
-    /// batched once per frame instead of крок-8's EnemyEcsSpawner (one immediate EntityManager
-    /// structural change per enemy, now removed). Devil/HotDevil/Eye/BigEye still spawn as
-    /// MonoBehaviour through the DiContainer, unchanged from EnemySpawner's old branch.
-    /// </summary>
     public partial class WaveSpawnSystem : SystemBase
     {
         private struct SpawnGroupState
@@ -34,6 +27,8 @@ namespace EnemyEcs
         private List<Game.EnemySpawner.Wave> _waves;
         private Vector2 _range;
         private EntityArchetype _enemyArchetype;
+        private Entity[] _enemyPrefabs;
+        private VatAnimationConfig[] _vatConfigs;
 
         private readonly List<SpawnGroupState> _activeGroups = new();
         private int _currentWaveId;
@@ -44,6 +39,7 @@ namespace EnemyEcs
         {
             _waves = waves;
             _range = range;
+            InitializePrefabs();
         }
 
         protected override void OnCreate()
@@ -57,6 +53,49 @@ namespace EnemyEcs
                 typeof(AttackState),
                 typeof(EnemyEcsType),
                 typeof(EnemyAttackType));
+        }
+
+        private void InitializePrefabs()
+        {
+            if (_enemyPrefabs != null)
+                return;
+
+            var desc = new RenderMeshDescription(
+                ShadowCastingMode.On,
+                receiveShadows: true);
+
+            var types = (Game.EnemyType[])System.Enum.GetValues(typeof(Game.EnemyType));
+            _enemyPrefabs = new Entity[types.Length];
+            _vatConfigs = new VatAnimationConfig[types.Length];
+
+            for (var i = 0; i < types.Length; i++)
+            {
+                Game.EnemyType type = types[i];
+                var config = Resources.Load<VatAnimationConfig>($"VAT/{type}_VatConfig");
+                _vatConfigs[i] = config;
+
+                Entity prefab = EntityManager.CreateEntity();
+                EntityManager.AddComponent<Prefab>(prefab);
+                EntityManager.AddComponent<LocalTransform>(prefab);
+                EntityManager.AddComponent<LocalToWorld>(prefab);
+                EntityManager.AddComponent<Game.MoveSpeed>(prefab);
+                EntityManager.AddComponent<Game.AttackStats>(prefab);
+                EntityManager.AddComponent<Game.Health>(prefab);
+                EntityManager.AddComponent<Game.UnitTeam>(prefab);
+                EntityManager.AddComponent<AttackState>(prefab);
+                EntityManager.AddComponent<EnemyEcsType>(prefab);
+                EntityManager.AddComponent<EnemyAttackType>(prefab);
+                EntityManager.AddComponent<EnemyVatPlayback>(prefab);
+                EntityManager.AddComponent<EnemyVatAnimParams>(prefab);
+
+                if (config != null && config.Material != null && config.Mesh != null)
+                {
+                    var rma = new RenderMeshArray(new[] { config.Material }, new[] { config.Mesh });
+                    RenderMeshUtility.AddComponents(prefab, EntityManager, desc, rma, MaterialMeshInfo.FromRenderMeshArrayIndices(0, 0));
+                }
+
+                _enemyPrefabs[i] = prefab;
+            }
         }
 
         protected override void OnUpdate()
@@ -142,9 +181,20 @@ namespace EnemyEcs
         private void SpawnEnemy(EntityCommandBuffer ecb, Game.EntityStatsAuthoring stats, float3 position)
         {
             Game.EntityCharacteristics characteristics = stats.Characteristics;
-            Entity entity = ecb.CreateEntity(_enemyArchetype);
+            int typeIndex = (int)stats.EnemyType;
 
-            ecb.SetComponent(entity, new LocalTransform { Position = position, Rotation = quaternion.identity, Scale = 1f });
+            Entity entity;
+            if (_enemyPrefabs != null && typeIndex >= 0 && typeIndex < _enemyPrefabs.Length && _enemyPrefabs[typeIndex] != Entity.Null)
+            {
+                entity = ecb.Instantiate(_enemyPrefabs[typeIndex]);
+            }
+            else
+            {
+                entity = ecb.CreateEntity(_enemyArchetype);
+            }
+
+            float scale = (stats.EnemyType == Game.EnemyType.BigEye) ? 2.0f : 1.0f;
+            ecb.SetComponent(entity, LocalTransform.FromPositionRotationScale(position, quaternion.identity, scale));
             ecb.SetComponent(entity, new Game.MoveSpeed { Value = characteristics.MoveSpeed });
             ecb.SetComponent(entity, new Game.AttackStats
             {
@@ -157,6 +207,26 @@ namespace EnemyEcs
             ecb.SetComponent(entity, new AttackState { Phase = AttackPhase.Idle, Timer = 0f });
             ecb.SetComponent(entity, new EnemyEcsType { Value = stats.EnemyType });
             ecb.SetComponent(entity, new EnemyAttackType { Value = stats.AttackType });
+
+            if (_vatConfigs != null && typeIndex >= 0 && typeIndex < _vatConfigs.Length && _vatConfigs[typeIndex] != null)
+            {
+                VatAnimationConfig config = _vatConfigs[typeIndex];
+                ecb.SetComponent(entity, new EnemyVatPlayback
+                {
+                    WalkStart = config.WalkStartFrame,
+                    WalkCount = config.WalkFrameCount,
+                    AttackStart = config.AttackStartFrame,
+                    AttackCount = config.AttackFrameCount,
+                    DeathStart = config.DeathStartFrame,
+                    DeathCount = config.DeathFrameCount,
+                    Fps = config.Fps,
+                    Time = Random.Range(0f, 10f),
+                });
+                ecb.SetComponent(entity, new EnemyVatAnimParams
+                {
+                    Value = new float4(config.WalkStartFrame, config.WalkFrameCount, 0f, config.Fps)
+                });
+            }
         }
     }
 }

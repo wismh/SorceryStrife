@@ -11,16 +11,13 @@ namespace EnemyEcs
     public partial class EnemyDeathSystem : SystemBase
     {
         private Entity _pickupPrefab;
-        private EnemyCompanionAssignmentSystem _companionSystem;
         private System.Action<float3> _minibossDeathCallback;
 
         public void SetDependencies(
             Entity pickupPrefab,
-            EnemyCompanionAssignmentSystem companionSystem,
             System.Action<float3> minibossDeathCallback = null)
         {
             _pickupPrefab = pickupPrefab;
-            _companionSystem = companionSystem;
             _minibossDeathCallback = minibossDeathCallback;
         }
 
@@ -39,8 +36,6 @@ namespace EnemyEcs
 
                 if (enemyType.ValueRO.Value == Game.EnemyType.Eye || enemyType.ValueRO.Value == Game.EnemyType.BigEye)
                     _minibossDeathCallback?.Invoke(transform.ValueRO.Position);
-
-                _companionSystem?.HandleDeath(entity, enemyType.ValueRO.Value);
 
                 Entity pickup = ecb.Instantiate(_pickupPrefab);
                 ecb.SetComponent(pickup, new LocalTransform

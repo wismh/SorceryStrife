@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71457000f8f746d32faf52b8af7c7588, type: 3}
+  m_Name: Minion_VatConfig
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyEcs.VatAnimationConfig
+  <Mesh>k__BackingField: {fileID: 4300000, guid: 2ae47c85f809cff4aa4a9a3c18ce6ec5,
+    type: 2}
+  <Material>k__BackingField: {fileID: 2100000, guid: 058171b217a8ab7489e187525568da58,
+    type: 2}
+  <PositionTexture>k__BackingField: {fileID: 2800000, guid: 4e6d8dd86c9691b439866b76eac7728b,
+    type: 2}
+  <NormalTexture>k__BackingField: {fileID: 2800000, guid: a7f213c35c71daa46ab9843abb7ac105,
+    type: 2}
+  <TextureSize>k__BackingField: {x: 675, y: 120}
+  <WalkStartFrame>k__BackingField: 0
+  <WalkFrameCount>k__BackingField: 13
+  <AttackStartFrame>k__BackingField: 13
+  <AttackFrameCount>k__BackingField: 34
+  <DeathStartFrame>k__BackingField: 47
+  <DeathFrameCount>k__BackingField: 73
+  <Fps>k__BackingField: 24

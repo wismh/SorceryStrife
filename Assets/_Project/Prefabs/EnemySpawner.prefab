@@ -48,20 +48,20 @@ MonoBehaviour:
   - Enemies:
     - EnemyPrefab: {fileID: 1449213688858323806, guid: efb3c982c11f4214899f3de9a547db88,
         type: 3}
-      Amount: 400
+      Amount: 1200
     Duration: 50
   - Enemies:
     - EnemyPrefab: {fileID: 1449213688858323806, guid: efb3c982c11f4214899f3de9a547db88,
         type: 3}
-      Amount: 600
+      Amount: 1800
     - EnemyPrefab: {fileID: 1449213688858323806, guid: 09afe802418efba439ed9404cd2e93a9,
         type: 3}
-      Amount: 300
+      Amount: 900
     Duration: 60
   - Enemies:
     - EnemyPrefab: {fileID: 1449213688858323806, guid: efb3c982c11f4214899f3de9a547db88,
         type: 3}
-      Amount: 800
+      Amount: 2400
     Duration: 10
   - Enemies:
     - EnemyPrefab: {fileID: 1449213688858323806, guid: 049868856a485f744b35b9d0e6832472,
@@ -74,26 +74,26 @@ MonoBehaviour:
   - Enemies:
     - EnemyPrefab: {fileID: 1449213688858323806, guid: efb3c982c11f4214899f3de9a547db88,
         type: 3}
-      Amount: 600
+      Amount: 1800
     - EnemyPrefab: {fileID: 1449213688858323806, guid: 2660f4b3999b63a44b240fd4857f11eb,
         type: 3}
-      Amount: 200
+      Amount: 600
     Duration: 60
   - Enemies:
     - EnemyPrefab: {fileID: 1449213688858323806, guid: 09afe802418efba439ed9404cd2e93a9,
         type: 3}
-      Amount: 600
+      Amount: 1800
     - EnemyPrefab: {fileID: 1449213688858323806, guid: efb3c982c11f4214899f3de9a547db88,
         type: 3}
-      Amount: 1000
+      Amount: 3000
     Duration: 60
   - Enemies:
     - EnemyPrefab: {fileID: 1449213688858323806, guid: 09afe802418efba439ed9404cd2e93a9,
         type: 3}
-      Amount: 1200
+      Amount: 3600
     - EnemyPrefab: {fileID: 1449213688858323806, guid: 2660f4b3999b63a44b240fd4857f11eb,
         type: 3}
-      Amount: 400
+      Amount: 1200
     Duration: 120
   - Enemies:
     - EnemyPrefab: {fileID: 1449213688858323806, guid: 049868856a485f744b35b9d0e6832472,
@@ -101,7 +101,7 @@ MonoBehaviour:
       Amount: 200
     - EnemyPrefab: {fileID: 1449213688858323806, guid: 09afe802418efba439ed9404cd2e93a9,
         type: 3}
-      Amount: 1000
+      Amount: 3000
     - EnemyPrefab: {fileID: 1449213688858323806, guid: 52b529a948fa4f645b2281382fd2eed8,
         type: 3}
       Amount: 2
@@ -123,6 +123,6 @@ MonoBehaviour:
       Amount: 1000
     - EnemyPrefab: {fileID: 1449213688858323806, guid: 120c95515c8c884468c5cb136858860c,
         type: 3}
-      Amount: 600
+      Amount: 1800
     Duration: 120
   _range: {x: 25, y: 40}

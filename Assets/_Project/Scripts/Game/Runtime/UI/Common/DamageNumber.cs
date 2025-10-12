@@ -10,7 +10,6 @@ namespace Game
         [SerializeField] private float _duration;
 
         private TextMeshProUGUI _textMesh;
-        private Camera _camera;
 
         public string Text
         {
@@ -25,18 +24,19 @@ namespace Game
 
         private void Awake()
         {
-            _camera = Camera.main;
             _textMesh = GetComponentInChildren<TextMeshProUGUI>();
         }
 
         private void Start()
         {
-            _textMesh.transform.DOMoveY(transform.position.y + _offset, _duration);
-        }
+            var mainCamera = Camera.main;
+            if (mainCamera != null)
+                transform.forward = mainCamera.transform.forward;
 
-        private void Update()
-        {
-            transform.forward = _camera.transform.forward;
+            if (TryGetComponent(out TempObject tempObject))
+                tempObject.TimeOfLife = _duration;
+
+            _textMesh.transform.DOMoveY(transform.position.y + _offset, _duration).SetLink(gameObject);
         }
     }
 }
