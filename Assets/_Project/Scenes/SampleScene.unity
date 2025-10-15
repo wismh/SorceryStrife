@@ -5769,22 +5769,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 307bab5c8de37f94283b48e72201b0bd, type: 2}
   - {fileID: 11400000, guid: 3c37dc84d94687c478046f6204c1f23d, type: 2}
   - {fileID: 11400000, guid: 59b66d922e5941c49bb6bafbf6e32bf9, type: 2}
-  _minionCompanionPrefab: {fileID: 2270169045049551187, guid: 701506a00452885b76e25b9697a9ff70,
-    type: 3}
-  _mutantCompanionPrefab: {fileID: 2270169045049551187, guid: d6a5ea65abe3d9900165b98164f97af9,
-    type: 3}
-  _ogrCompanionPrefab: {fileID: 2270169045049551187, guid: e02aa1b73a878c806d7a2b0b0ab69585,
-    type: 3}
-  _oldMutantCompanionPrefab: {fileID: 2270169045049551187, guid: e3e8b8990e0605bc99e31277fc4e2db1,
-    type: 3}
-  _devilCompanionPrefab: {fileID: 2270169045049551187, guid: 1abd4691799f4920be4c137fc61481d7,
-    type: 3}
-  _hotDevilCompanionPrefab: {fileID: 2270169045049551187, guid: fdfd5acb60f64896a700e59b805bfe80,
-    type: 3}
-  _eyeCompanionPrefab: {fileID: 2270169045049551187, guid: 9c77c724d9c440b297e0a9822865d357,
-    type: 3}
-  _bigEyeCompanionPrefab: {fileID: 2270169045049551187, guid: b6d2e2f549a14770b61c70487b58dc37,
-    type: 3}
 --- !u!1001 &898328776
 PrefabInstance:
   m_ObjectHideFlags: 0
