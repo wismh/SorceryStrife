@@ -17,19 +17,22 @@ namespace Game
         private PlayerCaster _playerCaster;
         private Player _player;
         private IScreenManager _screenManager;
+        private RunFlowStateMachine _runFlowStateMachine;
 
         [Inject]
         public void Construct(
             Player player,
             CastersRegister castersRegister,
             List<Spell> spells,
-            IScreenManager screenManager)
+            IScreenManager screenManager,
+            RunFlowStateMachine runFlowStateMachine)
         {
             _player = player;
             _castersRegister = castersRegister;
             _playerCaster = player.GetComponent<PlayerCaster>();
             _spells = spells;
             _screenManager = screenManager;
+            _runFlowStateMachine = runFlowStateMachine;
         }
 
         private void Start()
@@ -51,11 +54,13 @@ namespace Game
         private void HandleLevelUp()
         {
             _screenManager.OpenScreen<UpgradeScreen>().Forget();
+            _runFlowStateMachine.Enter<LevelUpInterstitialState>().Forget();
         }
 
         private void HandleCardSelected()
         {
             _screenManager.CloseScreen<UpgradeScreen>().Forget();
+            _runFlowStateMachine.Enter<WaveState>().Forget();
         }
 
         public override void OnOpen()
@@ -77,10 +82,9 @@ namespace Game
             if (possibleSpells.Count == 0)
             {
                 _screenManager.CloseScreen<UpgradeScreen>().Forget();
+                _runFlowStateMachine.Enter<WaveState>().Forget();
                 return;
             }
-
-            Time.timeScale = 0.01f;
 
             var numberOfVariants = possibleSpells.Count >= 3 ? 3 : possibleSpells.Count;
             for (var i = 0; i < numberOfVariants; ++i)
@@ -94,8 +98,6 @@ namespace Game
 
         public override UniTask OnClose()
         {
-            Time.timeScale = 1;
-
             foreach (var card in _upgradeCards)
                 card.gameObject.SetActive(false);
 

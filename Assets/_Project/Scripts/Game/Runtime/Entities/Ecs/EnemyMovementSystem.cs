@@ -15,12 +15,12 @@ namespace EnemyEcs
             if (!SystemAPI.TryGetSingleton(out PlayerPositionSingleton player))
                 return;
 
-            new SteerTowardPlayerJob
+            state.Dependency = new SteerTowardPlayerJob
             {
                 DeltaTime = SystemAPI.Time.DeltaTime,
                 PlayerPosition = player.Position,
                 PlayerAlive = player.IsAlive,
-            }.ScheduleParallel(state.Dependency).Complete();
+            }.ScheduleParallel(state.Dependency);
         }
     }
 
