@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Project.Core.AssetLoaderModule
 {
-    /// <summary>Wraps Resources - the only asset source MiniJam has today (no Addressables package).</summary>
+    /// <summary>Wraps Resources - the only asset source Sorcery Strife has today (no Addressables package).</summary>
     public class ResourceAssetLoaderService : IAssetLoaderService
     {
         public T LoadAsset<T>(string key) where T : Object
