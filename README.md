@@ -64,10 +64,10 @@ graph TD
     end
 
     subgraph Dependency Injection [Zenject]
-        GI[GameInstaller] --> Casters[CastersRegister]
-        GI --> Items[ItemsRegister]
-        GI --> UI[UIModule / Screens]
-        GI --> Aud[AudioSystem]
+        GI[SceneContext Installers] --> Casters[PlayerCombatInstaller / CastersRegister]
+        GI --> Items[GameplayConfigsInstaller / ItemsRegister]
+        GI --> UI[UiInstaller / ScreenManager]
+        GI --> RF[RunFlowInstaller / RunFlowStateMachine]
     end
 
     subgraph Hybrid ECS Simulation [Unity Entities / Burst]
@@ -94,7 +94,7 @@ graph TD
 - **Multi-Scene Boot Chain**:
   - `BootstrapScene` (Build Index 0) resolves `ProjectContext` lazily, sets `DontDestroyOnLoad`, and transitions cleanly to `MainMenu`.
   - `ProjectContextInstaller` binds project-wide singletons (`GlobalGameStateMachine`, `AudioSystem`).
-  - `GameInstaller` wires gameplay dependencies (`Player`, `CastersRegister`, `ItemsRegister`, `RunFlowStateMachine`).
+  - Modular `SceneContext` installers (`GameplayConfigsInstaller`, `PlayerCombatInstaller`, `UiInstaller`, `RunFlowInstaller`) wire gameplay dependencies (`Player`, `CastersRegister`, `ItemsRegister`, `RunFlowStateMachine`).
 - **Constructor Injection**: Pure C# services use standard constructor injection; MonoBehaviours use `[Inject] Construct()` lifecycle methods.
 
 ### 3. State Machines

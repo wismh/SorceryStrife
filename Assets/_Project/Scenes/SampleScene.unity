@@ -636,6 +636,9 @@ MonoBehaviour:
   _scriptableObjectInstallers: []
   _monoInstallers:
   - {fileID: 896980457}
+  - {fileID: 896980458}
+  - {fileID: 896980459}
+  - {fileID: 896980460}
   _installerPrefabs: []
   _autoRun: 1
   OnPreInstall:
@@ -5717,8 +5720,11 @@ GameObject:
   m_Component:
   - component: {fileID: 896980456}
   - component: {fileID: 896980457}
+  - component: {fileID: 896980458}
+  - component: {fileID: 896980459}
+  - component: {fileID: 896980460}
   m_Layer: 0
-  m_Name: GameInstaller
+  m_Name: Installers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5748,15 +5754,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 896980455}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ccfbb468d62f5c7409b89b3cf0918b1f, type: 3}
+  m_Script: {fileID: 11500000, guid: 578c8093bf7cd6924ec29566395df2e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _player: {fileID: 384120447}
-  _screens:
-  - {fileID: 846847278}
-  - {fileID: 1479043344}
-  - {fileID: 406936042}
-  _pickupEcsSpawner: {fileID: 190000015}
   _spells:
   - {fileID: 11400000, guid: 6b7a6bc13dc7565468c7ab5a4b14b813, type: 2}
   - {fileID: 11400000, guid: 6e50f29b7763d4e40a128e32da7a89d2, type: 2}
@@ -5769,6 +5769,48 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 307bab5c8de37f94283b48e72201b0bd, type: 2}
   - {fileID: 11400000, guid: 3c37dc84d94687c478046f6204c1f23d, type: 2}
   - {fileID: 11400000, guid: 59b66d922e5941c49bb6bafbf6e32bf9, type: 2}
+--- !u!114 &896980458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 896980455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19f6b77e17d517c9804c4ff8aadd5d66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _player: {fileID: 384120447}
+  _pickupEcsSpawner: {fileID: 190000015}
+--- !u!114 &896980459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 896980455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89cce4e298829d2869912d39f6ca1b9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _screens:
+  - {fileID: 846847278}
+  - {fileID: 1479043344}
+  - {fileID: 406936042}
+--- !u!114 &896980460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 896980455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df19e79c62da3d3059d0a209d65b30b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &898328776
 PrefabInstance:
   m_ObjectHideFlags: 0
