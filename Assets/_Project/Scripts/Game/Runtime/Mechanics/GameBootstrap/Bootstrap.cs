@@ -21,6 +21,11 @@ namespace Game
             _stateMachine = stateMachine;
         }
 
+        private void Awake()
+        {
+            Application.targetFrameRate = 60;
+        }
+
         private void Start()
         {
             EnterMenuAsync().Forget();

@@ -40,6 +40,21 @@ namespace PickupEcs
             });
         }
 
+        private void OnDestroy()
+        {
+            World world = World.DefaultGameObjectInjectionWorld;
+            if (world == null || !world.IsCreated || !_prefabCreated || _prefabEntity == Entity.Null)
+                return;
+
+            if (world.EntityManager.Exists(_prefabEntity))
+            {
+                world.EntityManager.DestroyEntity(_prefabEntity);
+            }
+
+            _prefabEntity = Entity.Null;
+            _prefabCreated = false;
+        }
+
         public Entity GetOrCreatePrefabEntity()
         {
             if (_prefabCreated)
