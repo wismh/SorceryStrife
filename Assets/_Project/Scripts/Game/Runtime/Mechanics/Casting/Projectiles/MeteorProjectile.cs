@@ -30,15 +30,33 @@ namespace Game
             DelayAsync().Forget();
         }
 
+        private bool _exploded;
+
+        private void Explode()
+        {
+            if (_exploded)
+            {
+                return;
+            }
+
+            _exploded = true;
+            OnCollisionFloor?.Invoke();
+            Destroy(gameObject);
+        }
+
         private void FixedUpdate()
         {
             if (!_startFalling)
+            {
                 return;
+            }
 
             _rigidbody.linearVelocity = Vector3.down * 10f;
 
             if (EcsEnemyHits.DamageInRange(transform.position, EcsHitRadius, _meteorCaster.Damage / 3f))
-                Destroy(gameObject);
+            {
+                Explode();
+            }
         }
 
         private async UniTaskVoid DelayAsync()
@@ -49,10 +67,7 @@ namespace Game
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.layer == _floorLayer)
-                OnCollisionFloor?.Invoke();
-
-            Destroy(gameObject);
+            Explode();
         }
     }
 }

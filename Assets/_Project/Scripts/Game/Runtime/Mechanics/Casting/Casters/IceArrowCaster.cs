@@ -30,11 +30,11 @@ namespace Game
 
             var directionToEnemy = (targetPosition - caster.position).normalized;
 
-            var number = PlayerInventory.ApplyModifiers(StatType.ProjectileCount, 1);
+            var count = Mathf.Max(1, Mathf.RoundToInt(PlayerInventory.ApplyModifiers(StatType.ProjectileCount, 1)));
 
-            for (var i = 0; i < number; ++i)
+            for (var i = 0; i < count; ++i)
             {
-                var angle = angleOffset * (i - number / 2);
+                var angle = count > 1 ? angleOffset * (i - (count - 1) * 0.5f) : 0f;
                 var direction = Quaternion.AngleAxis(angle, Vector3.up) * directionToEnemy;
 
                 var clone = _container.InstantiatePrefabForComponent<IceArrowProjectile>(_spell.ProjectilePrefab);

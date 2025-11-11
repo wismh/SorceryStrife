@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using Zenject;
 using Object = UnityEngine.Object;
@@ -11,6 +11,9 @@ namespace Game
     {
         public float Damage => PlayerInventory.ApplyModifiers(StatType.Damage, _spell.Damage.ValueAtLevel(Level));
         public float Projectiles => PlayerInventory.ApplyModifiers(StatType.ProjectileCount, _spell.Projectiles.ValueAtLevel(Level));
+        public float Radius => PlayerInventory.ApplyModifiers(
+            StatType.Radius,
+            _spell.Radius != null && _spell.Radius.Count > 0 ? _spell.Radius.ValueAtLevel(Level) : 3.5f);
         public float Delay => _spell.Delay;
         
         private readonly MeteorSpell _spell;
@@ -26,7 +29,9 @@ namespace Game
 
         protected override void CastInternal(Transform caster)
         {
-            for (var i = 0; i < Projectiles; i++)
+            var projectileCount = Mathf.Max(1, Mathf.RoundToInt(Projectiles));
+
+            for (var i = 0; i < projectileCount; i++)
             {
                 var randomOffset = Random.insideUnitCircle.normalized * Random.Range(_spell.Range.x, _spell.Range.y);
                 var position = caster.position + new Vector3(randomOffset.x, -0.4f, randomOffset.y);
