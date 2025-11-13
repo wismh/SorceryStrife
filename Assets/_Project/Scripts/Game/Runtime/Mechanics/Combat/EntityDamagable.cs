@@ -1,4 +1,4 @@
-using System.Globalization;
+using Project.Core.DamagePopupModule;
 using UnityEngine;
 using Zenject;
 
@@ -11,10 +11,12 @@ namespace Game
         public DamageNumber DamageNumberPrefab => _damageNumberPrefab;
 
         private Entity _entity;
+        private IDamagePopupSpawner _damagePopupSpawner;
 
         [Inject]
-        public void Construct()
+        public void Construct([InjectOptional] IDamagePopupSpawner damagePopupSpawner = null)
         {
+            _damagePopupSpawner = damagePopupSpawner;
             _entity = GetComponent<Entity>();
         }
 
@@ -31,18 +33,27 @@ namespace Game
         public void Damage(float amount)
         {
             if (!_entity.IsAlive)
+            {
                 return;
+            }
 
             _entity.Health -= amount;
 
             _entity.OnHit?.Invoke(amount);
             if (_entity.Health > 0)
+            {
                 return;
+            }
             
             if (TryGetComponent(out BoxCollider boxCollider))
+            {
                 boxCollider.enabled = false;
+            }
+
             if (TryGetComponent(out Rigidbody body))
+            {
                 body.isKinematic = true;
+            }
             
             _entity.IsAlive = false;
             _entity.OnDeath?.Invoke();
@@ -50,6 +61,17 @@ namespace Game
 
         private void ShowDamageNumber(float amount)
         {
+            if (_damagePopupSpawner != null)
+            {
+                _damagePopupSpawner.Spawn(transform, transform.position, new DamagePopupInfo(amount));
+                return;
+            }
+
+            if (!_damageNumberPrefab)
+            {
+                return;
+            }
+
             var clone = Instantiate(_damageNumberPrefab);
             clone.transform.position = transform.position;
             clone.Text = amount.ToString("0.#");

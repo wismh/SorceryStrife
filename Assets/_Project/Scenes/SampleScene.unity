@@ -6242,6 +6242,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 307bab5c8de37f94283b48e72201b0bd, type: 2}
   - {fileID: 11400000, guid: 3c37dc84d94687c478046f6204c1f23d, type: 2}
   - {fileID: 11400000, guid: 59b66d922e5941c49bb6bafbf6e32bf9, type: 2}
+  _damagePopupPrefab: {fileID: 1140000000000000002, guid: 7fde6ff4662a6ae9b3304ddae23326a0, type: 3}
+  _damagePopupInitialPoolSize: 32
 --- !u!114 &896980458
 MonoBehaviour:
   m_ObjectHideFlags: 0

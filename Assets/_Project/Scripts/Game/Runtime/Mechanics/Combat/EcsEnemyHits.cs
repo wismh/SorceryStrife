@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Project.Core.DamagePopupModule;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -15,16 +16,30 @@ namespace Game
         private static World _lastWorld;
         private static EntityQuery _query;
         private static DamageNumber _damageNumberPrefab;
+        private static IDamagePopupSpawner _damagePopupSpawner;
+
+        public static void SetDamagePopupSpawner(IDamagePopupSpawner spawner)
+        {
+            _damagePopupSpawner = spawner;
+        }
 
         public static void SetDamageNumberPrefab(DamageNumber prefab)
         {
             _damageNumberPrefab = prefab;
         }
 
-        private static void ShowDamageNumber(Vector3 position, float amount)
+        private static void ShowDamageNumber(Vector3 position, float amount, bool isCrit = false)
         {
-            if (!_damageNumberPrefab)
+            if (_damagePopupSpawner != null)
+            {
+                _damagePopupSpawner.Spawn(position, new DamagePopupInfo(amount, isCrit));
                 return;
+            }
+
+            if (!_damageNumberPrefab)
+            {
+                return;
+            }
 
             var clone = Object.Instantiate(_damageNumberPrefab);
             clone.transform.position = position;

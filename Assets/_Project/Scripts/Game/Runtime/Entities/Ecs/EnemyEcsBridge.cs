@@ -1,5 +1,6 @@
 using Game;
 using PickupEcs;
+using Project.Core.DamagePopupModule;
 using Unity.Entities;
 using UnityEngine;
 using Zenject;
@@ -20,16 +21,19 @@ namespace EnemyEcs
         private Player _player;
         private PickupEcsSpawner _pickupSpawner;
         private DiContainer _container;
+        private IDamagePopupSpawner _damagePopupSpawner;
 
         [Inject]
         public void Construct(
             Player player,
             PickupEcsSpawner pickupSpawner,
-            DiContainer container)
+            DiContainer container,
+            IDamagePopupSpawner damagePopupSpawner)
         {
             _player = player;
             _pickupSpawner = pickupSpawner;
             _container = container;
+            _damagePopupSpawner = damagePopupSpawner;
         }
 
         private void Start()
@@ -41,7 +45,11 @@ namespace EnemyEcs
                 playerDamagable,
                 _devilProjectilePrefab,
                 _container);
-            EcsEnemyHits.SetDamageNumberPrefab(playerDamagable.DamageNumberPrefab);
+            EcsEnemyHits.SetDamagePopupSpawner(_damagePopupSpawner);
+            if (playerDamagable != null && playerDamagable.DamageNumberPrefab != null)
+            {
+                EcsEnemyHits.SetDamageNumberPrefab(playerDamagable.DamageNumberPrefab);
+            }
 
             Unity.Entities.Entity pickupPrefab = _pickupSpawner.GetOrCreatePrefabEntity();
             world.GetOrCreateSystemManaged<EnemyDeathSystem>().SetDependencies(
