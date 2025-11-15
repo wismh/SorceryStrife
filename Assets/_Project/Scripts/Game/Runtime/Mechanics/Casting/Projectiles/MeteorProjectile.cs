@@ -1,6 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Zenject;
 
 namespace Game
 {
@@ -10,27 +11,36 @@ namespace Game
 
         public event Action OnCollisionFloor;
         private Rigidbody _rigidbody;
-        private int _floorLayer;
         private MeteorCaster _meteorCaster;
+        private IMemoryPool _pool;
         private bool _startFalling;
+        private bool _exploded;
 
-        public void Construct(MeteorCaster caster)
+        public void Construct(MeteorCaster caster, IMemoryPool pool)
         {
             _meteorCaster = caster;
+            _pool = pool;
+            _exploded = false;
+            _startFalling = false;
+            enabled = true;
+
+            if (_rigidbody)
+            {
+                _rigidbody.linearVelocity = Vector3.zero;
+            }
+
+            DelayAsync().Forget();
         }
 
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody>();
-            _floorLayer = LayerMask.NameToLayer("Terrain");
-        }
 
-        private void Start()
-        {
-            DelayAsync().Forget();
+            if (TryGetComponent(out TempObject tempObject))
+            {
+                Destroy(tempObject);
+            }
         }
-
-        private bool _exploded;
 
         private void Explode()
         {
@@ -40,13 +50,14 @@ namespace Game
             }
 
             _exploded = true;
+            enabled = false;
             OnCollisionFloor?.Invoke();
-            Destroy(gameObject);
+            DespawnSelf();
         }
 
         private void FixedUpdate()
         {
-            if (!_startFalling)
+            if (!_startFalling || _exploded)
             {
                 return;
             }
@@ -62,12 +73,31 @@ namespace Game
         private async UniTaskVoid DelayAsync()
         {
             await UniTask.WaitForSeconds(_meteorCaster.Delay, cancellationToken: this.GetCancellationTokenOnDestroy());
-            _startFalling = true;
+            if (!_exploded)
+            {
+                _startFalling = true;
+            }
         }
 
         private void OnTriggerEnter(Collider other)
         {
             Explode();
+        }
+
+        private void DespawnSelf()
+        {
+            if (_pool != null)
+            {
+                _pool.Despawn(this);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
+
+        public class Pool : MonoMemoryPool<MeteorProjectile>
+        {
         }
     }
 }

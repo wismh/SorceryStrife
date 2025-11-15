@@ -17,14 +17,20 @@ namespace Game
         public float Delay => _spell.Delay;
         
         private readonly MeteorSpell _spell;
-        private readonly DiContainer _container;
+        private readonly MeteorProjectile.Pool _meteorPool;
+        private readonly ExplosionProjectile.Pool _explosionPool;
         
         [Inject]
-        public MeteorCaster(DiContainer container, PlayerInventory inventory, MeteorSpell spell):
+        public MeteorCaster(
+            PlayerInventory inventory,
+            MeteorSpell spell,
+            MeteorProjectile.Pool meteorPool,
+            ExplosionProjectile.Pool explosionPool) :
             base(spell, inventory)
         {
-            _container = container;
             _spell = spell;
+            _meteorPool = meteorPool;
+            _explosionPool = explosionPool;
         }
 
         protected override void CastInternal(Transform caster)
@@ -39,9 +45,9 @@ namespace Game
                 var sight = Object.Instantiate(_spell.SightPrefab);
                 sight.transform.position = position;
 
-                var clone = _container.InstantiatePrefabForComponent<MeteorProjectile>(_spell.ProjectilePrefab);
-                clone.Construct(this);
+                var clone = _meteorPool.Spawn();
                 clone.transform.position = position + Vector3.up * 15;
+                clone.Construct(this, _meteorPool);
 
                 Action onCollision = null;
                 onCollision = () =>
@@ -56,9 +62,9 @@ namespace Game
 
         private void SpawnExplosion(Vector3 position)
         {
-            var explosion = Object.Instantiate(_spell.ExplosionPrefab);
-            explosion.Construct(this);
-            explosion.transform.position = position;   
+            var explosion = _explosionPool.Spawn();
+            explosion.transform.position = position;
+            explosion.Construct(this, _explosionPool);
         }
     }
 }
