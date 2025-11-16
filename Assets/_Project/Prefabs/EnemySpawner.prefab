@@ -77,7 +77,7 @@ MonoBehaviour:
       Amount: 1800
     - EnemyPrefab: {fileID: 1449213688858323806, guid: 2660f4b3999b63a44b240fd4857f11eb,
         type: 3}
-      Amount: 600
+      Amount: 240
     Duration: 60
   - Enemies:
     - EnemyPrefab: {fileID: 1449213688858323806, guid: 09afe802418efba439ed9404cd2e93a9,
@@ -93,7 +93,7 @@ MonoBehaviour:
       Amount: 3600
     - EnemyPrefab: {fileID: 1449213688858323806, guid: 2660f4b3999b63a44b240fd4857f11eb,
         type: 3}
-      Amount: 1200
+      Amount: 480
     Duration: 120
   - Enemies:
     - EnemyPrefab: {fileID: 1449213688858323806, guid: 049868856a485f744b35b9d0e6832472,
@@ -123,6 +123,6 @@ MonoBehaviour:
       Amount: 1000
     - EnemyPrefab: {fileID: 1449213688858323806, guid: 120c95515c8c884468c5cb136858860c,
         type: 3}
-      Amount: 1800
+      Amount: 720
     Duration: 120
   _range: {x: 25, y: 40}
