@@ -11,13 +11,15 @@ namespace Project.Core.DamagePopupModule
             public readonly float LastHitTime;
             public readonly float AccumulatedAmount;
             public readonly bool IsCrit;
+            public readonly Color? CustomColor;
 
-            public ActivePopupState(DamagePopupView view, float lastHitTime, float accumulatedAmount, bool isCrit)
+            public ActivePopupState(DamagePopupView view, float lastHitTime, float accumulatedAmount, bool isCrit, Color? customColor)
             {
                 View = view;
                 LastHitTime = lastHitTime;
                 AccumulatedAmount = accumulatedAmount;
                 IsCrit = isCrit;
+                CustomColor = customColor;
             }
         }
 
@@ -62,16 +64,17 @@ namespace Project.Core.DamagePopupModule
             {
                 float mergedAmount = existing.AccumulatedAmount + info.Amount;
                 bool mergedCrit = existing.IsCrit || info.IsCrit;
-                DamagePopupInfo mergedInfo = new(mergedAmount, mergedCrit);
+                Color? mergedColor = info.CustomColor ?? existing.CustomColor;
+                DamagePopupInfo mergedInfo = new(mergedAmount, mergedCrit, mergedColor);
                 existing.View.Restart(worldPosition, mergedInfo);
-                _activePopupsByTarget[target] = new ActivePopupState(existing.View, now, mergedAmount, mergedCrit);
+                _activePopupsByTarget[target] = new ActivePopupState(existing.View, now, mergedAmount, mergedCrit, mergedColor);
                 return;
             }
 
             DamagePopupView popup = _factory.Create(worldPosition, info);
             popup.OnPopUpDespawned -= HandlePopupOnPopUpDespawned;
             popup.OnPopUpDespawned += HandlePopupOnPopUpDespawned;
-            _activePopupsByTarget[target] = new ActivePopupState(popup, now, info.Amount, info.IsCrit);
+            _activePopupsByTarget[target] = new ActivePopupState(popup, now, info.Amount, info.IsCrit, info.CustomColor);
             _targetByPopup[popup] = target;
         }
 

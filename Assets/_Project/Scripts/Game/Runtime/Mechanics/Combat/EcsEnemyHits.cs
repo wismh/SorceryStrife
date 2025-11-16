@@ -30,9 +30,13 @@ namespace Game
 
         private static void ShowDamageNumber(Vector3 position, float amount, bool isCrit = false)
         {
+            var damageColor = isCrit
+                ? new Color(1f, 0.72f, 0.12f, 1f)
+                : new Color(1f, 0.28f, 0.24f, 1f);
+
             if (_damagePopupSpawner != null)
             {
-                _damagePopupSpawner.Spawn(position, new DamagePopupInfo(amount, isCrit));
+                _damagePopupSpawner.Spawn(position, new DamagePopupInfo(amount, isCrit, damageColor));
                 return;
             }
 
@@ -44,7 +48,7 @@ namespace Game
             var clone = Object.Instantiate(_damageNumberPrefab);
             clone.transform.position = position;
             clone.Text = amount.ToString("0.#");
-            clone.SetColor(Color.red);
+            clone.SetColor(damageColor);
         }
 
         /// <summary>Damages every alive melee enemy within range not already in <paramref name="alreadyHit"/> (if given). Returns true if at least one was hit.</summary>

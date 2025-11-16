@@ -30,8 +30,8 @@ namespace Project.Core.DamagePopupModule
         [SerializeField] private Ease fadeEase = Ease.OutCubic;
 
         [Header("Style")]
-        [SerializeField] private Color normalColor = Color.white;
-        [SerializeField] private Color critColor = new Color(1f, 0.25f, 0.15f, 1f);
+        [SerializeField] private Color normalColor = new Color(1f, 0.28f, 0.24f, 1f);
+        [SerializeField] private Color critColor = new Color(1f, 0.72f, 0.12f, 1f);
         [SerializeField, Min(0.01f)] private float normalScale = 1f;
         [SerializeField, Min(0.01f)] private float critScale = 1.35f;
 
@@ -39,10 +39,24 @@ namespace Project.Core.DamagePopupModule
         private Sequence _activeSequence;
         private int _animationGeneration;
         private Transform _billboardFacing;
+        private Vector3 _baseScale = Vector3.zero;
 
         private void Awake()
         {
+            EnsureBaseScale();
             TryCacheBillboardFacing();
+        }
+
+        private void EnsureBaseScale()
+        {
+            if (_baseScale == Vector3.zero)
+            {
+                _baseScale = transform.localScale;
+                if (_baseScale == Vector3.zero)
+                {
+                    _baseScale = Vector3.one;
+                }
+            }
         }
 
         private void TryCacheBillboardFacing()
@@ -87,12 +101,17 @@ namespace Project.Core.DamagePopupModule
 
             float flightDuration = Mathf.Max(minDuration, duration + Random.Range(-durationVariance, durationVariance));
 
+            EnsureBaseScale();
+            float scaleMultiplier = info.IsCrit ? critScale : normalScale;
             transform.position = planar;
-            transform.localScale = Vector3.one * (info.IsCrit ? critScale : normalScale);
+            transform.localScale = new Vector3(
+                _baseScale.x * scaleMultiplier,
+                _baseScale.y * scaleMultiplier,
+                _baseScale.z * scaleMultiplier);
             transform.rotation = _billboardFacing.rotation;
 
             canvasGroup.alpha = 1f;
-            label.color = info.IsCrit ? critColor : normalColor;
+            label.color = info.CustomColor ?? (info.IsCrit ? critColor : normalColor);
             label.SetText("{0}", Mathf.Max(1, Mathf.RoundToInt(info.Amount)));
 
             _animationGeneration++;

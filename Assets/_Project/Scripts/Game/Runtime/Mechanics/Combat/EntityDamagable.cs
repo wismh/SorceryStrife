@@ -61,9 +61,14 @@ namespace Game
 
         private void ShowDamageNumber(float amount)
         {
+            var isPlayer = GetComponent<Player>() != null;
+            var damageColor = isPlayer
+                ? new Color(0.96f, 0.26f, 0.88f, 1f)
+                : new Color(1f, 0.28f, 0.24f, 1f);
+
             if (_damagePopupSpawner != null)
             {
-                _damagePopupSpawner.Spawn(transform, transform.position, new DamagePopupInfo(amount));
+                _damagePopupSpawner.Spawn(transform, transform.position, new DamagePopupInfo(amount, isCrit: false, damageColor));
                 return;
             }
 
@@ -75,7 +80,7 @@ namespace Game
             var clone = Instantiate(_damageNumberPrefab);
             clone.transform.position = transform.position;
             clone.Text = amount.ToString("0.#");
-            clone.SetColor(GetComponent<Player>() != null ? Color.magenta : Color.red);
+            clone.SetColor(damageColor);
         }
     }
 }
