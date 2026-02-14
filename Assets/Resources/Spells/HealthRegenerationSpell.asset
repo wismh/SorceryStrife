@@ -15,7 +15,7 @@ MonoBehaviour:
   <Icon>k__BackingField: {fileID: 21300000, guid: 96392210c42ef8f45ae5abd9a4b6e401,
     type: 3}
   <Title>k__BackingField: Health Regen
-  <Description>k__BackingField: Heal
+  <Description>k__BackingField: Gradually restores your health over time.
   <CanOnFirstLevel>k__BackingField: 0
   <MaxLevel>k__BackingField: 4
   <Cooldown>k__BackingField:

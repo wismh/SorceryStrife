@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b79d3520ee646e29a8c0cccb0b90739, type: 3}
   m_Name: SealOfCleavage
   m_EditorClassIdentifier: 
-  <Icon>k__BackingField: {fileID: 21300000, guid: 69f4c89e4b1de164485dea299438726f,
+  <Icon>k__BackingField: {fileID: 21300000, guid: c6b6c499106a64a41974d600af5305ac,
     type: 3}
   <Title>k__BackingField: Seal Of Cleavage
-  <Description>k__BackingField: Increase number of projectiles
+  <Description>k__BackingField: Splits your magic into multiple paths, increasing
+    the number of projectiles cast.
   <MaxLevel>k__BackingField: 2
   <Projectiles>k__BackingField:
   - 0.2

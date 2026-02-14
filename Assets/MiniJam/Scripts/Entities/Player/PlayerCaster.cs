@@ -46,7 +46,7 @@ namespace Game
 
         public bool HasSpell(Type typeOfSpell)
         {
-            return typeOfSpell.DerivesFrom(typeof(Item)) && _casters.ContainsKey(typeOfSpell);
+            return typeOfSpell.DerivesFrom(typeof(Spell)) && _casters.ContainsKey(typeOfSpell);
         }
 
         public Caster GetCasterOfSpell(Type type)
