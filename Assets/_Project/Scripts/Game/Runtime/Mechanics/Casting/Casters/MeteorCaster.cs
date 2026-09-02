@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using UnityEngine;
 using Zenject;
 using Object = UnityEngine.Object;
@@ -10,10 +9,8 @@ namespace Game
     [SpellCaster(SpellType = typeof(MeteorSpell))]
     public class MeteorCaster : Caster
     {
-        public float Damage => 
-            (Level >= _spell.Damage.Count ? _spell.Damage.Last() : _spell.Damage[Level]) * PlayerInventory.GetSumOfBuff(nameof(Damage));
-        public float Projectiles =>
-            (Level >= _spell.Projectiles.Count ? _spell.Projectiles.Last() : _spell.Projectiles[Level]) * PlayerInventory.GetSumOfBuff(nameof(Projectiles));
+        public float Damage => _spell.Damage.ValueAtLevel(Level) * PlayerInventory.GetSumOfBuff(nameof(Damage));
+        public float Projectiles => _spell.Projectiles.ValueAtLevel(Level) * PlayerInventory.GetSumOfBuff(nameof(Projectiles));
         public float Delay => _spell.Delay;
         
         private readonly MeteorSpell _spell;

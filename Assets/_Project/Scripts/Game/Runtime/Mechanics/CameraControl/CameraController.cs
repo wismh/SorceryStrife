@@ -19,9 +19,6 @@ namespace Game
 
         private void Update()
         {
-            if (!_player)
-                return;
-                
             var position = Vector3.Lerp(transform.position, _player.position + _cameraOffset, _cameraSpeed * Time.deltaTime);
             
             position = new Vector3(

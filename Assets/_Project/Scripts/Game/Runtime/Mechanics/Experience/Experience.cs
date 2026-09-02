@@ -14,9 +14,6 @@ namespace Game
         [Inject]
         public void Construct(Player player)
         {
-            if (!player)
-                return;
-            
             _player = player;
             _playerAsEntity = player.GetComponent<Entity>();
             _rigidbody = GetComponent<Rigidbody>();
@@ -24,9 +21,6 @@ namespace Game
 
         private void Update()
         {
-            if (!_player)
-                return;
-
             var offset = _player.transform.position - transform.position;
             var sqrDistance = offset.sqrMagnitude;
 
