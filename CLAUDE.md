@@ -4,7 +4,7 @@ Address me as "Zhenya".
 
 **Game:** Top-down arena survival, auto-cast spells, finite hand-authored waves, level-up/item-pick screens between fights.
 
-**Code:** `Assets/_Project/` · Unity 6 (6000.3.10f1) · Zenject DI · New Input System · URP · no networking · no tests yet.
+**Code:** `Assets/_Project/` · Unity 6 (6000.3.10f1) · Zenject DI · UniTask (async, not Coroutines) · DOTween (tweens, not PrimeTween) · Odin Inspector · New Input System · URP · Entities/Entities Graphics (groundwork only, migration plan step 6+) · no networking · no tests yet.
 
 Full design reference (implemented scope only): [`Docs/GDD.md`](Docs/GDD.md). Rework plan and current step: [`Docs/Architecture-DOTS-Migration-Plan.md`](Docs/Architecture-DOTS-Migration-Plan.md).
 

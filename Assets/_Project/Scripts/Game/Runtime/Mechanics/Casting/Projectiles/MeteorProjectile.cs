@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Game
@@ -25,7 +25,7 @@ namespace Game
 
         private void Start()
         {
-            StartCoroutine(DelayRoutine());
+            DelayAsync().Forget();
         }
 
         private void Update()
@@ -36,9 +36,9 @@ namespace Game
             _rigidbody.linearVelocity = Vector3.down * 10f;
         }
 
-        private IEnumerator DelayRoutine()
+        private async UniTaskVoid DelayAsync()
         {
-            yield return new WaitForSeconds(_meteorCaster.Delay);
+            await UniTask.WaitForSeconds(_meteorCaster.Delay, cancellationToken: this.GetCancellationTokenOnDestroy());
             _startFalling = true;
         }
 

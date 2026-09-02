@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using PrimeTween;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.VFX;
 using Zenject;
@@ -41,14 +41,8 @@ namespace Game
             
             _collider.radius = 0;
 
-            Tween.Custom(
-                0, 
-                _caster.Radius,
-                _caster.Duration / 2,
-                value => _collider.radius = value,
-                cycles: 2,
-                cycleMode: CycleMode.Yoyo
-                );
+            DOTween.To(() => _collider.radius, value => _collider.radius = value, _caster.Radius, _caster.Duration / 2)
+                .SetLoops(2, LoopType.Yoyo);
         }
 
         private void OnCollisionEnter(Collision other)

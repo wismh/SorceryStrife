@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using PrimeTween;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,12 +10,12 @@ namespace Game
         [SerializeField] private Image _cooldownMask;
 
         private Caster _caster;
-        
+
         public void SetData(Caster caster)
         {
             _caster = caster;
             _spellIcon.sprite = _caster.Spell.Icon;
-            _caster.OnCast += CastHandle;   
+            _caster.OnCast += CastHandle;
         }
 
         private void OnDestroy()
@@ -25,11 +23,11 @@ namespace Game
             if (_caster != null)
                 _caster.OnCast -= CastHandle;
         }
-        
+
         private void CastHandle()
         {
             _cooldownMask.fillAmount = 1;
-            Tween.UIFillAmount(_cooldownMask, 0.0f, _caster.Cooldown);
+            _cooldownMask.DOFillAmount(0f, _caster.Cooldown);
         }
     }
 }
