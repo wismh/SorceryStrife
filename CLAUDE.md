@@ -18,7 +18,7 @@ Full design reference (implemented scope only): [`Docs/GDD.md`](Docs/GDD.md). Re
 |--------|------|-------|
 | Entities | `Entities/{Entity,EntityCharacteristics}.cs`, `Entities/{Player,Enemy,Friend}/` | shared stat base for player/enemies via `EntityCharacteristics` ScriptableObject |
 | Casting | `Mechanics/Casting/` | `Spell`/`Caster`/`CastersRegister`, `Casters/`, `Spells/`, `Projectiles/` |
-| Inventory | `Mechanics/Inventory/` | `PlayerInventory`, `ItemsRegister`, `Items/` — buff lookup is reflection-based today, being replaced by an explicit `StatType` model (migration plan §8) |
+| Inventory | `Mechanics/Inventory/` | `PlayerInventory`, `ItemsRegister`, `Items/`, `StatType`/`ModifierOp`/`StatModifier` — items declare explicit `StatModifier`s; `PlayerInventory.ApplyModifiers(StatType, baseValue)` aggregates them, no reflection (migration plan §8) |
 | Combat | `Mechanics/Combat/` | `EntityDamagable`, `Team` |
 | EnemySpawn | `Mechanics/EnemySpawn/EnemySpawner.cs` | coroutine-driven finite wave list |
 | Chests / Experience / CameraControl / Audio / Input / GameBootstrap | `Mechanics/*` | one folder per mechanic |
