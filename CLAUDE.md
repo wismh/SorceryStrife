@@ -50,7 +50,9 @@ For gameplay visuals spawned during runtime (projectiles, popups, particles, tem
 
 Required `[SerializeField]` on installers/MonoBehaviours and scene/prefab references are **always assigned in the Unity Inspector**. Code must not defend against them being missing.
 
-`[Inject]` dependencies resolved by Zenject are **always bound** in `GameInstaller` for the scene they're used in. Do not add runtime null checks or no-op implementations "just in case" DI failed.
+`[Inject]` dependencies resolved by Zenject are **always bound** in `GameInstaller`/`ProjectContextInstaller` for the scope they're used in. Do not add runtime null checks or no-op implementations "just in case" DI failed.
+
+**Constructor injection for plain classes, `[Inject] Construct()` only for MonoBehaviours** — Unity blocks custom constructors on `MonoBehaviour`, so `Construct()` is the only option there; every other class (`PlayerInventory`, `CastersRegister`, every `Caster`) takes its dependencies through a real constructor, and installers should let `AsSingle()` construct it rather than hand-building an instance and binding it with `FromInstance()`. Full rule + when `FromInstance()` is actually correct: [`.claude/skills/zenject-ui-subscriptions`](.claude/skills/zenject-ui-subscriptions/SKILL.md). Also see [`.claude/skills/unity-meta-files`](.claude/skills/unity-meta-files/SKILL.md) before hand-editing any `.meta`/`.prefab`/`.unity` file, and [`.claude/skills/pr`](.claude/skills/pr/SKILL.md) for the branch/commit/PR workflow.
 
 ### Do not
 
