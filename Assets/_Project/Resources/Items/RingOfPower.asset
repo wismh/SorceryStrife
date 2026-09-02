@@ -11,14 +11,17 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5d6e9ce0187d4e5991ff4f7e6160d64e, type: 3}
   m_Name: RingOfPower
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier:
   <Icon>k__BackingField: {fileID: 21300000, guid: 4028f94f06966da49bd4a714d5f85f87,
     type: 3}
   <Title>k__BackingField: Ring Of Power
   <Description>k__BackingField: Imbued with raw energy, this ring increases the damage
     of all your spells.
   <MaxLevel>k__BackingField: 2
-  <Damage>k__BackingField:
-  - 0.1
-  - 0.15
-  - 0.2
+  <Modifiers>k__BackingField:
+  - Stat: 0
+    Op: 0
+    ValuePerLevel:
+    - 0.1
+    - 0.15
+    - 0.2

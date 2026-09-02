@@ -11,14 +11,17 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a7a64e73c9c44fba81e66220472b12f0, type: 3}
   m_Name: LensOfGods
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier:
   <Icon>k__BackingField: {fileID: 21300000, guid: c0058ecec4bc8f94b96762d2abf10468,
     type: 3}
   <Title>k__BackingField: Lens Of Gods
   <Description>k__BackingField: Magnifies your magic, increasing the radius of all
     spell effects.
   <MaxLevel>k__BackingField: 2
-  <Radius>k__BackingField:
-  - 0.1
-  - 0.15
-  - 0.2
+  <Modifiers>k__BackingField:
+  - Stat: 2
+    Op: 0
+    ValuePerLevel:
+    - 0.1
+    - 0.15
+    - 0.2

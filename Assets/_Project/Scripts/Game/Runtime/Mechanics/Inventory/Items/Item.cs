@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Game
 {
@@ -8,5 +9,6 @@ namespace Game
         [field: SerializeField] public string Title { get; private set; }
         [field: SerializeField] public string Description { get; private set; }
         [field: SerializeField] public int MaxLevel { get; private set; }
+        [field: SerializeField] public List<StatModifier> Modifiers { get; private set; }
     }
 }

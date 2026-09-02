@@ -6,7 +6,7 @@ namespace Game
     [SpellCaster(SpellType = typeof(HealthRegenerationSpell))]
     public class HealthRegenerationCaster : Caster
     {
-        public float Heal => _spell.Regeneration.ValueAtLevel(Level) * PlayerInventory.GetSumOfBuff(nameof(Heal));
+        public float Heal => PlayerInventory.ApplyModifiers(StatType.HealAmount, _spell.Regeneration.ValueAtLevel(Level));
 
         private readonly HealthRegenerationSpell _spell;
         private readonly Entity _player;

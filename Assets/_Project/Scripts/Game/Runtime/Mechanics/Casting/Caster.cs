@@ -16,7 +16,7 @@ namespace Game
         public PlayerInventory PlayerInventory { get; set; }
         public int Level { get; set; }
         
-        public float Cooldown => Spell.Cooldown.ValueAtLevel(Level) * PlayerInventory.GetSumOfBuff(nameof(Cooldown));
+        public float Cooldown => PlayerInventory.ApplyModifiers(StatType.Cooldown, Spell.Cooldown.ValueAtLevel(Level));
         
         protected abstract void CastInternal(Transform caster);
 
