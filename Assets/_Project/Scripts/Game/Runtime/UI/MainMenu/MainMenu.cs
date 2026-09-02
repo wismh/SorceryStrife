@@ -1,8 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Game
@@ -26,7 +22,7 @@ namespace Game
 
         private static void HandleStartGame()
         {
-            SceneManager.LoadScene(sceneBuildIndex: 1);
+            Bootstrap.StateMachine.Enter(new GameplayState());
         }
 
         private static void HandleExitGame()

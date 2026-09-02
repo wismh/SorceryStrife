@@ -8,9 +8,13 @@ Address me as "Zhenya".
 
 Full design reference (implemented scope only): [`Docs/GDD.md`](Docs/GDD.md). Rework plan and current step: [`Docs/Architecture-DOTS-Migration-Plan.md`](Docs/Architecture-DOTS-Migration-Plan.md).
 
-## Boot chain (current — pre-Bootstrap/state-machine rework, see migration plan step 4)
+## Boot chain
 
-`GameInstaller` (`SceneContext`, `Assets/_Project/Scripts/Game/Runtime/Mechanics/GameBootstrap/GameInstaller.cs`) binds all gameplay singletons directly on the `SampleScene` scene. `MainMenu` (scene 0) → `SceneManager.LoadScene(1)` starts a run; death routes back to scene 0 via a hardcoded delay+`LoadScene(0)` in `Player`. No `Bootstrap`/`ProjectContextInstaller` split yet, no explicit state machine — that's the next planned step.
+`Bootstrap` (`Mechanics/GlobalGameStateMachine/Bootstrap.cs`) runs once via `[RuntimeInitializeOnLoadMethod(BeforeSceneLoad)]`, before the first scene loads — no scene/prefab authoring needed to bring it online. It owns the static `GlobalGameStateMachine`, seeded with `MenuState` (matching Build Settings index 0, `MainMenu.unity`). `MainMenu`'s Start button calls `Bootstrap.StateMachine.Enter(new GameplayState())`; `Player`'s death handler calls `Enter(new MenuState())` after a delay. Both states just wrap `SceneManager.LoadScene(SceneInBuild.*)` — see `MenuState`/`GameplayState`.
+
+This is a **deliberate stand-in for a real Zenject `ProjectContext`** (the "proper" version of this step per the migration plan): a `ProjectContext` prefab in `Resources/` plus a `SceneContext` in `MainMenu.unity` both require Editor authoring that can't be done blind from a diff. `Bootstrap.StateMachine` is the only thing that needs updating if/when that Editor step happens — every call site already goes through it, not a raw `SceneManager.LoadScene`.
+
+`GameInstaller` (`SceneContext`, `Mechanics/GameBootstrap/GameInstaller.cs`) still binds all gameplay singletons on `SampleScene` only; `MainMenu.unity` has no Zenject context at all yet, so `MainMenu.cs` reaches `Bootstrap` via the static accessor, not `[Inject]`.
 
 ## Main systems (folder under `Scripts/Game/Runtime/`)
 
