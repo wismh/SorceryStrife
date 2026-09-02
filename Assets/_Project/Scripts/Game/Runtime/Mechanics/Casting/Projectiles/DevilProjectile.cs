@@ -24,7 +24,7 @@ namespace Game
         private void FixedUpdate()
         {
             transform.right = _direction;
-            _rigidbody.velocity = _direction * _speed;
+            _rigidbody.linearVelocity = _direction * _speed;
         }
 
         private void OnTriggerEnter(Collider collision)

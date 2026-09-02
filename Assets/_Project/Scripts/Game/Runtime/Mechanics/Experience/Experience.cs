@@ -32,11 +32,11 @@ namespace Game
 
             if (sqrDistance > _playerAsEntity.RangeOfPickUp)
             {
-                _rigidbody.velocity = Vector3.zero;
+                _rigidbody.linearVelocity = Vector3.zero;
                 return;
             }
 
-            _rigidbody.velocity = offset.normalized * k_speedOfItems;
+            _rigidbody.linearVelocity = offset.normalized * k_speedOfItems;
         }
     }
 }

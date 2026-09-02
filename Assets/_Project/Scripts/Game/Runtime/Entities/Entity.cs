@@ -28,7 +28,7 @@ namespace Game
             get => _canMove;
             set  {
                 _canMove = value;
-                _rigidbody.velocity = Vector3.zero;
+                _rigidbody.linearVelocity = Vector3.zero;
             }
         }
         public bool IsAlive { get; set; }

@@ -24,7 +24,7 @@ namespace Game
 
         private void FixedUpdate()
         {
-            _rigidbody.velocity = _direction * _caster.Speed;
+            _rigidbody.linearVelocity = _direction * _caster.Speed;
         }
 
         private void OnCollisionEnter(Collision collision)
@@ -38,7 +38,7 @@ namespace Game
             GetComponentInChildren<SphereCollider>().enabled = false;
             GetComponent<TempObject>().TimeOfLife = 2f;
             GetComponentInChildren<VisualEffect>().Stop();
-            _rigidbody.velocity = Vector3.zero;
+            _rigidbody.linearVelocity = Vector3.zero;
         }
     }
 }

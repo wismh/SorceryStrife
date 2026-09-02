@@ -48,7 +48,7 @@ namespace Game
             var direction = (_target.transform.position - transform.position).normalized;
             
             _rigidbody.AddForce(direction * _speed);
-            _rigidbody.velocity = Vector3.ClampMagnitude(_rigidbody.velocity, _maxSpeed);
+            _rigidbody.linearVelocity = Vector3.ClampMagnitude(_rigidbody.linearVelocity, _maxSpeed);
             
             transform.forward = direction;
             transform.rotation = new Quaternion(0, transform.rotation.y, 0, transform.rotation.w);
