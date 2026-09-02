@@ -17,12 +17,14 @@ namespace Game
         public float RequiredExperienceForLevelUp { get; private set; }
 
         private PoolOfObject<Experience> _experiencePool;
+        private GlobalGameStateMachine _stateMachine;
         private Entity _playerAsEntity;
-        
+
         [Inject]
-        public void Construct(PoolOfObject<Experience> experiencePool)
+        public void Construct(PoolOfObject<Experience> experiencePool, GlobalGameStateMachine stateMachine)
         {
             _experiencePool = experiencePool;
+            _stateMachine = stateMachine;
             _playerAsEntity = GetComponent<Entity>();
         }
         
@@ -73,7 +75,7 @@ namespace Game
         private IEnumerator LoadMenuRoutine()
         {
             yield return new WaitForSeconds(4);
-            Bootstrap.StateMachine.Enter(new MenuState());
+            _stateMachine.Enter(new MenuState());
         }
     }
 }

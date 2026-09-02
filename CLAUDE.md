@@ -10,11 +10,14 @@ Full design reference (implemented scope only): [`Docs/GDD.md`](Docs/GDD.md). Re
 
 ## Boot chain
 
-`Bootstrap` (`Mechanics/GlobalGameStateMachine/Bootstrap.cs`) runs once via `[RuntimeInitializeOnLoadMethod(BeforeSceneLoad)]`, before the first scene loads — no scene/prefab authoring needed to bring it online. It owns the static `GlobalGameStateMachine`, seeded with `MenuState` (matching Build Settings index 0, `MainMenu.unity`). `MainMenu`'s Start button calls `Bootstrap.StateMachine.Enter(new GameplayState())`; `Player`'s death handler calls `Enter(new MenuState())` after a delay. Both states just wrap `SceneManager.LoadScene(SceneInBuild.*)` — see `MenuState`/`GameplayState`.
+Real Zenject `ProjectContext`, matching the Lumenwake template's `Bootstrap → ProjectContextInstaller` pattern:
 
-This is a **deliberate stand-in for a real Zenject `ProjectContext`** (the "proper" version of this step per the migration plan): a `ProjectContext` prefab in `Resources/` plus a `SceneContext` in `MainMenu.unity` both require Editor authoring that can't be done blind from a diff. `Bootstrap.StateMachine` is the only thing that needs updating if/when that Editor step happens — every call site already goes through it, not a raw `SceneManager.LoadScene`.
+- `Resources/ProjectContext.prefab` — a `ProjectContext` component (Zenject) with a child `ProjectContextInstaller` GameObject wired into its Mono Installers list. This prefab predates this rework (it's in the repo's first commit) but was never actually installed on anything until now.
+- `ProjectContextInstaller` (`Mechanics/GameBootstrap/ProjectContextInstaller.cs`) binds `GlobalGameStateMachine` as a project-wide singleton, seeded with `MenuState` (Build Settings index 0, `MainMenu.unity`) via `SetInitial` so booting into the menu scene doesn't also reload it.
+- Zenject instantiates `ProjectContext` lazily and `DontDestroyOnLoad`s it the first time any `SceneContext` resolves its parent container — both `MainMenu.unity` and `SampleScene.unity` already have a `SceneContext`, so `GlobalGameStateMachine` is `[Inject]`-able from either scene automatically, no per-scene rebinding needed.
+- `MainMenu`'s Start button calls `_stateMachine.Enter(new GameplayState())`; `Player`'s death handler calls `Enter(new MenuState())` after a delay — both `[Inject]` the state machine rather than reaching for a static. Both states just wrap `SceneManager.LoadScene(SceneInBuild.*)` — see `MenuState`/`GameplayState`.
 
-`GameInstaller` (`SceneContext`, `Mechanics/GameBootstrap/GameInstaller.cs`) still binds all gameplay singletons on `SampleScene` only; `MainMenu.unity` has no Zenject context at all yet, so `MainMenu.cs` reaches `Bootstrap` via the static accessor, not `[Inject]`.
+`GameInstaller` (`SceneContext`, `Mechanics/GameBootstrap/GameInstaller.cs`) still binds gameplay-only singletons on `SampleScene`; nothing there changed — `ProjectContext` bindings simply flow down as a parent container.
 
 ## Main systems (folder under `Scripts/Game/Runtime/`)
 
