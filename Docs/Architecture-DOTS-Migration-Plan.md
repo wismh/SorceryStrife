@@ -37,7 +37,16 @@
 | **AssetLoaderModule** (`Gateways/AssetLoading/`) | мертвий каркас навіть у space-bac (0 споживачів) | порт спрощеної версії (без `IAssetLoaderFacadeService`/Addressables-half — Addressables у MiniJam не встановлено) — MiniJam на відміну від space-bac має реальні `Resources.Load`-виклики, які є що замінити |
 | **ToolbarShortcuts** (`Assets/ToolbarShortcuts/`) | не змінюється — той самий пакет | копія один-в-один, перейменований `PackageFolderName` під плаский layout MiniJam |
 
-Деталі — гілка `feature/lumenwake-template-parity`.
+Усі 7 пунктів реалізовано на гілці `feature/lumenwake-template-parity` (продовжує `feature/bootstrap-scene`). Деталі:
+
+- **AudioSystem** — `Mechanics/Audio/`, повний порт (SFX-пул, looping SFX, кросфейд музики); `BackgroundMusic` тепер грає через `IAudioSystem.PlayMusic`, а не власний `DontDestroyOnLoad`-хак. `UiSoundsConfig`/`ButtonSound` не портовано — немає жодного SFX-кліпу в проєкті.
+- **SceneLoading** — `Gateways/SceneLoading/`, `ISceneLoaderService`/`BuildInSceneLoaderService`; `MenuState`/`GameplayState` більше не викликають `SceneManager.LoadScene` напряму.
+- **StateMachine** — `Tools/Runtime/{StateBase,PayLoadedStateBase,StateMachineBehaviour}.cs`, портовано **без змін** (на відміну від початкового плану з `SetInitial` — виявилось непотрібним, бо `Bootstrap` тепер завжди окрема сцена від `MainMenu`). `GlobalGameStateMachine` конструктор-інжектить `MenuState`/`GameplayState`.
+- **AssetLoading** — `Gateways/AssetLoading/`, `IAssetLoaderService` (лише Resources — Addressables немає в проєкті); замінив прямі `Resources.Load`/`LoadAll` у `CastersRegister`/`ItemsRegister`/`ItemSelectionScreen`/`UpgradeScreen`.
+- **ComponentRegistry** — `Tools/Runtime/`, портовано як інфраструктура без споживача (знадобиться під крок 8 DOTS-плану).
+- **UIModule** — `UI/Common/Screens/`; `HUD`/`UpgradeScreen`/`ItemSelectionScreen` тепер `BaseScreen`, керуються через `BaseScreenManager` (`GameInstaller`). `MainMenu` навмисно НЕ переведено — його ніхто не відкриває/закриває. `TabManager`/`HoverEffectView`/`TabButton` портовано як інфраструктура без табованого UI в MiniJam.
+- **InputRebindManager**/`KeyReference` — портовано як інфраструктура; немає екрану налаштувань керування.
+- **ToolbarShortcuts** — `Assets/ToolbarShortcuts/`, копія пакету; `PackageFolderName` → `"ToolbarShortcuts"`, `ToolbarShortcutsConfig.asset` переприв'язаний на сцени/префаб MiniJam.
 
 ## 1. Цільова структура папок
 
