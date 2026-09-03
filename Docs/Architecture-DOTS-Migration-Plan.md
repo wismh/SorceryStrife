@@ -21,6 +21,24 @@
 
 Деталі — коміти `7b4bc7e`, `bbe00f3`, `441a1f1`.
 
+### 0.2 Архітектурні модулі з Lumenwake template
+
+Продовження 0.1 — не інструментарій, а DI/архітектурні модулі. Знайдено звіркою `_Project` з двох джерел: голого **Lumenwake template** (де частина цих модулів лежить незадіяною — нема жодного реального споживача навіть у самому темплейті) і **space-bac** (`C:/Projects/Lumenwake/space-bac/space-bac`) — реальної гри на цьому темплейті, яка показує, які з модулів насправді використовуються, а які лишаються мертвим каркасом навіть там.
+
+| Модуль | Статус у space-bac | План для MiniJam |
+|---|---|---|
+| **AudioSystem** (`Mechanics/Audio/`) | реальний, активно використовується (SFX-пул, looping-звуки, кросфейд музики, гучність) | повний порт, `BackgroundMusic` переходить на нього |
+| **SceneLoaderServiceModule** (`Gateways/SceneLoading/`) | реальний — єдиний механізм переходу між сценами, викликається лише зі стейтів FSM | порт (без `IGameplayLevelSceneService` — мертвий код навіть у space-bac) |
+| **StateMachineModule** (`Tools/Runtime/StateBase.cs` тощо) | реальний, `GameFlowStateMachine` — стейти конструктор-інжектяться прямо в FSM | порт, замінює власну `StateMachine`/`IState` |
+| **ComponentRegistry** (`Tools/Runtime/ComponentRegistry.cs`) | реальний — `IComponentRegistry<Gravitational>` замість `FindObjectsOfType` у гарячому циклі | порт як інфраструктура, без споживача (буде корисний під крок 8 — пул компаньйонів ворогів) |
+| **UIModule: BaseScreen/BaseScreenManager** (`UI/Common/Screens/`) | реальний, 9 конкретних екранів у space-bac | порт + міграція `HUD`/`UpgradeScreen`/`ItemSelectionScreen` |
+| **UIModule: TabManager** | існує, підключається лише через Inspector, нуль C#-коду навіть у space-bac | порт як інфраструктура |
+| **UIModule: InputRebindManager** | реальний, але потребує окремого екрану налаштувань з `KeyReference`-префабами | порт рантайм-скриптів, без екрану (контент, не архітектура) |
+| **AssetLoaderModule** (`Gateways/AssetLoading/`) | мертвий каркас навіть у space-bac (0 споживачів) | порт спрощеної версії (без `IAssetLoaderFacadeService`/Addressables-half — Addressables у MiniJam не встановлено) — MiniJam на відміну від space-bac має реальні `Resources.Load`-виклики, які є що замінити |
+| **ToolbarShortcuts** (`Assets/ToolbarShortcuts/`) | не змінюється — той самий пакет | копія один-в-один, перейменований `PackageFolderName` під плаский layout MiniJam |
+
+Деталі — гілка `feature/lumenwake-template-parity`.
+
 ## 1. Цільова структура папок
 
 Замінити плоский `Assets/MiniJam/Scripts/...` на:
@@ -31,7 +49,7 @@ Assets/_Project/
     Game/
       Runtime/
         Entities/          # Player, Enemy, Friend — authoring + (згодом) ECS-компоненти
-        Gateways/           # заглушки під майбутнє: SaveService, Analytics — поки не потрібні джему, але місце зарезервувати
+        Gateways/           # SceneLoading/AssetLoading (§0.2), SaveService/Analytics заглушки на майбутнє
         Mechanics/
           Casting/          # Caster/Spell/CastersRegister (було CastSystem)
           Inventory/        # PlayerInventory/ItemsRegister (було InventorySystem)
@@ -71,7 +89,7 @@ Assets/_Project/
 
 ## 5. DOTS/ECS — обсяг конверсії
 
-Обрано **гібридний підхід**: ECS для масової рантайм-симуляції (де реально є проблема продуктивності — вороги/снаряди зараз не пуляться взагалі), MonoBehaviour+Zenject лишається для orchestration/UI/meta — так само, як у tactics-cards (яка взагалі не використовує DOTS). Повна конверсія всього проєкту (включно з UI, стейт-машинами, інвентарем) в ECS суперечила б і цілі "рівень tactics-cards", і здоровому глузду для джем-гри такого масштабу.
+Обрано **гібридний підхід**: ECS для масової рантайм-симуляції (де реально є проблема продуктивності — вороги/снаряди зараз не пуляться взагалі), MonoBehaviour+Zenject лишається для orchestration/UI/meta — так само, як у tactics-cards (яка взагалі не використовує DOTS). Повна конверсія всього проєкту (включно з UI, стейт-машинами, інвентарем) в ECS суперечила б і цілі "рівень tactics-cards", і здоровому глузду для гри такого жанру й масштабу команди.
 
 ### 5.1 У ECS переїжджає
 
@@ -93,7 +111,7 @@ Assets/_Project/
 - Уся UI-шар (HUD, SpellSlots, ItemSlots, UpgradeScreen, ItemSelectionScreen, MainMenu).
 - `PlayerInventory`, `CastersRegister`, `ItemsRegister` — orchestration/дані, не perf-критичні.
 - `CameraController`, стейт-машини, `Chest`.
-- Анімації/VFX (`Animator`, `SkinnedMeshRenderer`, `VisualEffect`, `PrimeTween`) — лишаються GameObject-компаньйонами (hybrid renderer), синхронізованими з ECS-трансформом через baked companion link. Повна конверсія скін-анімацій в ECS (Entities Graphics + Kinematica/подібне) — поза обсягом джем-проєкту.
+- Анімації/VFX (`Animator`, `SkinnedMeshRenderer`, `VisualEffect`, `PrimeTween`) — лишаються GameObject-компаньйонами (hybrid renderer), синхронізованими з ECS-трансформом через baked companion link. Повна конверсія скін-анімацій в ECS (Entities Graphics + Kinematica/подібне) — поза поточним обсягом цього проєкту.
 
 ### 5.3 Рендер: як тримати продуктивність при рості кількості ворогів/ефектів
 
@@ -106,7 +124,7 @@ Assets/_Project/
 | Гравець, Friend, мінібоси (Eye/BigEye) | 1–3 одночасно | лишаються звичайними GameObject + `Animator`/`SkinnedMeshRenderer`, як зараз — кількість мала, якість важливіша за перформанс |
 | VFX (вибухи, каст-ефекти) | багато коротких сплесків | пул `VisualEffect`/`ParticleSystem`-префабів через Zenject memory pool (той самий патерн "prefab + pool", що вже описаний у tactics-cards `CLAUDE.md` — **Runtime visuals: prefab + pooling**), тригериться з ECS-систем як one-shot подія, не по одному VFX-об'єкту на снаряд |
 
-Це дає основний виграш (пулінг+ECS для мас-контенту) без інвестиції в GPU skeletal-анімацію під ECS (Vertex Animation Textures / Kinemation-подібні рішення) — той шлях лишаю як **стретч-ціль кроку 12 (perf)**: якщо після профайлінгу бюджетованих компаньйонів `Animator` все ще є вузьким місцем, тоді розглядаємо VAT-бейкинг існуючих анімацій під `Entities Graphics`. Не інвестую в це одразу, бо це окремий пайплайн (потрібен бейкер анімацій, нових шейдерів) — недешево для джем-проєкту, поки немає доказу, що воно справді потрібне.
+Це дає основний виграш (пулінг+ECS для мас-контенту) без інвестиції в GPU skeletal-анімацію під ECS (Vertex Animation Textures / Kinemation-подібні рішення) — той шлях лишаю як **стретч-ціль кроку 12 (perf)**: якщо після профайлінгу бюджетованих компаньйонів `Animator` все ще є вузьким місцем, тоді розглядаємо VAT-бейкинг існуючих анімацій під `Entities Graphics`. Не інвестую в це одразу, бо це окремий пайплайн (потрібен бейкер анімацій, нових шейдерів) — недешево для проєкту цього масштабу, поки немає доказу, що воно справді потрібне.
 
 ### 5.4 Пакети
 
