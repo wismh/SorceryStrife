@@ -75,7 +75,7 @@ namespace Game
         private async UniTaskVoid LoadMenuAsync()
         {
             await UniTask.WaitForSeconds(4, cancellationToken: this.GetCancellationTokenOnDestroy());
-            _stateMachine.Enter(new MenuState());
+            await _stateMachine.Enter<MenuState>();
         }
     }
 }

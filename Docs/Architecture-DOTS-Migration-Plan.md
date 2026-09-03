@@ -17,7 +17,7 @@
 - **Odin Inspector** (платний, Женя підтвердив ліцензію) — скопійовано, поки ніде не використовується.
 - **DOTween** замінив **PrimeTween** повністю (5 файлів, `PrimeTween` видалено з проєкту).
 - **UniTask** замінив **Coroutines** усюди, де вони були (11 файлів) — `GetCancellationTokenOnDestroy()` скрізь, щоб поведінка "зупиняється при знищенні об'єкта" лишилась ідентичною.
-- **BootstrapScene** — окрема порожня сцена (Build Settings індекс 0, `Bootstrap.cs` в `Mechanics/GameBootstrap/`), яка на `Start()` одразу вантажить `MainMenu` — той самий `Bootstrap → MainScene`-хендофф, що в template. Раніше проєкт стартував напряму з `MainMenu.unity` як індексу 0; тепер `MainMenu` = індекс 1, `SampleScene` (Gameplay) = індекс 2. `BootstrapScene` без `SceneContext` — `ProjectContext` резолвиться, як і раніше, коли перша сцена з `SceneContext` (`MainMenu`) завантажиться.
+- **BootstrapScene** — окрема порожня сцена (Build Settings індекс 0, `Bootstrap.cs` в `Mechanics/GameBootstrap/`), яка на `Start()` інжектить `GlobalGameStateMachine` і викликає `Enter<MenuState>()` — той самий `Bootstrap → MainScene`-хендофф, що в template, лише через FSM (§0.2), а не сирий `SceneManager.LoadScene`. Раніше проєкт стартував напряму з `MainMenu.unity` як індексу 0; тепер `MainMenu` = індекс 1, `SampleScene` (Gameplay) = індекс 2. `BootstrapScene` має власний порожній `SceneContext` (без локальних інсталлерів) — потрібен, щоб Zenject проінжектив сам `Bootstrap`; `ProjectContext` тепер резолвиться вже тут, а не при завантаженні `MainMenu`.
 
 Деталі — коміти `7b4bc7e`, `bbe00f3`, `441a1f1`.
 

@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -31,7 +32,12 @@ namespace Game
 
         private void HandleStartGame()
         {
-            _stateMachine.Enter(new GameplayState());
+            EnterGameplayAsync().Forget();
+        }
+
+        private async UniTaskVoid EnterGameplayAsync()
+        {
+            await _stateMachine.Enter<GameplayState>();
         }
 
         private static void HandleExitGame()

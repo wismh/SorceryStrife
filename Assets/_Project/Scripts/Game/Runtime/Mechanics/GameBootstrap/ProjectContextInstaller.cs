@@ -11,6 +11,8 @@ namespace Game
     {
         public override void InstallBindings()
         {
+            Container.Bind<MenuState>().AsSingle();
+            Container.Bind<GameplayState>().AsSingle();
             Container.Bind<GlobalGameStateMachine>().AsSingle();
         }
     }

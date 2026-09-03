@@ -1,11 +1,13 @@
+using System.Collections.Generic;
+
 namespace Game
 {
     /// <summary>Which top-level scene is loaded: main menu or a run. See MenuState / GameplayState.</summary>
-    public class GlobalGameStateMachine : StateMachine
+    public class GlobalGameStateMachine : StateMachineBehaviour<StateBase>
     {
-        public GlobalGameStateMachine()
+        public GlobalGameStateMachine(MenuState menuState, GameplayState gameplayState)
         {
-            SetInitial(new MenuState());
+            SetStates(new List<StateBase> { menuState, gameplayState });
         }
     }
 }
