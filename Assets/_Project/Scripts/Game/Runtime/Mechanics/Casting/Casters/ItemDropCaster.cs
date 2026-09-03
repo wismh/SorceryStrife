@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+using Cysharp.Threading.Tasks;
+using UnityEngine;
 using Zenject;
 
 namespace Game
@@ -6,20 +7,25 @@ namespace Game
     [SpellCaster(SpellType = typeof(ItemDropSpell))]
     public class ItemDropCaster : Caster
     {
-        private readonly ItemSelectionScreen _itemSelectionScreen;
+        private readonly IScreenManager _screenManager;
 
         [Inject]
-        public ItemDropCaster(ItemDropSpell spell, PlayerInventory inventory, ItemSelectionScreen itemSelectionScreen) :
+        public ItemDropCaster(ItemDropSpell spell, PlayerInventory inventory, IScreenManager screenManager) :
             base(spell, inventory)
         {
-            _itemSelectionScreen = itemSelectionScreen;
+            _screenManager = screenManager;
         }
-        
-        
+
+
         // ReSharper disable Unity.PerformanceAnalysis
         protected override void CastInternal(Transform caster)
         {
-            _itemSelectionScreen.Show();
+            OpenAsync().Forget();
+        }
+
+        private async UniTaskVoid OpenAsync()
+        {
+            await _screenManager.OpenScreen<ItemSelectionScreen>();
         }
     }
 }

@@ -5754,7 +5754,10 @@ MonoBehaviour:
   _player: {fileID: 384120447}
   _experiencePrefab: {fileID: -8197700048124896270, guid: 0cd2bda961f00a944a83331d3319a4ac,
     type: 3}
-  _itemSelectionScreen: {fileID: 406936042}
+  _screens:
+  - {fileID: 846847278}
+  - {fileID: 1479043344}
+  - {fileID: 406936042}
 --- !u!1001 &898328776
 PrefabInstance:
   m_ObjectHideFlags: 0
