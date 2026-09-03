@@ -1,22 +1,27 @@
-﻿using UnityEngine;
+using UnityEngine;
+using Zenject;
 
 namespace Game
 {
+    /// <summary>
+    /// Plays looping menu music via IAudioSystem, which is itself the persistent ProjectContext
+    /// singleton - no DontDestroyOnLoad/duplicate-guard needed here anymore.
+    /// </summary>
     public class BackgroundMusic : MonoBehaviour
     {
-        private static BackgroundMusic _instance = null;
-        
+        [SerializeField] private SoundData _music;
+
+        private IAudioSystem _audioSystem;
+
+        [Inject]
+        public void Construct(IAudioSystem audioSystem)
+        {
+            _audioSystem = audioSystem;
+        }
+
         private void Start()
         {
-            if (_instance != null)
-            {
-                Destroy(gameObject);
-                return;
-            }
-            
-            _instance = this;
-            transform.parent = null;
-            DontDestroyOnLoad(gameObject);
+            _audioSystem.PlayMusic(_music);
         }
     }
 }
