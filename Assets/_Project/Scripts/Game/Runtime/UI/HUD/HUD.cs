@@ -1,11 +1,15 @@
 using System;
-using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using Zenject;
 
 namespace Game
 {
+    /// <summary>
+    /// Always-on base layer, not a stack member - never call OpenScreen/CloseScreen on it. It stays
+    /// active by its own default scene state; UpgradeScreen/ItemSelectionScreen show as overlays on
+    /// top of it via BaseScreenManager without ever touching HUD's active state.
+    /// </summary>
     public class HUD : BaseScreen
     {
         [SerializeField] private ValueBar _healthBar;
@@ -14,15 +18,13 @@ namespace Game
 
         private Player _player;
         private Entity _playerAsEntity;
-        private IScreenManager _screenManager;
         private string _levelPattern;
 
         [Inject]
-        public void Construct(Player player, IScreenManager screenManager)
+        public void Construct(Player player)
         {
             _player = player;
             _playerAsEntity = _player.GetComponent<Entity>();
-            _screenManager = screenManager;
         }
 
         private void Awake()
@@ -33,13 +35,7 @@ namespace Game
 
         private void Start()
         {
-            OpenAsync().Forget();
             _player.OnLevelUp += UpdateLevelLabel;
-        }
-
-        private async UniTaskVoid OpenAsync()
-        {
-            await _screenManager.OpenScreen<HUD>();
         }
 
         private void OnDestroy()
