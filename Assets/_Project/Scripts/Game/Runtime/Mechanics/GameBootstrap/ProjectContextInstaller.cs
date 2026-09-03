@@ -12,6 +12,7 @@ namespace Game
         public override void InstallBindings()
         {
             Container.Bind<ISceneLoaderService>().To<BuildInSceneLoaderService>().AsSingle();
+            Container.Bind<IAssetLoaderService>().To<ResourceAssetLoaderService>().AsSingle();
 
             Container.Bind<MenuState>().AsSingle();
             Container.Bind<GameplayState>().AsSingle();

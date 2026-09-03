@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace Game.InventorySystem
 {
@@ -9,10 +8,10 @@ namespace Game.InventorySystem
     {
         private const string k_itemsPath = "Items";
         private readonly Dictionary<Type, Item> _items;
-        
-        public ItemsRegister()
+
+        public ItemsRegister(IAssetLoaderService assetLoaderService)
         {
-            var items = Resources.LoadAll<Item>(k_itemsPath);
+            var items = assetLoaderService.LoadAllAssets<Item>(k_itemsPath);
             _items = items.ToDictionary(item => item.GetType(), item => item);
         }
 
