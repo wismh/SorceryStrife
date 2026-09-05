@@ -35,8 +35,18 @@ namespace EnemyEcs
         private float _waveElapsed;
         private bool _waveStarted;
 
+        public void Reset()
+        {
+            _waveStarted = false;
+            _currentWaveId = 0;
+            _waveElapsed = 0f;
+            _activeGroups.Clear();
+            _waves = null;
+        }
+
         public void SetDependencies(List<Game.EnemySpawner.Wave> waves, Vector2 range)
         {
+            Reset();
             _waves = waves;
             _range = range;
             InitializePrefabs();

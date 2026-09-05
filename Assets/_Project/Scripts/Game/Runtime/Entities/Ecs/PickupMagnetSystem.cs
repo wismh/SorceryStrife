@@ -30,6 +30,11 @@ namespace PickupEcs
             _player = player;
         }
 
+        public void Reset()
+        {
+            _player = null;
+        }
+
         protected override void OnUpdate()
         {
             if (_player == null || !SystemAPI.TryGetSingleton(out PlayerPositionSingleton player))

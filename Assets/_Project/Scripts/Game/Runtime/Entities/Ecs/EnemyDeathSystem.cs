@@ -21,6 +21,12 @@ namespace EnemyEcs
             _minibossDeathCallback = minibossDeathCallback;
         }
 
+        public void Reset()
+        {
+            _pickupPrefab = Entity.Null;
+            _minibossDeathCallback = null;
+        }
+
         protected override void OnUpdate()
         {
             if (_pickupPrefab == Entity.Null)

@@ -31,6 +31,13 @@ namespace EnemyEcs
             _container = container;
         }
 
+        public void Reset()
+        {
+            _playerDamagable = null;
+            _devilProjectilePrefab = null;
+            _container = null;
+        }
+
         protected override void OnUpdate()
         {
             if (_playerDamagable == null || !SystemAPI.TryGetSingleton(out PlayerPositionSingleton player))

@@ -54,5 +54,10 @@ namespace EnemyEcs
 
             world.GetOrCreateSystemManaged<PickupMagnetSystem>().SetDependencies(_player);
         }
+
+        private void OnDestroy()
+        {
+            EcsWorldCleanup.CleanUpGameplayEntities();
+        }
     }
 }

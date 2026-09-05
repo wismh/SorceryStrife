@@ -37,5 +37,10 @@ namespace Game
             World.DefaultGameObjectInjectionWorld.GetOrCreateSystemManaged<WaveSpawnSystem>()
                 .SetDependencies(_waves, _range);
         }
+
+        private void OnDestroy()
+        {
+            EcsWorldCleanup.CleanUpGameplayEntities();
+        }
     }
 }
